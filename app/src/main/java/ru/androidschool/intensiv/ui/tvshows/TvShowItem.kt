@@ -4,22 +4,21 @@ import com.squareup.picasso.Picasso
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_tv_show.*
-import kotlinx.android.synthetic.main.item_with_text.content
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.TvShow
 
-class TvShowItem (
-    private val content: TvShow,
+class TvShowItem(
+    private val tvShowContent: TvShow,
     private val onClick: (tvShow: TvShow) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_tv_show
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.tv_show_title.text = content.title
-        viewHolder.tv_show_rating.rating = content.rating
-        viewHolder.content.setOnClickListener {
-            onClick.invoke(content)
+        viewHolder.tv_show_title.text = tvShowContent.title
+        viewHolder.tv_show_rating.rating = tvShowContent.rating
+        viewHolder.tv_show_content.setOnClickListener {
+            onClick.invoke(tvShowContent)
         }
 
         Picasso.get()
