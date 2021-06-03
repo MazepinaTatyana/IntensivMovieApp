@@ -20,4 +20,10 @@
     <dimen name="search_bar_height">56dp</dimen>
     <dimen name="min_height">100dp</dimen>
 
+    <!--Tv Show Card Item-->
+    <dimen name="corner_radius_card_view">10dp</dimen>
+    <dimen name="tv_show_margin">5dp</dimen>
+    <dimen name="tv_show_text_size">20sp</dimen>
+
+
 </resources>
