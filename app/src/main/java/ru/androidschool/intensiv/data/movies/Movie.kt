@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.data
+package ru.androidschool.intensiv.data.movies
 
 data class Movie(
     var title: String? = "",

@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.MockRepository
-import ru.androidschool.intensiv.data.Movie
+import ru.androidschool.intensiv.data.movies.MockRepository
+import ru.androidschool.intensiv.data.movies.Movie
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 

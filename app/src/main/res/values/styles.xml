@@ -21,6 +21,10 @@
         <item name="cornerSize">10%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize40Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="tv_show_text_view_style">
         <item name="android:textColor">@color/textColorLight</item>
         <item name="android:textAllCaps">true</item>
