@@ -1,12 +1,160 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blueDark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="ru.androidschool.intensiv.ui.movie_details.MovieDetailsFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:background="@color/blueDark">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/details_movie_img"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/details_movie_title"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+            tools:src="@drawable/ic_avatar" />
+
+        <TextView
+            android:id="@+id/details_movie_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aquaman"
+            android:layout_margin="20dp"
+            android:textSize="20sp"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
+
+        <ImageView
+            android:id="@+id/details_movie_favorite_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_movies"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
+
+        <Button
+            android:id="@+id/details_movie_show_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Смотреть"
+            android:textColor="@color/white"
+            app:cornerRadius="20dp"
+            android:layout_margin="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_title" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/details_movie_rating"
+            style="@style/Base.Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="20dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:progressBackgroundTint="@color/colorControlNormal"
+            android:stepSize="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/details_movie_show_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_favorite_icon"
+            tools:rating="5" />
+
+        <TextView
+            android:id="@+id/details_movie_text_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textColor="@color/textColorLight"
+            android:text="Описание фильма"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_show_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/details_movie_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/details_movie_text_description" />
+
+        <TextView
+            android:id="@+id/details_movie_label_studio_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Студия"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_recycler_view"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/details_movie_label_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Жанр"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_label_studio_name"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/details_movie_label_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Год"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_label_genre" />
+
+        <TextView
+            android:id="@+id/details_movie_studio_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Worner Bros."
+            android:textColor="@color/textColorLight"
+            app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_recycler_view" />
+
+        <TextView
+            android:id="@+id/details_movie_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Action, Adventure, Fantasy"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_studio_name" />
+
+        <TextView
+            android:id="@+id/details_movie_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="2018"
+            android:textColor="@color/textColorLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
+            app:layout_constraintTop_toBottomOf="@id/details_movie_genre" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
