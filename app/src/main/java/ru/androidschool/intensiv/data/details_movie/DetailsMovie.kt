@@ -10,6 +10,4 @@ data class DetailsMovie(
     var studio: String,
     var year: String,
     var actors: List<Actor>
-) {
-
-}
+)

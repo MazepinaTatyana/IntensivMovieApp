@@ -52,10 +52,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             // Название таба
             val title = profileTabLayoutTitles[position]
             // Раздеряем название на части. Первый элемент будет кол-во
-//            val parts = profileTabLayoutTitles[position].split(" ")
-//            val number = parts[0]
+            val parts = profileTabLayoutTitles[position].split(" ")
+            val number = parts[0]
             val spannableStringTitle = SpannableString(title)
-//            spannableStringTitle.setSpan(RelativeSizeSpan(2f), 0, number.count(), 0)
+            spannableStringTitle.setSpan(RelativeSizeSpan(2f), 0, number.count(), 0)
 
             tab.text = spannableStringTitle
         }.attach()

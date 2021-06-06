@@ -21,8 +21,5 @@ class TvShowItem(
             onClick.invoke(tvShowContent)
         }
         viewHolder.tv_show_img.load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
-//        Picasso.get()
-//            .load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
-//            .into(viewHolder.tv_show_img)
     }
 }

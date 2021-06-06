@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/details_movie_img"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="@dimen/details_movie_height_img"
             android:layout_weight="1"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -24,34 +24,42 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
             tools:src="@drawable/ic_avatar" />
 
+        <ImageView
+            android:id="@+id/details_movie_back_icon"
+            android:layout_width="@dimen/details_movie_size_icon"
+            android:layout_height="@dimen/details_movie_size_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            android:src="@drawable/ic_back_icon" />
+
         <TextView
             android:id="@+id/details_movie_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aquaman"
-            android:layout_margin="20dp"
-            android:textSize="20sp"
-            android:textColor="@color/textColorLight"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            style="@style/details_movie_text_white_color_style"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
 
         <ImageView
             android:id="@+id/details_movie_favorite_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_movies"
+            android:layout_width="@dimen/details_movie_size_icon"
+            android:layout_height="@dimen/details_movie_size_icon"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            android:src="@drawable/ic_favourite"
+            app:layout_constraintBottom_toTopOf="@+id/details_movie_rating"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/details_movie_show_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Смотреть"
-            android:textColor="@color/white"
-            app:cornerRadius="20dp"
-            android:layout_margin="20dp"
+            android:text="@string/details_movie_look_btn"
+            style="@style/details_movie_look_btn_style"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            app:layout_constraintBottom_toTopOf="@id/details_movie_text_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_title" />
 
@@ -61,22 +69,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:progressBackgroundTint="@color/colorControlNormal"
             android:stepSize="0.5"
+            tools:rating="5"
+            android:progressBackgroundTint="@color/colorControlNormal"
             app:layout_constraintBottom_toBottomOf="@+id/details_movie_show_btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/details_movie_favorite_icon"
-            tools:rating="5" />
+            app:layout_constraintTop_toTopOf="@+id/details_movie_show_btn" />
 
         <TextView
             android:id="@+id/details_movie_text_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:textColor="@color/textColorLight"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            style="@style/details_movie_text_grey_color_style"
             android:text="Описание фильма"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,19 +95,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_with_text"
+            android:background="@color/blueDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/details_movie_label_studio_name"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_text_description" />
 
         <TextView
             android:id="@+id/details_movie_label_studio_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Студия"
-            android:textColor="@color/textColorLight"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            android:text="@string/details_movie_studio"
+            style="@style/details_movie_text_white_color_style"
             app:layout_constraintTop_toBottomOf="@id/details_movie_recycler_view"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -107,9 +118,9 @@
             android:id="@+id/details_movie_label_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Жанр"
-            android:textColor="@color/textColorLight"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            android:text="@string/details_movie_genre"
+            style="@style/details_movie_text_white_color_style"
             app:layout_constraintTop_toBottomOf="@id/details_movie_label_studio_name"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -117,9 +128,9 @@
             android:id="@+id/details_movie_label_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:text="Год"
-            android:textColor="@color/textColorLight"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
+            android:text="@string/details_movie_year"
+            style="@style/details_movie_text_white_color_style"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_movie_label_genre" />
@@ -128,9 +139,9 @@
             android:id="@+id/details_movie_studio_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
             android:text="Worner Bros."
-            android:textColor="@color/textColorLight"
+            style="@style/details_movie_text_grey_color_style"
             app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
             app:layout_constraintTop_toBottomOf="@id/details_movie_recycler_view" />
 
@@ -138,9 +149,9 @@
             android:id="@+id/details_movie_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
             android:text="Action, Adventure, Fantasy"
-            android:textColor="@color/textColorLight"
+            style="@style/details_movie_text_grey_color_style"
             app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
             app:layout_constraintTop_toBottomOf="@id/details_movie_studio_name" />
 
@@ -148,14 +159,12 @@
             android:id="@+id/details_movie_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="@dimen/details_movie_margin_twenty_dp"
             android:text="2018"
-            android:textColor="@color/textColorLight"
+            style="@style/details_movie_text_grey_color_style"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/details_movie_label_studio_name"
             app:layout_constraintTop_toBottomOf="@id/details_movie_genre" />
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

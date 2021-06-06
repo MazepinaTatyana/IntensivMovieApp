@@ -19,9 +19,5 @@ class MoviePreviewItem(
             onClick.invoke(content)
         }
         viewHolder.image_preview.load("https://www.kinopoisk.ru/images/film_big/1143242.jpg")
-//        // TODO Получать из модели
-//        Picasso.get()
-//            .load("https://www.kinopoisk.ru/images/film_big/1143242.jpg")
-//            .into(viewHolder.image_preview)
     }
 }
