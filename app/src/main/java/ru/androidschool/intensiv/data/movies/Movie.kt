@@ -1,7 +1,7 @@
-package ru.androidschool.intensiv.data
+package ru.androidschool.intensiv.data.movies
 
 data class Movie(
-    var title: String? = "",
+    var title: String,
     var voteAverage: Double = 0.0
 ) {
     val rating: Float

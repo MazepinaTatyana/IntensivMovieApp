@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.data
+package ru.androidschool.intensiv.data.tv_shows
 
 data class TvShow(
     var title: String? = "",

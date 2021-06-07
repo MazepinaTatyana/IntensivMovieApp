@@ -1,11 +1,11 @@
 package ru.androidschool.intensiv.ui.tvshows
 
-import com.squareup.picasso.Picasso
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_tv_show.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.TvShow
+import ru.androidschool.intensiv.data.tv_shows.TvShow
+import ru.androidschool.intensiv.extensions.load
 
 class TvShowItem(
     private val tvShowContent: TvShow,
@@ -20,9 +20,6 @@ class TvShowItem(
         viewHolder.tv_show_content.setOnClickListener {
             onClick.invoke(tvShowContent)
         }
-
-        Picasso.get()
-            .load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
-            .into(viewHolder.tv_show_img)
+        viewHolder.tv_show_img.load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
     }
 }

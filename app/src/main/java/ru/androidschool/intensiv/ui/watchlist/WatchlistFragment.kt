@@ -8,19 +8,20 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.fragment_watchlist.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.MockRepository
+import ru.androidschool.intensiv.data.movies.MockRepository
+import ru.androidschool.intensiv.databinding.FragmentWatchlistBinding
 
 class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
 
+    private lateinit var watchlistBinding: FragmentWatchlistBinding
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        movies_recycler_view.layoutManager = GridLayoutManager(context, 4)
-        movies_recycler_view.adapter = adapter.apply { addAll(listOf()) }
+        watchlistBinding = FragmentWatchlistBinding.bind(view)
+        watchlistBinding.moviesRecyclerView.layoutManager = GridLayoutManager(context, 4)
 
         val moviesList =
             MockRepository.getMovies().map {
@@ -29,12 +30,6 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
                 ) { movie -> }
             }.toList()
 
-        movies_recycler_view.adapter = adapter.apply { addAll(moviesList) }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = WatchlistFragment()
+        watchlistBinding.moviesRecyclerView.adapter = adapter.apply { addAll(moviesList) }
     }
 }

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -21,11 +21,37 @@
         <item name="cornerSize">10%</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="tv_show_text_view_style">
         <item name="android:textColor">@color/textColorLight</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">@dimen/tv_show_text_size</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="details_movie_text_white_color_style">
+        <item name="android:textSize">@dimen/details_movie_text_size</item>
+        <item name="android:textColor">@color/textColorLight</item>
+    </style>
+
+    <style name="details_movie_text_grey_color_style">
+        <item name="android:textSize">@dimen/details_movie_text_size</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+    <style name="actor_item_text_style">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/details_movie_text_size_name_actor</item>
+
+    </style>
+
+    <style name="details_movie_look_btn_style">
+        <item name="android:textColor">@color/textColorLight</item>
+        <item name="backgroundTint">@color/grey</item>
+        <item name="cornerRadius">@dimen/details_movie_radius</item>
     </style>
 
 

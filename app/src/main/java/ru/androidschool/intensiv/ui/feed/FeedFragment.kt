@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.MockRepository
-import ru.androidschool.intensiv.data.Movie
+import ru.androidschool.intensiv.data.movies.MockRepository
+import ru.androidschool.intensiv.data.movies.Movie
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -74,9 +74,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     }
 
     private fun openMovieDetails(movie: Movie) {
-        val bundle = Bundle()
-        bundle.putString(KEY_TITLE, movie.title)
-        findNavController().navigate(R.id.movie_details_fragment, bundle, options)
+        if (!movie.title.isNullOrEmpty()) {
+            findNavController().navigate(FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(movie.title))
+        }
     }
 
     private fun openSearch(searchText: String) {
