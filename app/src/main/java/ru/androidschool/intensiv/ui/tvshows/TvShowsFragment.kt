@@ -22,8 +22,6 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
 
-        tvShowsFragmentBinding.tvShowRecyclerView.adapter = adapter.apply { addAll(listOf()) }
-
         val tvShowList =
             MockTVShowsRepository.getTVShows().map {
                 TvShowItem(

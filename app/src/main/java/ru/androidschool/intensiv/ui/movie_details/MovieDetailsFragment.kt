@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ru.androidschool.intensiv.R
@@ -22,12 +23,13 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
-        val detailsTitle = requireArguments().getString(FeedFragment.KEY_TITLE)
-        movieDetailsFragmentBinding.detailsMovieTitle.text = detailsTitle
+
+        val navArgs: MovieDetailsFragmentArgs by navArgs()
+        val title = navArgs.movieId
+
+        movieDetailsFragmentBinding.detailsMovieTitle.text = title
         movieDetailsFragmentBinding.detailsMovieRating.rating = 5f
         movieDetailsFragmentBinding.detailsMovieImg.load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
-
-        movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter = adapter.apply { addAll(listOf()) }
 
         val actorList =
             MockDetailsMovieRepository.getDetailsMovie().actors

@@ -74,9 +74,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     }
 
     private fun openMovieDetails(movie: Movie) {
-        val bundle = Bundle()
-        bundle.putString(KEY_TITLE, movie.title)
-        findNavController().navigate(R.id.movie_details_fragment, bundle, options)
+        if (!movie.title.isNullOrEmpty()) {
+            findNavController().navigate(FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(movie.title))
+        }
     }
 
     private fun openSearch(searchText: String) {

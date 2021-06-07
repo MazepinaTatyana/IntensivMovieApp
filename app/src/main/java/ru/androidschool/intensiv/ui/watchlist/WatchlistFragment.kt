@@ -21,9 +21,7 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         watchlistBinding = FragmentWatchlistBinding.bind(view)
-
         watchlistBinding.moviesRecyclerView.layoutManager = GridLayoutManager(context, 4)
-        watchlistBinding.moviesRecyclerView.adapter = adapter.apply { addAll(listOf()) }
 
         val moviesList =
             MockRepository.getMovies().map {
