@@ -42,12 +42,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
 
-        <ImageView
+        <CheckBox
             android:id="@+id/details_movie_favorite_icon"
             android:layout_width="@dimen/details_movie_size_icon"
             android:layout_height="@dimen/details_movie_size_icon"
             android:layout_margin="@dimen/details_movie_margin_20_dp"
-            android:src="@drawable/favourite_movie_selector"
+            android:buttonTint="@color/grey"
+            android:button="@drawable/favourite_movie_selector"
             app:layout_constraintBottom_toTopOf="@+id/details_movie_rating"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/details_movie_img" />
