@@ -32,12 +32,14 @@
 
         <TextView
             android:id="@+id/tv_show_title"
-            android:layout_width="wrap_content"
+            style="@style/tv_show_text_view_style"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/tv_show_margin"
             android:maxLines="2"
-            app:layout_behavior="@+id/tv_show_img"
-            style="@style/tv_show_text_view_style"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tv_show_rating"
+            app:layout_constraintHorizontal_weight="2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_show_img"
             tools:text="Game of Thrones" />
@@ -53,7 +55,9 @@
             android:numStars="5"
             android:progressBackgroundTint="@color/colorControlNormal"
             android:stepSize="0.5"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintTop_toBottomOf="@+id/tv_show_img"
             tools:rating="5" />
     </androidx.constraintlayout.widget.ConstraintLayout>

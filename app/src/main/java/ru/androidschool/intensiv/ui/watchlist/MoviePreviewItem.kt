@@ -9,7 +9,7 @@ import ru.androidschool.intensiv.extensions.load
 
 class MoviePreviewItem(
     private val content: Movie,
-    private val onClick: (movie: Movie) -> Unit
+    private val onClick: (movieModel: Movie) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_small
@@ -18,6 +18,6 @@ class MoviePreviewItem(
         viewHolder.image_preview.setOnClickListener {
             onClick.invoke(content)
         }
-        viewHolder.image_preview.load("https://www.kinopoisk.ru/images/film_big/1143242.jpg")
+        viewHolder.image_preview.load(url = "https://www.kinopoisk.ru/images/film_big/1143242.jpg")
     }
 }

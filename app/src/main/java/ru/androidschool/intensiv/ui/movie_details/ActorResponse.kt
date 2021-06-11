@@ -3,12 +3,11 @@ package ru.androidschool.intensiv.ui.movie_details
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Actor(
-    @SerializedName("name")
+data class ActorResponse(
+    @SerializedName("id")
     @Expose
-    val name: String,
-
-    @SerializedName("profile_path")
+    val id: Int,
+    @SerializedName("cast")
     @Expose
-    val profilePath: String
+    val actors: List<Actor>
 )

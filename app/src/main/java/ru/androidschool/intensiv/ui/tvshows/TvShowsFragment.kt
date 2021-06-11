@@ -1,14 +1,15 @@
 package ru.androidschool.intensiv.ui.tvshows
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import kotlinx.android.synthetic.main.tv_shows_fragment.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.tv_shows.MockTVShowsRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
+import ru.androidschool.intensiv.extensions.response
+import ru.androidschool.intensiv.network.tv_shows.TvApiClient
 
 class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
 
@@ -22,12 +23,24 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
 
-        val tvShowList =
-            MockTVShowsRepository.getTVShows().map {
-                TvShowItem(
-                    it
-                ) { tvShow -> } }.toList()
+        TvApiClient.tvShowApiClient.getTvShows().response {
+            onFailure = { error ->
+                Log.d("error tvShows", error?.message.toString())
+            }
+            onResponse = { respounse ->
+                val tvShowList = respounse.body()?.tvShows?.map {
+                        TvShowItem(
+                            it
+                        ) { tvShow -> }
+                    }
 
-        tvShowsFragmentBinding.tvShowRecyclerView.adapter = adapter.apply { addAll(tvShowList) }
+                tvShowsFragmentBinding.tvShowRecyclerView.adapter =
+                    adapter.apply {
+                        if (tvShowList != null) {
+                            addAll(tvShowList)
+                        }
+                    }
+            }
+        }
     }
 }
