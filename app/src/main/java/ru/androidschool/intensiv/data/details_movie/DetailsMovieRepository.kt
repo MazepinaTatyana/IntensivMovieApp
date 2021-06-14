@@ -2,13 +2,14 @@ package ru.androidschool.intensiv.data.details_movie
 
 import ru.androidschool.intensiv.ui.movie_details.Actor
 
-object MockDetailsMovieRepository {
+object DetailsMovieRepository {
 
     fun getDetailsMovie(): DetailsMovie {
         val actorList = mutableListOf<Actor>()
         for (x in 0..5) {
             val actor = Actor(
-                name = "Willem Dafoe"
+                name = "Willem Dafoe",
+                profilePath = ""
             )
             actorList.add(actor)
         }

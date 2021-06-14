@@ -1,5 +1,6 @@
 package ru.androidschool.intensiv.ui.feed
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -10,9 +11,12 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
+import retrofit2.Response
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.movies.MockRepository
-import ru.androidschool.intensiv.data.movies.Movie
+import ru.androidschool.intensiv.extensions.response
+import ru.androidschool.intensiv.model.movie_model.ApiResponse
+import ru.androidschool.intensiv.model.movie_model.ResultApi
+import ru.androidschool.intensiv.network.MovieApiClient
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -21,6 +25,8 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
+
+    var moviesList: List<ResultApi>? = null
 
     private val options = navOptions {
         anim {
@@ -31,6 +37,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         }
     }
 
+    @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,41 +48,65 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-        // Используя Мок-репозиторий получаем фэйковый список фильмов
-        val moviesList = listOf(
-            MainCardContainer(
-                R.string.recommended,
-                MockRepository.getMovies().map {
-                    MovieItem(it) { movie ->
-                        openMovieDetails(
-                            movie
-                        )
-                    }
-                }.toList()
-            )
-        )
+        MovieApiClient.movieApiClient.getPopularMovies().response {
+            onFailure = { error ->
+                Timber.e("Error popularMovies", error?.message.toString())
+            }
 
-        movies_recycler_view.adapter = adapter.apply { addAll(moviesList) }
+            onResponse = { response ->
+                createMovieItemAndMainCard(response, R.string.popular)
+            }
+        }
 
-        // Используя Мок-репозиторий получаем фэйковый список фильмов
-        // Чтобы отобразить второй ряд фильмов
-        val newMoviesList = listOf(
-            MainCardContainer(
-                R.string.upcoming,
-                MockRepository.getMovies().map {
-                    MovieItem(it) { movie ->
-                        openMovieDetails(movie)
-                    }
-                }.toList()
-            )
-        )
+        MovieApiClient.movieApiClient.getNowPlayingMovies().response {
 
-        adapter.apply { addAll(newMoviesList) }
+            onFailure = { error ->
+                Timber.e("Error nowPlayingMovies", error?.message.toString())
+            }
+
+            onResponse = { response ->
+                createMovieItemAndMainCard(response, R.string.recommended)
+            }
+        }
+
+        MovieApiClient.movieApiClient.getUpcomingMovies().response {
+            onFailure = { error ->
+                Timber.e("Error upcomingMovies", error?.message.toString())
+            }
+
+            onResponse = { response ->
+                createMovieItemAndMainCard(response, R.string.upcoming)
+            }
+        }
     }
 
-    private fun openMovieDetails(movie: Movie) {
-        if (!movie.title.isNullOrEmpty()) {
-            findNavController().navigate(FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(movie.title))
+    private fun createMovieItemAndMainCard(response: Response<ApiResponse>, mainCardTitle: Int) {
+        moviesList = response.body()?.results
+
+        val listMovieItem = moviesList?.map {
+            MovieItem(it) { movie ->
+                openMovieDetails(
+                    movie
+                )
+            }
+        }?.toList()
+
+        val listCardContainer = listOf(listMovieItem?.let {
+            MainCardContainer(mainCardTitle, it)
+        })
+
+        movies_recycler_view.adapter = adapter.apply {
+            addAll(listCardContainer)
+        }
+    }
+
+    private fun openMovieDetails(resultApi: ResultApi) {
+        if (resultApi.id != null) {
+            findNavController().navigate(
+                FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(
+                    resultApi.id
+                )
+            )
         }
     }
 
@@ -88,6 +119,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     override fun onStop() {
         super.onStop()
         search_toolbar.clear()
+        adapter.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

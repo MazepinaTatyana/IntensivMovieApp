@@ -31,8 +31,9 @@
     <dimen name="details_movie_text_size_name_actor">15sp</dimen>
     <dimen name="details_movie_height_img">350dp</dimen>
     <dimen name="details_movie_margin_20_dp">20dp</dimen>
+    <dimen name="details_movie_margin_10_dp">10dp</dimen>
     <dimen name="details_movie_size_icon">25dp</dimen>
-    <dimen name="details_movie_text_size">18sp</dimen>
+    <dimen name="details_movie_text_size">15sp</dimen>
     <dimen name="details_movie_radius">20sp</dimen>
 
 </resources>

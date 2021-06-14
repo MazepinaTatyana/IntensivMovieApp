@@ -10,7 +10,7 @@ import ru.androidschool.intensiv.R
 class MainCardContainer(
     @StringRes
     private val title: Int,
-    private val items: List<Item>
+    var items: List<Item>
 ) : Item() {
 
     override fun getLayout() = R.layout.item_card

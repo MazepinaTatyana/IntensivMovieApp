@@ -13,10 +13,10 @@ class ActorItem(
     override fun getLayout() = R.layout.item_actor
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        val nameActor = content.name?.split(" ")
+        val nameActor = content.name.split(" ")
         if (!nameActor.isNullOrEmpty() && nameActor.size > 1) {
             viewHolder.item_actor_name.text = String.format("%s\n %s", nameActor[0], nameActor[1])
         } else viewHolder.item_actor_name.text = content.name
-        viewHolder.item_actor_photo.load("https://m.media-amazon.com/images/M/MV5BYTk3MDljOWQtNGI2My00OTEzLTlhYjQtOTQ4ODM2MzUwY2IwXkEyXkFqcGdeQXVyNTIzOTk5ODM@._V1_.jpg")
+        if (!content.profilePath.isNullOrEmpty()) viewHolder.item_actor_photo.load(url = content.profilePath)
     }
 }

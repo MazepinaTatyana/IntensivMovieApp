@@ -5,7 +5,7 @@
     android:id="@+id/content_details_movie"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/details_movie_margin_5_dp"
+    android:layout_margin="@dimen/details_movie_margin_10_dp"
     android:orientation="vertical"
     tools:background="@color/blueDark"
     tools:ignore="RtlHardcoded">

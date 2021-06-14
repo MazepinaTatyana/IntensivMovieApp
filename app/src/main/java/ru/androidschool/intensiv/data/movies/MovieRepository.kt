@@ -1,8 +1,8 @@
 package ru.androidschool.intensiv.data.movies
 
-object MockRepository {
+object MovieRepository {
 
-    fun getMovies(): List<Movie> {
+fun getMovies(): List<Movie> {
 
         val moviesList = mutableListOf<Movie>()
         for (x in 0..10) {

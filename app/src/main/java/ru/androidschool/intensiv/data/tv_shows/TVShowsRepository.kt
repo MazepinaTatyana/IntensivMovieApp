@@ -1,6 +1,6 @@
 package ru.androidschool.intensiv.data.tv_shows
 
-object MockTVShowsRepository {
+object TVShowsRepository {
 
     fun getTVShows(): List<TvShow> {
 
