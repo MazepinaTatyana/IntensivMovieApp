@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class DetailsMovieModel(
     @SerializedName("adult")
     @Expose
-val adult: Boolean,
+    val adult: Boolean,
     @SerializedName("backdrop_path")
     @Expose
     val backdropPath: String,

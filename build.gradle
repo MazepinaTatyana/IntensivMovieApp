@@ -46,4 +46,11 @@ ext {
     timberVersion = '4.7.1'
 
     groupieVersion = '2.8.0'
+
+    retrofitVersion = '2.9.0'
+    converterJsonVersion = '2.9.0'
+    loggingInterceptorVersion = '4.9.0'
+    adapterRxJava2Version = '2.7.2'
+    gpuimageVersion = '1.4.1'
+    gsonVersion = '2.8.6'
 }

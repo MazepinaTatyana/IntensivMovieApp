@@ -5,11 +5,11 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.movie_model.MovieModel
+import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class MovieItem(
-    private val content: MovieModel,
-    private val onClick: (movieModel: MovieModel) -> Unit
+    private val content: ResultApi,
+    private val onClick: (resultApi: ResultApi) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_with_text
@@ -20,6 +20,8 @@ class MovieItem(
         viewHolder.content.setOnClickListener {
             onClick.invoke(content)
         }
-        viewHolder.image_preview.load(url = content.posterPath)
+        content.posterPath.let {
+            viewHolder.image_preview.load(url = it)
+        }
     }
 }

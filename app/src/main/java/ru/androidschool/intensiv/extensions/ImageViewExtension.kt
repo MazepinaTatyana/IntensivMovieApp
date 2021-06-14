@@ -7,7 +7,7 @@ import ru.androidschool.intensiv.BuildConfig
 fun ImageView.load(
     basePosterUrl: String = BuildConfig.BASE_POSTER_URL,
     sizePoster: String = BuildConfig.SMALL_POSTER_SIZE,
-    url: String
+    url: String?
 ) {
     Picasso.get()
         .load(basePosterUrl + sizePoster + url)

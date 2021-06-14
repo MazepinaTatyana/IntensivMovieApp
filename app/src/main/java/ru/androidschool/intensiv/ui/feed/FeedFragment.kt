@@ -1,7 +1,7 @@
 package ru.androidschool.intensiv.ui.feed
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,10 +11,12 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
+import retrofit2.Response
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.extensions.response
-import ru.androidschool.intensiv.model.movie_model.MovieModel
-import ru.androidschool.intensiv.network.movies.MovieApiClient
+import ru.androidschool.intensiv.model.movie_model.ApiResponse
+import ru.androidschool.intensiv.model.movie_model.ResultApi
+import ru.androidschool.intensiv.network.MovieApiClient
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -24,7 +26,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         GroupAdapter<GroupieViewHolder>()
     }
 
-    var moviesList: List<MovieModel>? = null
+    var moviesList: List<ResultApi>? = null
 
     private val options = navOptions {
         anim {
@@ -35,6 +37,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         }
     }
 
+    @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -45,88 +48,63 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-            MovieApiClient.movieApiClient.getPopularMovies().response {
-                onFailure = { error ->
-                    Log.d("Error popularMovies", error?.message.toString())
-                }
-
-                onResponse = { response ->
-                    moviesList = response.body()?.movies
-                    val moviesList = listOf(
-                        moviesList?.map {
-                            MovieItem(it) { movie ->
-                                openMovieDetails(
-                                    movie
-                                )
-                            }
-                        }?.toList()?.let {
-                            MainCardContainer(
-                                R.string.popular,
-                                it
-                            )
-                        }
-                    )
-                    movies_recycler_view.adapter = adapter.apply { addAll(moviesList) }
-                }
-            }
-
-            MovieApiClient.movieApiClient.getNowPlayingMovies().response {
-
+        MovieApiClient.movieApiClient.getPopularMovies().response {
             onFailure = { error ->
-                Log.d("Error nowPlayingMovies", error?.message.toString())
+                Timber.e("Error popularMovies", error?.message.toString())
             }
 
             onResponse = { response ->
-                moviesList = response.body()?.movies
-                val moviesList = listOf(
-                    moviesList?.map {
-                        MovieItem(it) { movie ->
-                            openMovieDetails(
-                                movie
-                            )
-                        }
-                    }?.toList()?.let {
-                        MainCardContainer(
-                            R.string.recommended,
-                            it
-                        )
-                    }
-                )
-                movies_recycler_view.adapter = adapter.apply { addAll(moviesList) }
+                createMovieItemAndMainCard(response, R.string.popular)
             }
         }
 
-            MovieApiClient.movieApiClient.getUpcomingMovies().response {
+        MovieApiClient.movieApiClient.getNowPlayingMovies().response {
+
             onFailure = { error ->
-                Log.d("Error upcomingMovies", error?.message.toString())
+                Timber.e("Error nowPlayingMovies", error?.message.toString())
             }
 
             onResponse = { response ->
-                moviesList = response.body()?.movies
-                val moviesList = listOf(
-                    moviesList?.map {
-                        MovieItem(it) { movie ->
-                            openMovieDetails(
-                                movie
-                            )
-                        }
-                    }?.toList()?.let {
-                        MainCardContainer(
-                            R.string.upcoming,
-                            it
-                        )
-                    }
-                )
-                movies_recycler_view.adapter = adapter.apply { addAll(moviesList) }
+                createMovieItemAndMainCard(response, R.string.recommended)
+            }
+        }
+
+        MovieApiClient.movieApiClient.getUpcomingMovies().response {
+            onFailure = { error ->
+                Timber.e("Error upcomingMovies", error?.message.toString())
+            }
+
+            onResponse = { response ->
+                createMovieItemAndMainCard(response, R.string.upcoming)
             }
         }
     }
 
-    private fun openMovieDetails(movieModel: MovieModel) {
-        if (movieModel.id != null) {
+    private fun createMovieItemAndMainCard(response: Response<ApiResponse>, mainCardTitle: Int) {
+        moviesList = response.body()?.results
+
+        val listMovieItem = moviesList?.map {
+            MovieItem(it) { movie ->
+                openMovieDetails(
+                    movie
+                )
+            }
+        }?.toList()
+
+        val listCardContainer = listOf(listMovieItem?.let {
+            MainCardContainer(mainCardTitle, it)
+        })
+
+        movies_recycler_view.adapter = adapter.apply {
+            addAll(listCardContainer)
+        }
+    }
+
+    private fun openMovieDetails(resultApi: ResultApi) {
+        if (resultApi.id != null) {
             findNavController().navigate(
                 FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(
-                    movieModel.id
+                    resultApi.id
                 )
             )
         }

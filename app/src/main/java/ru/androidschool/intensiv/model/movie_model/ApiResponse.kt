@@ -3,7 +3,7 @@ package ru.androidschool.intensiv.model.movie_model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class MovieApiResponse(
+data class ApiResponse(
     @SerializedName("dates")
     @Expose
     var dates: Dates? = null,
@@ -12,7 +12,7 @@ data class MovieApiResponse(
     var page: Int,
     @SerializedName("results")
     @Expose
-    var movies: List<MovieModel>,
+    var results: List<ResultApi>,
     @SerializedName("total_pages")
     @Expose
     var totalPages: Int,

@@ -1,7 +1,7 @@
 package ru.androidschool.intensiv.ui.movie_details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,7 +13,10 @@ import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
 import ru.androidschool.intensiv.extensions.response
-import ru.androidschool.intensiv.network.details_movie.DetailsMovieApiClient
+import ru.androidschool.intensiv.network.MovieApiClient
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
@@ -22,6 +25,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     }
     private lateinit var movieDetailsFragmentBinding: MovieDetailsFragmentBinding
 
+    @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,13 +33,13 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
-        DetailsMovieApiClient.detailsMovieApiClient.getDetailsMovieById(id).response {
+        MovieApiClient.movieApiClient.getDetailsMovieById(id).response {
             onFailure = { error ->
-                Log.d("error details movie", error.toString())
+                Timber.e("error details movie", error.toString())
             }
             onResponse = { respounse ->
                 val detailsMovie = respounse.body()
-                if (detailsMovie != null) {
+                detailsMovie?.let {
                     val genresName = arrayListOf<String>()
                     detailsMovie.genres.forEach {
                         genresName.add(it.name)
@@ -53,8 +57,9 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                     movieDetailsFragmentBinding.detailsMovieRating.rating = detailsMovie.rating
                     movieDetailsFragmentBinding.detailsMovieTextDescription.text =
                         detailsMovie.overview
-                    movieDetailsFragmentBinding.detailsMovieYear.text =
-                        detailsMovie.releaseDate.substring(0..3)
+
+                    val year = getYear(detailsMovie.releaseDate)
+                    movieDetailsFragmentBinding.detailsMovieYear.text = year.toString()
                     movieDetailsFragmentBinding.detailsMovieImg.load(
                         sizePoster = BuildConfig.BIG_POSTER_SIZE,
                         url = detailsMovie.posterPath
@@ -63,9 +68,9 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             }
         }
 
-        DetailsMovieApiClient.detailsMovieApiClient.getMovieActors(id).response {
+        MovieApiClient.movieApiClient.getMovieActors(id).response {
             onFailure = { error ->
-                Log.d("error actors", error.toString())
+                Timber.e("error actors", error.toString())
             }
             onResponse = { response ->
                 val actors = response.body()?.actors?.map {
@@ -74,9 +79,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
                 movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
                     adapter.apply {
-                        if (actors != null) {
-                            addAll(actors)
-                        }
+                        actors?.let { addAll(actors) }
                     }
             }
         }
@@ -84,5 +87,13 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun getYear(date: String): Int {
+        val calendar = Calendar.getInstance()
+        calendar.time = SimpleDateFormat("yyyy").parse(date)
+        val year = calendar.get(Calendar.YEAR)
+        return year
     }
 }

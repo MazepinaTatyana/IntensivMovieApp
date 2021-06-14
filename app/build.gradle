@@ -24,14 +24,32 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', 'THE_MOVIE_DATABASE_API', keystoreProperties['THE_MOVIE_DATABASE_API']
-        buildConfigField 'String', 'BASE_URL', keystoreProperties['BASE_URL']
-        buildConfigField 'String', 'BASE_POSTER_URL', keystoreProperties['BASE_POSTER_URL']
-        buildConfigField 'String', 'BIG_POSTER_SIZE', keystoreProperties['BIG_POSTER_SIZE']
-        buildConfigField 'String', 'SMALL_POSTER_SIZE', keystoreProperties['SMALL_POSTER_SIZE']
     }
     buildTypes {
+        debug {
+            buildConfigField "String", 'BASE_URL', '\"https://api.themoviedb.org/3/\"'
+            buildConfigField "String", 'BASE_POSTER_URL', '\"https://image.tmdb.org/t/p/\"'
+            buildConfigField "String", 'BIG_POSTER_SIZE', '\"w500\"'
+            buildConfigField "String", 'SMALL_POSTER_SIZE', '\"w185\"'
+            buildConfigField "String", 'LANGUAGE_RU', '\"ru\"'
+            buildConfigField "String", 'REGION_RU', '\"ru\"'
+        }
+        staging {
+            buildConfigField "String", 'BASE_URL', '\"https://api.themoviedb.org/3/\"'
+            buildConfigField "String", 'BASE_POSTER_URL', '\"https://image.tmdb.org/t/p/\"'
+            buildConfigField "String", 'BIG_POSTER_SIZE', '\"w500\"'
+            buildConfigField "String", 'SMALL_POSTER_SIZE', '\"w185\"'
+            buildConfigField "String", 'LANGUAGE_RU', '\"ru\"'
+            buildConfigField "String", 'REGION_RU', '\"ru\"'
+        }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            buildConfigField "String", 'BASE_URL', '\"https://api.themoviedb.org/3/\"'
+            buildConfigField "String", 'BASE_POSTER_URL', '\"https://image.tmdb.org/t/p/\"'
+            buildConfigField "String", 'BIG_POSTER_SIZE', '\"w500\"'
+            buildConfigField "String", 'SMALL_POSTER_SIZE', '\"w185\"'
+            buildConfigField "String", 'LANGUAGE_RU', '\"ru\"'
+            buildConfigField "String", 'REGION_RU', '\"ru\"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -90,12 +108,12 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
 
     // Retrofit http://square.github.io/retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.7.2"
-    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.converterJsonVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.loggingInterceptorVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.adapterRxJava2Version"
+    implementation "jp.co.cyberagent.android.gpuimage:gpuimage-library:$rootProject.gpuimageVersion"
 
     // GSON body parser
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
 }

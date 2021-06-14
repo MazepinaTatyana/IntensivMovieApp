@@ -6,11 +6,11 @@ import kotlinx.android.synthetic.main.item_tv_show.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.tv_show_model.TvShowModel
+import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class TvShowItem(
-    private val tvShowContent: TvShowModel,
-    private val onClick: (tvShow: TvShowModel) -> Unit
+    private val tvShowContent: ResultApi,
+    private val onClick: (result: ResultApi) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_tv_show
@@ -21,6 +21,8 @@ class TvShowItem(
         viewHolder.tv_show_content.setOnClickListener {
             onClick.invoke(tvShowContent)
         }
-        viewHolder.tv_show_img.load(sizePoster = BuildConfig.BIG_POSTER_SIZE, url = tvShowContent.posterPath)
+        tvShowContent.posterPath.let {
+            viewHolder.tv_show_img.load(sizePoster = BuildConfig.BIG_POSTER_SIZE, url = it)
+        }
     }
 }
