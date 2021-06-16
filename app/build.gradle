@@ -116,4 +116,8 @@ dependencies {
 
     // GSON body parser
     implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    // RxJava2 Dependencies
+    implementation "io.reactivex.rxjava2:$rootProject.rxjavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
 }
