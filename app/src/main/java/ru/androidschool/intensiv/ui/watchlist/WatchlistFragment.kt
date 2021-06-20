@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.movies.MovieRepository
 import ru.androidschool.intensiv.databinding.FragmentWatchlistBinding
 
 class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
@@ -22,17 +21,17 @@ class WatchlistFragment : Fragment(R.layout.fragment_watchlist) {
         watchlistBinding = FragmentWatchlistBinding.bind(view)
         watchlistBinding.moviesRecyclerView.layoutManager = GridLayoutManager(context, 4)
 
-        val moviesList =
-            MovieRepository.getMovies().map {
-                MoviePreviewItem(
-                    it
-                ) { movie -> }
-            }.toList()
+//        val moviesList =
+//            MovieRepository.getMovies().map {
+//                MoviePreviewItem(
+//                    it
+//                ) { movie -> }
+//            }.toList()
 
-        watchlistBinding.moviesRecyclerView.adapter = adapter.apply {
-            if (moviesList != null) {
-                addAll(moviesList)
-            }
-        }
+//        watchlistBinding.moviesRecyclerView.adapter = adapter.apply {
+//            if (moviesList != null) {
+//                addAll(moviesList)
+//            }
+//        }
     }
 }

@@ -5,17 +5,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import io.reactivex.Observable
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.tv_shows.TVShowsRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
-import ru.androidschool.intensiv.extensions.response
-import ru.androidschool.intensiv.model.movie_model.ApiResponse
-import ru.androidschool.intensiv.network.MovieApiClient
-import timber.log.Timber
 
 class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
 
@@ -31,7 +25,8 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
-
+        tvShowsRepository.getTVShows()
+        var isAdded = false
         tvShowList.observe(viewLifecycleOwner, Observer {
             val list = it.map {
                 TvShowItem(
@@ -40,8 +35,17 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
             }
             tvShowsFragmentBinding.tvShowRecyclerView.adapter =
                 adapter.apply {
-                    addAll(list)
+                    if (!isAdded) {
+                        addAll(list)
+                        isAdded = true
+                    }
                 }
         })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.clear()
+        tvShowsRepository.clear()
     }
 }

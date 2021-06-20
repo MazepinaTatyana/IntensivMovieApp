@@ -2,8 +2,11 @@ package ru.androidschool.intensiv.ui.feed
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.xwray.groupie.GroupAdapter
@@ -11,12 +14,9 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
-import retrofit2.Response
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.extensions.response
-import ru.androidschool.intensiv.model.movie_model.ApiResponse
+import ru.androidschool.intensiv.data.movies.MovieRepository
 import ru.androidschool.intensiv.model.movie_model.ResultApi
-import ru.androidschool.intensiv.network.MovieApiClient
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -27,6 +27,10 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     }
 
     var moviesList: List<ResultApi>? = null
+    private val movieRepository = MovieRepository
+    private val popularMovieList = movieRepository.popularMovieList
+    private val upcomingMovieList = movieRepository.upcomingMovieList
+    private val nowPlayingMovieList = movieRepository.nowPlayingMovieList
 
     private val options = navOptions {
         anim {
@@ -48,40 +52,23 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-        MovieApiClient.movieApiClient.getPopularMovies().response {
-            onFailure = { error ->
-                Timber.e("Error popularMovies", error?.message.toString())
-            }
+        movieRepository.getPopularMovies()
+        movieRepository.getNowPlayingMovies()
+        movieRepository.getUpcomingMovies()
 
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.popular)
-            }
-        }
-
-        MovieApiClient.movieApiClient.getNowPlayingMovies().response {
-
-            onFailure = { error ->
-                Timber.e("Error nowPlayingMovies", error?.message.toString())
-            }
-
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.recommended)
-            }
-        }
-
-        MovieApiClient.movieApiClient.getUpcomingMovies().response {
-            onFailure = { error ->
-                Timber.e("Error upcomingMovies", error?.message.toString())
-            }
-
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.upcoming)
-            }
-        }
+        popularMovieList.observe(viewLifecycleOwner, Observer {
+            createMovieItemAndMainCard(it, R.string.popular)
+        })
+        nowPlayingMovieList.observe(viewLifecycleOwner, Observer {
+            createMovieItemAndMainCard(it, R.string.recommended)
+        })
+        upcomingMovieList.observe(viewLifecycleOwner, Observer {
+            createMovieItemAndMainCard(it, R.string.upcoming)
+        })
     }
 
-    private fun createMovieItemAndMainCard(response: Response<ApiResponse>, mainCardTitle: Int) {
-        moviesList = response.body()?.results
+    private fun createMovieItemAndMainCard(response: List<ResultApi>, mainCardTitle: Int) {
+        moviesList = response
 
         val listMovieItem = moviesList?.map {
             MovieItem(it) { movie ->
@@ -120,6 +107,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         super.onStop()
         search_toolbar.clear()
         adapter.clear()
+        movieRepository.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
