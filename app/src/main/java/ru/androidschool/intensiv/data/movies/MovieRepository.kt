@@ -1,18 +1,12 @@
 package ru.androidschool.intensiv.data.movies
 
+import io.reactivex.Observable
+import ru.androidschool.intensiv.model.movie_model.ApiResponse
+import ru.androidschool.intensiv.network.MovieApiClient
+
 object MovieRepository {
 
-fun getMovies(): List<Movie> {
-
-        val moviesList = mutableListOf<Movie>()
-        for (x in 0..10) {
-            val movie = Movie(
-                title = "Spider-Man $x",
-                voteAverage = 10.0 - x
-            )
-            moviesList.add(movie)
-        }
-
-        return moviesList
-    }
+    fun getNowPlayingMovies(): Observable<ApiResponse> = MovieApiClient.movieApiClient.getNowPlayingMovies()
+    fun getPopularMovies(): Observable<ApiResponse> = MovieApiClient.movieApiClient.getPopularMovies()
+    fun getUpcomingMovies(): Observable<ApiResponse> = MovieApiClient.movieApiClient.getUpcomingMovies()
 }

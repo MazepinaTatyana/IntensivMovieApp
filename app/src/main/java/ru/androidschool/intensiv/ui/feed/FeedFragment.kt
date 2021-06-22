@@ -2,21 +2,26 @@ package ru.androidschool.intensiv.ui.feed
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
-import retrofit2.Response
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.extensions.response
+import ru.androidschool.intensiv.data.movies.MovieRepository
 import ru.androidschool.intensiv.model.movie_model.ApiResponse
 import ru.androidschool.intensiv.model.movie_model.ResultApi
-import ru.androidschool.intensiv.network.MovieApiClient
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -25,8 +30,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
-
-    var moviesList: List<ResultApi>? = null
+    private val movieRepository = MovieRepository
+    private lateinit var disposable: Disposable
+    private var compositeDisposable = CompositeDisposable()
 
     private val options = navOptions {
         anim {
@@ -48,56 +54,39 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-        MovieApiClient.movieApiClient.getPopularMovies().response {
-            onFailure = { error ->
-                Timber.e("Error popularMovies", error?.message.toString())
-            }
-
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.popular)
-            }
-        }
-
-        MovieApiClient.movieApiClient.getNowPlayingMovies().response {
-
-            onFailure = { error ->
-                Timber.e("Error nowPlayingMovies", error?.message.toString())
-            }
-
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.recommended)
-            }
-        }
-
-        MovieApiClient.movieApiClient.getUpcomingMovies().response {
-            onFailure = { error ->
-                Timber.e("Error upcomingMovies", error?.message.toString())
-            }
-
-            onResponse = { response ->
-                createMovieItemAndMainCard(response, R.string.upcoming)
-            }
-        }
+        createMovieItemAndMainCard(movieRepository.getPopularMovies(), R.string.popular)
+        createMovieItemAndMainCard(movieRepository.getNowPlayingMovies(), R.string.recommended)
+        createMovieItemAndMainCard(movieRepository.getUpcomingMovies(), R.string.upcoming)
     }
 
-    private fun createMovieItemAndMainCard(response: Response<ApiResponse>, mainCardTitle: Int) {
-        moviesList = response.body()?.results
+    @SuppressLint("TimberArgCount")
+    private fun createMovieItemAndMainCard(
+        observable: Observable<ApiResponse>,
+        mainCardTitle: Int
+    ) {
+        disposable = observable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val listMovieItem = it.results.map {
+                    MovieItem(it) { movie ->
+                        openMovieDetails(
+                            movie
+                        )
+                    }
+                }.toList()
 
-        val listMovieItem = moviesList?.map {
-            MovieItem(it) { movie ->
-                openMovieDetails(
-                    movie
-                )
+                val listCardContainer = listOf(listMovieItem.let {
+                    MainCardContainer(mainCardTitle, it)
+                })
+
+                movies_recycler_view.adapter = adapter.apply {
+                    addAll(listCardContainer)
+                }
+            }, { error ->
+                Timber.d(getString(mainCardTitle), error.message)
             }
-        }?.toList()
-
-        val listCardContainer = listOf(listMovieItem?.let {
-            MainCardContainer(mainCardTitle, it)
-        })
-
-        movies_recycler_view.adapter = adapter.apply {
-            addAll(listCardContainer)
-        }
+            )
+        compositeDisposable.add(disposable)
     }
 
     private fun openMovieDetails(resultApi: ResultApi) {
@@ -120,6 +109,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         super.onStop()
         search_toolbar.clear()
         adapter.clear()
+        compositeDisposable.clear()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

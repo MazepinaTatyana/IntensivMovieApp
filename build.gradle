@@ -53,4 +53,7 @@ ext {
     adapterRxJava2Version = '2.7.2'
     gpuimageVersion = '1.4.1'
     gsonVersion = '2.8.6'
+
+    rxjavaVersion = '2.2.6'
+    rxandroidVersion = '2.1.1'
 }

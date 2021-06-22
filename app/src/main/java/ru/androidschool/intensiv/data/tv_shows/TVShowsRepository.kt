@@ -1,18 +1,10 @@
 package ru.androidschool.intensiv.data.tv_shows
 
+import io.reactivex.Observable
+import ru.androidschool.intensiv.model.movie_model.ApiResponse
+import ru.androidschool.intensiv.network.MovieApiClient
+
 object TVShowsRepository {
 
-    fun getTVShows(): List<TvShow> {
-
-        val tvShowsList = mutableListOf<TvShow>()
-        for (x in 0..10) {
-            val tvShow = TvShow(
-                title = "Game of Thrones $x",
-                voteAverage = 10.0 - x
-            )
-            tvShowsList.add(tvShow)
-        }
-
-        return tvShowsList
-    }
+    fun getTVShows(): Observable<ApiResponse> = MovieApiClient.movieApiClient.getTvShows()
 }

@@ -1,27 +1,13 @@
 package ru.androidschool.intensiv.data.details_movie
 
-import ru.androidschool.intensiv.ui.movie_details.Actor
+import io.reactivex.Observable
+import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
+import ru.androidschool.intensiv.network.MovieApiClient
+import ru.androidschool.intensiv.ui.movie_details.ActorResponse
 
 object DetailsMovieRepository {
 
-    fun getDetailsMovie(): DetailsMovie {
-        val actorList = mutableListOf<Actor>()
-        for (x in 0..5) {
-            val actor = Actor(
-                name = "Willem Dafoe",
-                profilePath = ""
-            )
-            actorList.add(actor)
-        }
+    fun getDetailsMovieById(movieId: Int): Observable<DetailsMovieModel> = MovieApiClient.movieApiClient.getDetailsMovieById(movieId)
 
-        return DetailsMovie(
-            title = "Spider-Man",
-            voteAverage = 3.0,
-            description = "Spider-Man",
-            genre = "Fantasy",
-            studio = "Studio",
-            year = "2018",
-            actors = actorList
-        )
-    }
+    fun getActorsMovie(movieId: Int): Observable<ActorResponse> = MovieApiClient.movieApiClient.getMovieActors(movieId)
 }

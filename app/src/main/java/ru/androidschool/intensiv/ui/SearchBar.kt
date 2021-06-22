@@ -7,8 +7,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
+import java.util.concurrent.TimeUnit
 
 class SearchBar @JvmOverloads constructor(
     context: Context,
@@ -50,13 +52,24 @@ class SearchBar @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        search_edit_text.afterTextChanged { text ->
-            if (!text.isNullOrEmpty() && !delete_text_button.isVisible) {
-                delete_text_button.visibility = View.VISIBLE
-            }
-            if (text.isNullOrEmpty() && delete_text_button.isVisible) {
-                delete_text_button.visibility = View.GONE
+        val source = Observable.create<String> { emiter ->
+            search_edit_text.afterTextChanged { text ->
+                text?.filter { text.length > LENGTH_TEXT }
+                    ?.map { it.toString().trim() }
+                if (!text.isNullOrEmpty() && !delete_text_button.isVisible) {
+                    delete_text_button.visibility = View.VISIBLE
+                }
+                if (text.isNullOrEmpty() && delete_text_button.isVisible) {
+                    delete_text_button.visibility = View.GONE
+                }
             }
         }
+        source.debounce(TIMEOUT_DEBOUNCE, TimeUnit.MILLISECONDS)
+            .subscribe()
+    }
+
+    companion object {
+        private const val LENGTH_TEXT = 3
+        private const val TIMEOUT_DEBOUNCE = 500L
     }
 }
