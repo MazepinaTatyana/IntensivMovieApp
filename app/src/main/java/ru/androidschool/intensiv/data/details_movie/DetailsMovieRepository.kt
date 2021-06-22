@@ -1,47 +1,13 @@
 package ru.androidschool.intensiv.data.details_movie
 
-import androidx.lifecycle.MutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Observable
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import ru.androidschool.intensiv.network.MovieApiClient
 import ru.androidschool.intensiv.ui.movie_details.ActorResponse
 
 object DetailsMovieRepository {
 
-    var movieDetails = MutableLiveData<DetailsMovieModel>()
-    var actors = MutableLiveData<ActorResponse>()
-    val compositeDisposable = CompositeDisposable()
-    var errors = MutableLiveData<Throwable>()
+    fun getDetailsMovieById(movieId: Int): Observable<DetailsMovieModel> = MovieApiClient.movieApiClient.getDetailsMovieById(movieId)
 
-    fun getDetailsMovieById(movieId: Int) {
-        compositeDisposable.add(
-            MovieApiClient.movieApiClient.getDetailsMovieById(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    movieDetails.postValue(it)
-                }, {
-                    errors.postValue(it)
-                })
-        )
-    }
-
-    fun getActorsMovie(movieId: Int) {
-        compositeDisposable.add(
-            MovieApiClient.movieApiClient.getMovieActors(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    actors.postValue(it)
-                }, {
-                    errors.postValue(it)
-                })
-        )
-    }
-
-    fun clear() {
-        compositeDisposable.clear()
-    }
+    fun getActorsMovie(movieId: Int): Observable<ActorResponse> = MovieApiClient.movieApiClient.getMovieActors(movieId)
 }

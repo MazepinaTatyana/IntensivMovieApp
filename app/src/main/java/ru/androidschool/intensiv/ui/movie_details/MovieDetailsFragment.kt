@@ -4,16 +4,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,8 +28,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     }
     private lateinit var movieDetailsFragmentBinding: MovieDetailsFragmentBinding
     private val detailsMovieRepository = DetailsMovieRepository
-    private val movieDetails = detailsMovieRepository.movieDetails
-    private val actors = detailsMovieRepository.actors
+    private lateinit var disposable: Disposable
+    private var compositeDisposable = CompositeDisposable()
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -34,10 +38,16 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
-        detailsMovieRepository.getDetailsMovieById(id)
-        detailsMovieRepository.getActorsMovie(id)
-        movieDetails.observe(viewLifecycleOwner, Observer {
-            val detailsMovie = it
+
+        movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        disposable = detailsMovieRepository.getDetailsMovieById(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val detailsMovie = it
                 val genresName = arrayListOf<String>()
                 detailsMovie.genres.forEach {
                     genresName.add(it.name)
@@ -62,21 +72,25 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                     sizePoster = BuildConfig.BIG_POSTER_SIZE,
                     url = detailsMovie.posterPath
                 )
-        })
+            }, { error ->
+                Timber.d("error details movie", error.message)
+            })
 
-        actors.observe(viewLifecycleOwner, Observer { actorResponse ->
-            val actors = actorResponse.actors.map { actor ->
-                ActorItem(actor)
-            }.toList()
+        disposable = detailsMovieRepository.getActorsMovie(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                val actors = it.actors.map { actor ->
+                    ActorItem(actor)
+                }.toList()
 
-            movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
-                adapter.apply {
-                    addAll(actors)
-                }
-        })
-        movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
-            findNavController().popBackStack()
-        }
+                movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
+                    adapter.apply {
+                        addAll(actors)
+                    }
+            }, { error ->
+                Timber.d("error actors", error.message)
+            })
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -89,7 +103,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     override fun onStop() {
         super.onStop()
-        detailsMovieRepository.clear()
         adapter.clear()
+        compositeDisposable.clear()
     }
 }

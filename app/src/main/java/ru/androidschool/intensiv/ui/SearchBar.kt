@@ -52,10 +52,10 @@ class SearchBar @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        val source = Observable.create<String>({ emiter ->
+        val source = Observable.create<String> { emiter ->
             search_edit_text.afterTextChanged { text ->
-                emiter.onNext(text.toString().trim())
-                text?.filter { text.length > 3 }
+                text?.filter { text.length > LENGTH_TEXT }
+                    ?.map { it.toString().trim() }
                 if (!text.isNullOrEmpty() && !delete_text_button.isVisible) {
                     delete_text_button.visibility = View.VISIBLE
                 }
@@ -63,8 +63,13 @@ class SearchBar @JvmOverloads constructor(
                     delete_text_button.visibility = View.GONE
                 }
             }
-        })
-        source.debounce(500, TimeUnit.MILLISECONDS)
+        }
+        source.debounce(TIMEOUT_DEBOUNCE, TimeUnit.MILLISECONDS)
             .subscribe()
+    }
+
+    companion object {
+        private const val LENGTH_TEXT = 3
+        private const val TIMEOUT_DEBOUNCE = 500L
     }
 }
