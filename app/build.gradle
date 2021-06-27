@@ -120,4 +120,10 @@ dependencies {
     // RxJava2 Dependencies
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+     // RxJava support for Room
+    implementation "androidx.room:room-rxjava2:$rootProject.roomRxJava2Version"
+    implementation "android.arch.persistence.room:rxjava2:$rootProject.persistenceRoomRxJava2Version"
 }

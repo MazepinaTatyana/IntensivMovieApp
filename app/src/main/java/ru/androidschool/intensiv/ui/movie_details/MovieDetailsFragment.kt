@@ -14,9 +14,13 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
+import ru.androidschool.intensiv.data.details_movie.DetailsMovie
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
+import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
+import ru.androidschool.intensiv.model.db_movie_model.Movie
+import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,6 +34,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private val detailsMovieRepository = DetailsMovieRepository
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
+    private lateinit var detailsMovie: DetailsMovieModel
+    private lateinit var movie: Movie
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -38,6 +44,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
+        getMovieDatabase(id)
 
         movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
             findNavController().popBackStack()
@@ -47,7 +54,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                val detailsMovie = it
+                detailsMovie = it
+                checkFavouriteMovie()
                 val genresName = arrayListOf<String>()
                 detailsMovie.genres.forEach {
                     genresName.add(it.name)
@@ -91,6 +99,66 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             }, { error ->
                 Timber.d("error actors", error.message)
             })
+
+    }
+
+    private fun convertMovie(dto:DetailsMovieModel): Movie {
+        return Movie(
+            dto.id,
+            dto.backdropPath,
+            dto.originalLanguage,
+            dto.originalTitle,
+            dto.overview,
+            dto.popularity,
+            dto.posterPath,
+            dto.releaseDate,
+            dto.title,
+            dto.voteAverage,
+            dto.voteCount,
+        )
+    }
+
+    @SuppressLint("TimberArgCount")
+    fun getMovieDatabase(movieId: Int) {
+        disposable = MovieDatabase.getInstance(requireContext()).getMovieDao().getMovieById(movieId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({movie ->
+                movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked = movie.id == movieId
+            },{
+                Timber.e("error db", it.message)
+            })
+
+        compositeDisposable.add(disposable)
+    }
+
+    @SuppressLint("TimberArgCount")
+    private fun checkFavouriteMovie() {
+        movie = convertMovie(detailsMovie)
+        movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
+            when(isChecked) {
+                true -> {
+                    MovieDatabase.getInstance(requireContext()).getMovieDao().saveMovie(movie)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Timber.e("saved movie", "saved movie")
+                        },{
+                            Timber.e("error db", it.message)
+                        })
+                }
+                false -> {
+                    MovieDatabase.getInstance(requireContext()).getMovieDao().deleteMovie(movie)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Timber.e("delete movie", "dalete movie")
+                        },{
+                            Timber.e("error db", it.message)
+                        })
+                }
+            }
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
