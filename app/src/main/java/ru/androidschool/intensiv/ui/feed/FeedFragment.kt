@@ -14,6 +14,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
@@ -22,6 +23,7 @@ import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.MovieRepository
 import ru.androidschool.intensiv.model.movie_model.ApiResponse
 import ru.androidschool.intensiv.model.movie_model.ResultApi
+import ru.androidschool.intensiv.model.movie_model.ResultFeedMovies
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -54,39 +56,45 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-        createMovieItemAndMainCard(movieRepository.getPopularMovies(), R.string.popular)
-        createMovieItemAndMainCard(movieRepository.getNowPlayingMovies(), R.string.recommended)
-        createMovieItemAndMainCard(movieRepository.getUpcomingMovies(), R.string.upcoming)
+        val popularMovie = movieRepository.getPopularMovies()
+        val nowPlayingMovie = movieRepository.getNowPlayingMovies()
+        val upcomingMovie = movieRepository.getUpcomingMovies()
+
+        disposable = Observable.zip(popularMovie, nowPlayingMovie, upcomingMovie,
+
+            Function3<ApiResponse, ApiResponse, ApiResponse, ResultFeedMovies> { popularMovie, nowPlayingMovie, upcomingMovie ->
+                ResultFeedMovies(popularMovie.results, nowPlayingMovie.results, upcomingMovie.results)
+            }
+        )
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
+            .doFinally { progress_feed.visibility = View.INVISIBLE }
+            .subscribe({
+            createCardMovies(it.popularMovies, R.string.popular)
+            createCardMovies(it.nowPlayingMovies, R.string.recommended)
+            createCardMovies(it.upcomingMovies, R.string.upcoming)
+        }, { error ->
+                Timber.d("Error", error.message)
+        })
+        compositeDisposable.add(disposable)
     }
 
-    @SuppressLint("TimberArgCount")
-    private fun createMovieItemAndMainCard(
-        observable: Observable<ApiResponse>,
-        mainCardTitle: Int
-    ) {
-        disposable = observable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                val listMovieItem = it.results.map {
-                    MovieItem(it) { movie ->
-                        openMovieDetails(
-                            movie
-                        )
-                    }
-                }.toList()
-
-                val listCardContainer = listOf(listMovieItem.let {
-                    MainCardContainer(mainCardTitle, it)
-                })
-
-                movies_recycler_view.adapter = adapter.apply {
-                    addAll(listCardContainer)
-                }
-            }, { error ->
-                Timber.d(getString(mainCardTitle), error.message)
+    private fun createCardMovies(resultFeedMovies: List<ResultApi>, cardTitleRes: Int) {
+        val listMovieItem = resultFeedMovies.map {
+            MovieItem(it) { movie ->
+                openMovieDetails(
+                    movie
+                )
             }
-            )
-        compositeDisposable.add(disposable)
+        }.toList()
+        val listCardContainer = listOf(listMovieItem.let {
+            MainCardContainer(cardTitleRes, it)
+        })
+
+        movies_recycler_view.adapter = adapter.apply {
+            addAll(listCardContainer)
+        }
     }
 
     private fun openMovieDetails(resultApi: ResultApi) {
