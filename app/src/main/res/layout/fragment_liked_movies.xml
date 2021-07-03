@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.watchlist.WatchlistFragment">
+    tools:context=".ui.liked_movies.LikedMoviesFragment">
 
     <include
         layout="@layout/movies_recycler_view"
-        android:id="@+id/movies_watchlist_recycler_view"/>
+        android:id="@+id/liked_movies"/>
 </FrameLayout>

@@ -5,8 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <ProgressBar
-    android:layout_width="50dp"
-    android:layout_height="50dp"
+    android:layout_width="@dimen/progress_bar_size"
+    android:layout_height="@dimen/progress_bar_size"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="parent"

@@ -2,6 +2,7 @@ package ru.androidschool.intensiv.ui.profile
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import ru.androidschool.intensiv.ui.liked_movies.LikedMoviesFragment
 import ru.androidschool.intensiv.ui.watchlist.WatchlistFragment
 
 class ProfileAdapter(
@@ -14,6 +15,9 @@ class ProfileAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return WatchlistFragment()
+        return when(position) {
+            0 -> LikedMoviesFragment()
+            else -> WatchlistFragment()
+        }
     }
 }
