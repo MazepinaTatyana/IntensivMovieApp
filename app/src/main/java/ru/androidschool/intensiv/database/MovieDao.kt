@@ -1,12 +1,10 @@
 package ru.androidschool.intensiv.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.androidschool.intensiv.model.db_movie_model.Movie
+import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 @Dao
 interface MovieDao {
@@ -22,4 +20,9 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies WHERE movieId = :movieId")
     fun getMovieById(movieId: Int): Observable<Movie>
+
+    @Transaction
+    @Query("SELECT * FROM movies")
+    fun getMoviesByCategory(): List<MovieAndCategoryCrossRef>
+
 }

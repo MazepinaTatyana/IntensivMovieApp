@@ -104,17 +104,22 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     private fun convertMovie(dto:DetailsMovieModel): Movie {
         return Movie(
-            dto.id,
-            dto.backdropPath,
-            dto.originalLanguage,
-            dto.originalTitle,
-            dto.overview,
-            dto.popularity,
-            dto.posterPath,
-            dto.releaseDate,
-            dto.title,
-            dto.voteAverage,
-            dto.voteCount,
+            id = dto.id,
+            backdropPath = dto.backdropPath,
+            originalLanguage = dto.originalLanguage,
+            originalTitle = dto.originalTitle,
+            overview = dto.overview,
+            popularity = dto.popularity,
+            posterPath = dto.posterPath,
+            releaseDate = dto.releaseDate,
+            title = dto.title,
+            voteAverage = dto.voteAverage,
+            voteCount = dto.voteCount,
+            status = dto.status,
+            revenue = dto.revenue,
+            runtime = dto.runtime,
+            tagline = dto.tagline,
+            homepage = dto.homepage,
         )
     }
 

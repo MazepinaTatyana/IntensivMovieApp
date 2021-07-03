@@ -1,7 +1,6 @@
 package ru.androidschool.intensiv.ui.feed
 
 import android.annotation.SuppressLint
-import android.app.Service
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -21,10 +20,14 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.movies.MovieRepository
+import ru.androidschool.intensiv.data.movies.DBMovieRepository
+import ru.androidschool.intensiv.data.movies.RemoteMovieRepository
+import ru.androidschool.intensiv.model.db_movie_model.Category
+import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.movie_model.ApiResponse
 import ru.androidschool.intensiv.model.movie_model.ResultApi
 import ru.androidschool.intensiv.model.movie_model.ResultFeedMovies
+import ru.androidschool.intensiv.model.movie_model.ResultFeedMoviesFromDb
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -33,7 +36,8 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
-    private val movieRepository = MovieRepository
+    private val remoteMovieRepository = RemoteMovieRepository()
+    private val dbMovieRepository = DBMovieRepository(requireContext())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
 
@@ -57,20 +61,37 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             }
         }
 
-        val popularMovie = movieRepository.getPopularMovies()
-        val nowPlayingMovie = movieRepository.getNowPlayingMovies()
-        val upcomingMovie = movieRepository.getUpcomingMovies()
+        initCategories()
 
-        disposable = Observable.zip(popularMovie, nowPlayingMovie, upcomingMovie,
 
-            Function3<ApiResponse, ApiResponse, ApiResponse, Map<MovieFeed, ResultFeedMovies>> { popularMovie, nowPlayingMovie, upcomingMovie ->
-                linkedMapOf(
-                    MovieFeed.POPULAR to ResultFeedMovies(R.string.popular, popularMovie.results),
-                    MovieFeed.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovie.results),
-                    MovieFeed.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovie.results)
+        val popularMovie = remoteMovieRepository.getPopularMovies()
+        val nowPlayingMovie = remoteMovieRepository.getNowPlayingMovies()
+        val upcomingMovie = remoteMovieRepository.getUpcomingMovies()
+
+        val popularMovieFromDb = dbMovieRepository.getPopularMovies()
+        val nowPlayingMovieFromDb = dbMovieRepository.getNowPlayingMovies()
+        val upcomingMovieFromDb = dbMovieRepository.getUpcomingMovies()
+
+
+        val disposable =  Observable.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
+            Function3<List<Movie>, List<Movie>, List<Movie>, Map<MovieCategory,ResultFeedMoviesFromDb>> {popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
+                linkedMapOf(MovieCategory.POPULAR to ResultFeedMoviesFromDb(R.string.popular, popularMovieFromDb),
+                    MovieCategory.NOWPLAYING to ResultFeedMoviesFromDb(R.string.recommended, nowPlayingMovieFromDb),
+                    MovieCategory.UPCOMING to ResultFeedMoviesFromDb(R.string.upcoming, upcomingMovieFromDb)
                 )
             }
         )
+            .concatMap {
+            Observable.zip(popularMovie, nowPlayingMovie, upcomingMovie,
+
+            Function3<ApiResponse, ApiResponse, ApiResponse, Map<MovieCategory, ResultFeedMovies>> { popularMovie, nowPlayingMovie, upcomingMovie ->
+                linkedMapOf(
+                    MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovie.results),
+                    MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovie.results),
+                    MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovie.results)
+                )
+            }
+        ) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
@@ -83,7 +104,34 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         compositeDisposable.add(disposable)
     }
 
-    private fun createCardMovies(movies: Map<MovieFeed, ResultFeedMovies>) {
+    private fun initCategories() {
+        var categories = listOf<Category>()
+        disposable = dbMovieRepository.getCategories()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                categories = it
+                if (categories.isNullOrEmpty()) {
+                    setCategories()
+                }
+            }, {
+
+            })
+    }
+
+    private fun setCategories() {
+        val categories = arrayListOf<Category>()
+        categories.add(Category(title = getString(R.string.popular), movieCategory = MovieCategory.POPULAR))
+        categories.add(Category(title = getString(R.string.upcoming), movieCategory = MovieCategory.UPCOMING))
+        categories.add(Category(title = getString(R.string.recommended), movieCategory = MovieCategory.NOWPLAYING))
+        disposable = dbMovieRepository.setCategories(categories)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({}
+            , {})
+    }
+
+    private fun createCardMovies(movies: Map<MovieCategory, ResultFeedMovies>) {
         for (movie in movies) {
             val listMovieItem = movie.value.movies.map {
                 MovieItem(it) { movie ->
