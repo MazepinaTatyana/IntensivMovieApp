@@ -1,6 +1,7 @@
 package ru.androidschool.intensiv.ui.feed
 
 import android.annotation.SuppressLint
+import android.app.Service
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -62,8 +63,12 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
         disposable = Observable.zip(popularMovie, nowPlayingMovie, upcomingMovie,
 
-            Function3<ApiResponse, ApiResponse, ApiResponse, ResultFeedMovies> { popularMovie, nowPlayingMovie, upcomingMovie ->
-                ResultFeedMovies(popularMovie.results, nowPlayingMovie.results, upcomingMovie.results)
+            Function3<ApiResponse, ApiResponse, ApiResponse, Map<MovieFeed, ResultFeedMovies>> { popularMovie, nowPlayingMovie, upcomingMovie ->
+                linkedMapOf(
+                    MovieFeed.POPULAR to ResultFeedMovies(R.string.popular, popularMovie.results),
+                    MovieFeed.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovie.results),
+                    MovieFeed.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovie.results)
+                )
             }
         )
             .subscribeOn(Schedulers.io())
@@ -71,29 +76,29 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
             .doFinally { progress_feed.visibility = View.INVISIBLE }
             .subscribe({
-            createCardMovies(it.popularMovies, R.string.popular)
-            createCardMovies(it.nowPlayingMovies, R.string.recommended)
-            createCardMovies(it.upcomingMovies, R.string.upcoming)
-        }, { error ->
+                createCardMovies(it)
+            }, { error ->
                 Timber.d("Error", error.message)
-        })
+            })
         compositeDisposable.add(disposable)
     }
 
-    private fun createCardMovies(resultFeedMovies: List<ResultApi>, cardTitleRes: Int) {
-        val listMovieItem = resultFeedMovies.map {
-            MovieItem(it) { movie ->
-                openMovieDetails(
-                    movie
-                )
-            }
-        }.toList()
-        val listCardContainer = listOf(listMovieItem.let {
-            MainCardContainer(cardTitleRes, it)
-        })
+    private fun createCardMovies(movies: Map<MovieFeed, ResultFeedMovies>) {
+        for (movie in movies) {
+            val listMovieItem = movie.value.movies.map {
+                MovieItem(it) { movie ->
+                    openMovieDetails(
+                        movie
+                    )
+                }
+            }.toList()
+            val listCardContainer = listOf(listMovieItem.let {
+                MainCardContainer(movie.value.titleRes, it)
+            })
 
-        movies_recycler_view.adapter = adapter.apply {
-            addAll(listCardContainer)
+            movies_recycler_view.adapter = adapter.apply {
+                addAll(listCardContainer)
+            }
         }
     }
 
