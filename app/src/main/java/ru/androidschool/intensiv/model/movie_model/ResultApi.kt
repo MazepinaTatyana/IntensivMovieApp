@@ -1,11 +1,13 @@
 package ru.androidschool.intensiv.model.movie_model
 
+import androidx.room.Entity
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import ru.androidschool.intensiv.model.details_movie_model.Genre
 import ru.androidschool.intensiv.model.details_movie_model.ProductionCompany
 import ru.androidschool.intensiv.model.details_movie_model.ProductionCountry
 import ru.androidschool.intensiv.model.details_movie_model.SpokenLanguage
+
 
 data class ResultApi(
 

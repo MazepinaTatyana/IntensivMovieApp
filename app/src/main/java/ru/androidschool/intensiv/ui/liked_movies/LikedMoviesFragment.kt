@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -26,6 +27,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
+    val countMovies = MutableLiveData<Int>()
 
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +49,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
                 likedMoviesRecycler.adapter = adapter.apply {
                     addAll(moviesList)
                 }
+                countMovies.postValue(movies.size)
 
             }, {
                 Timber.e("error db", it.message)
