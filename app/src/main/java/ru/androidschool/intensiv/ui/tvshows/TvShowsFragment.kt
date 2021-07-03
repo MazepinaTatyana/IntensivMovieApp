@@ -10,6 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_search.view.*
+import kotlinx.android.synthetic.main.tv_shows_fragment.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.tv_shows.TVShowsRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
@@ -33,6 +35,8 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
         disposable = tvShowsRepository.getTVShows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { progress_tv_shows.visibility = View.VISIBLE }
+            .doFinally { progress_tv_shows.visibility = View.INVISIBLE }
             .subscribe({
                 val list = it.results.map {
                     TvShowItem(

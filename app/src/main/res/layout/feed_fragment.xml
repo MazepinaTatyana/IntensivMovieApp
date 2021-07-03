@@ -30,4 +30,8 @@
                 tools:listitem="@layout/item_card" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <include
+        android:id="@+id/progress_feed"
+        layout="@layout/progress_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,10 +8,10 @@ import ru.androidschool.intensiv.model.details_movie_model.ProductionCountry
 import ru.androidschool.intensiv.model.details_movie_model.SpokenLanguage
 
 data class ResultApi(
-
-    @SerializedName("adult")
-    @Expose
-    val isAdult: Boolean,
+//
+//    @SerializedName("adult")
+//    @Expose
+//    val isAdult: Boolean,
 
     @SerializedName("backdrop_path")
     @Expose
