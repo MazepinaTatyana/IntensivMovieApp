@@ -1,6 +1,7 @@
 package ru.androidschool.intensiv.ui.feed
 
 import android.annotation.SuppressLint
+import android.app.Service
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
