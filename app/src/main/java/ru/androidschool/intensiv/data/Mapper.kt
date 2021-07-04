@@ -22,7 +22,7 @@ class Mapper {
             revenue = dto.revenue,
             runtime = dto.runtime,
             tagline = dto.tagline,
-            homepage = dto.homepage,
+            homepage = dto.homepage
         )
     }
 
@@ -43,7 +43,7 @@ class Mapper {
             revenue = dto.revenue,
             runtime = dto.runtime,
             tagline = dto.tagline,
-            homepage = dto.homepage,
+            homepage = dto.homepage
         )
     }
 }

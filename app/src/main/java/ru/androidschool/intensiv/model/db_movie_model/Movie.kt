@@ -11,7 +11,7 @@ data class Movie(
 
     @SerializedName("backdrop_path")
     @Expose
-    val backdropPath: String,
+    val backdropPath: String? = null,
 
     @SerializedName("id")
     @Expose
@@ -21,61 +21,61 @@ data class Movie(
 
     @SerializedName("original_language")
     @Expose
-    val originalLanguage: String,
+    val originalLanguage: String? = null,
 
     @SerializedName("original_title")
     @Expose
-    val originalTitle: String,
+    val originalTitle: String? = null,
 
     @SerializedName("overview")
     @Expose
-    val overview: String,
+    val overview: String? = null,
 
     @SerializedName("popularity")
     @Expose
-    val popularity: Double,
+    val popularity: Double? = null,
 
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String? = null,
 
     @SerializedName("release_date")
     @Expose
-    val releaseDate: String,
+    val releaseDate: String? = null,
 
     @SerializedName("title")
     @Expose
-    val title: String,
+    val title: String? = null,
 
     @SerializedName("vote_average")
     @Expose
-    val voteAverage: Double,
+    val voteAverage: Double? = null,
 
     @SerializedName("vote_count")
     @Expose
-    val voteCount: Int,
+    val voteCount: Int? = null,
 
     @SerializedName("homepage")
     @Expose
-    val homepage: String,
+    val homepage: String? = null,
 
     @SerializedName("revenue")
     @Expose
-    val revenue: Int,
+    val revenue: Int? = null,
 
     @SerializedName("runtime")
     @Expose
-    val runtime: Int,
+    val runtime: Int? = null,
 
     @SerializedName("status")
     @Expose
-    val status: String,
+    val status: String? = null,
 
     @SerializedName("tagline")
     @Expose
-    val tagline: String
+    val tagline: String? = null
 ) {
-    val rating: Float
-        get() = voteAverage.div(2).toFloat()
+    val rating: Float?
+        get() = voteAverage?.div(2)?.toFloat()
 }
 
