@@ -14,6 +14,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
+import ru.androidschool.intensiv.data.Mapper
 import ru.androidschool.intensiv.data.details_movie.DetailsMovie
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.database.MovieDatabase
@@ -102,27 +103,6 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     }
 
-    private fun convertMovie(dto:DetailsMovieModel): Movie {
-        return Movie(
-            id = dto.id,
-            backdropPath = dto.backdropPath,
-            originalLanguage = dto.originalLanguage,
-            originalTitle = dto.originalTitle,
-            overview = dto.overview,
-            popularity = dto.popularity,
-            posterPath = dto.posterPath,
-            releaseDate = dto.releaseDate,
-            title = dto.title,
-            voteAverage = dto.voteAverage,
-            voteCount = dto.voteCount,
-            status = dto.status,
-            revenue = dto.revenue,
-            runtime = dto.runtime,
-            tagline = dto.tagline,
-            homepage = dto.homepage,
-        )
-    }
-
     @SuppressLint("TimberArgCount")
     fun getMovieDatabase(movieId: Int) {
         disposable = MovieDatabase.getInstance(requireContext()).getMovieDao().getMovieById(movieId)
@@ -139,7 +119,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie() {
-        movie = convertMovie(detailsMovie)
+        movie = Mapper().convertMovie(detailsMovie)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {

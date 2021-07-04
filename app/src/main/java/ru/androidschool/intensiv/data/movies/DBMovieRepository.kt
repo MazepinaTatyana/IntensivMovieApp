@@ -2,28 +2,38 @@ package ru.androidschool.intensiv.data.movies
 
 import android.content.Context
 import io.reactivex.Observable
-import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.model.db_movie_model.Category
 import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
+import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
-class DBMovieRepository(var context: Context): MovieRepository {
+class DBMovieRepository(var context: Context) {
 
-    override fun getPopularMovies(): Observable<CategoryWithMovies> = MovieDatabase
+     fun getMovies(resString: Int): Observable<CategoryWithMovies> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
-        .getCategoryWithMovies(R.string.popular)
+        .getCategoryWithMoviesById(resString)
 
-    override fun getNowPlayingMovies(): Observable<CategoryWithMovies> = MovieDatabase
+    fun setMovies(listMovie: List<Movie>) = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
-        .getCategoryWithMovies(R.string.recommended)
+        .setMovies(listMovie)
 
-    override fun getUpcomingMovies(): Observable<CategoryWithMovies> = MovieDatabase
+    fun deleteAllCat() = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
-        .getCategoryWithMovies(R.string.upcoming)
+        .deleteAllCategories()
+
+//     fun getNowPlayingMovies(): Observable<CategoryWithMovies> = MovieDatabase
+//        .getInstance(context)
+//        .getMoviesByCategoryDao()
+//        .getCategoryWithMovies(R.string.recommended)
+//
+//     fun getUpcomingMovies(): Observable<CategoryWithMovies> = MovieDatabase
+//        .getInstance(context)
+//        .getMoviesByCategoryDao()
+//        .getCategoryWithMovies(R.string.upcoming)
 
 //    fun getAllCategories(): Observable<List<CategoryWithMovies>> = MovieDatabase
 //        .getInstance(context)
@@ -50,4 +60,9 @@ class DBMovieRepository(var context: Context): MovieRepository {
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryByMovieCategory(categoryTitle)
+
+    fun getCategoryWithMoviesById(categoryId: Int): Observable<CategoryWithMovies> = MovieDatabase
+        .getInstance(context)
+        .getMoviesByCategoryDao()
+        .getCategoryWithMoviesById(categoryId)
 }
