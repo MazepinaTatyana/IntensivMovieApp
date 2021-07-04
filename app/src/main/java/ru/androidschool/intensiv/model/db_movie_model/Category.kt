@@ -14,9 +14,9 @@ data class Category (
 
     @SerializedName("title")
     @Expose
-    var title: String,
-
-    @SerializedName("movieCategory")
-    @Expose
-    var movieCategory: MovieCategory,
+    var title: Int,
+//
+//    @SerializedName("movieCategory")
+//    @Expose
+//    var movieCategory: MovieCategory,
 )

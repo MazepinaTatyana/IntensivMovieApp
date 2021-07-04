@@ -7,8 +7,9 @@ import androidx.room.RoomDatabase
 import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.db_movie_model.Category
+import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
-@Database(entities = [Movie::class, Category::class, FavouriteMovies::class], version = 4)
+@Database(entities = [Movie::class, Category::class, FavouriteMovies::class, MovieAndCategoryCrossRef::class], version = 5, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
     companion object {
         private var DB: MovieDatabase? = null

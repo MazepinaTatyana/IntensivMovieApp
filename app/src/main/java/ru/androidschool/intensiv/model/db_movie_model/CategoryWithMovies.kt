@@ -4,12 +4,16 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class CategoryWithMovies (
+data class CategoryWithMovies(
     @Embedded val category: Category,
     @Relation(
         parentColumn = "categoryId",
         entityColumn = "movieId",
-        associateBy = Junction(MovieAndCategoryCrossRef::class)
+        associateBy = Junction(
+            MovieAndCategoryCrossRef::class,
+            parentColumn = "categoryId",
+            entityColumn = "movieId"
+        )
     )
     val movies: List<Movie>
 )
