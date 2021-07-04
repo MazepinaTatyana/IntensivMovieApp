@@ -12,8 +12,8 @@ import ru.androidschool.intensiv.ui.feed.MovieCategory
 @Dao
 interface MoviesByCategoryDao {
 
-    @Insert
-    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>)
+    @Update
+    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
     @Update
     fun setMovies(listMovie: List<Movie>): Completable

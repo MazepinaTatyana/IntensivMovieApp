@@ -169,9 +169,19 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                             MovieAndCategoryCrossRef(it.value.titleRes,
                                 m.id )
                         }
-                    }
+                    }.distinct()
                     dbMovieRepository.setMovies(movies)
-                    dbMovieRepository.saveMoviesByCategories(moviesByCat)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            dbMovieRepository.saveMoviesByCategories(moviesByCat)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe({}, {
+                                    println(it.message)
+                                })
+                        }, {})
+
                 }, { error ->
                     Timber.d("Error", error.message)
                 })
