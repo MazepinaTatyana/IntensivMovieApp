@@ -13,7 +13,7 @@ import ru.androidschool.intensiv.ui.feed.MovieCategory
 @Dao
 interface MoviesByCategoryDao {
 
-    @Update
+    @Update(entity = MovieAndCategoryCrossRef::class)
     fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
     @Update
@@ -24,7 +24,7 @@ interface MoviesByCategoryDao {
 
     @Transaction
     @Query("SELECT * FROM category WHERE categoryId LIKE :categoryId")
-    fun getCategoryWithMoviesById(categoryId: Int): Single<CategoryWithMovies>
+    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies>
 
     @Insert
     fun setCategories(categories: List<Category>): Completable
@@ -34,4 +34,7 @@ interface MoviesByCategoryDao {
 
     @Query("SELECT * FROM category WHERE categoryId = :categoryId")
     fun getCategoryByMovieCategory(categoryId: Int): Single<Category>
+
+    @Query("SELECT * FROM category")
+    fun getCategoriesWithMovies(): Single<List<CategoryWithMovies>>
 }

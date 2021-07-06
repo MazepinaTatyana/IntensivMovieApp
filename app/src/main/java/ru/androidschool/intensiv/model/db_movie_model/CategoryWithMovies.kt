@@ -10,9 +10,7 @@ data class CategoryWithMovies(
         parentColumn = "categoryId",
         entityColumn = "movieId",
         associateBy = Junction(
-            MovieAndCategoryCrossRef::class,
-            parentColumn = "categoryId",
-            entityColumn = "movieId"
+            MovieAndCategoryCrossRef::class
         )
     )
     val movies: List<Movie>

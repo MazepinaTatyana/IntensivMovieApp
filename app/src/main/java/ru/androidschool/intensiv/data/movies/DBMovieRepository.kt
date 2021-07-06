@@ -11,7 +11,7 @@ import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 class DBMovieRepository(var context: Context) {
 
-     fun getMovies(resString: Int): Single<CategoryWithMovies> = MovieDatabase
+     fun getMovies(resString: String): Single<CategoryWithMovies> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(resString)
@@ -25,6 +25,11 @@ class DBMovieRepository(var context: Context) {
         .getInstance(context)
         .getMoviesByCategoryDao()
         .deleteAllCategories()
+
+    fun getMovies(): Observable<List<Movie>> = MovieDatabase
+        .getInstance(context)
+        .getMovieDao()
+        .getMovies()
 
 //     fun getNowPlayingMovies(): Observable<CategoryWithMovies> = MovieDatabase
 //        .getInstance(context)
@@ -62,8 +67,13 @@ class DBMovieRepository(var context: Context) {
         .getMoviesByCategoryDao()
         .getCategoryByMovieCategory(categoryTitle)
 
-    fun getCategoryWithMoviesById(categoryId: Int): Single<CategoryWithMovies> = MovieDatabase
+    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(categoryId)
+
+    fun getCategoriesWithMovies(): Single<List<CategoryWithMovies>> = MovieDatabase
+        .getInstance(context)
+        .getMoviesByCategoryDao()
+        .getCategoriesWithMovies()
 }

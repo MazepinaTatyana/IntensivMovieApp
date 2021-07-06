@@ -9,8 +9,8 @@ import ru.androidschool.intensiv.ui.feed.MovieCategory
 
 @Entity(tableName = "category")
 data class Category (
-    @PrimaryKey()
-    var categoryId: Int = 0,
+    @PrimaryKey
+    var categoryId: String,
 
 //    @SerializedName("title")
 //    @Expose

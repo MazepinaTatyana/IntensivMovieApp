@@ -68,6 +68,16 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
         dbMovieRepository = DBMovieRepository(requireContext())
         initCategories()
+
+        dbMovieRepository.getMovies()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
+            .doFinally { progress_feed.visibility = View.INVISIBLE }
+            .subscribe({
+                val a = it
+            },{})
+
         getMoviesFromDb()
     }
 
@@ -88,9 +98,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
     private fun setCategories() {
         val categories = arrayListOf<Category>()
-        categories.add(Category(categoryId = R.string.popular))
-        categories.add(Category(categoryId = R.string.upcoming))
-        categories.add(Category(categoryId = R.string.recommended))
+        categories.add(Category(categoryId = getString(R.string.popular)))
+        categories.add(Category(categoryId = getString(R.string.upcoming)))
+        categories.add(Category(categoryId = getString(R.string.recommended)))
         disposable = dbMovieRepository.setCategories(categories)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -101,14 +111,24 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     @SuppressLint("TimberArgCount")
     private fun getMoviesFromDb() {
 
-        val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.popular)
-        val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.recommended)
-        val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.upcoming)
+        dbMovieRepository.getCategoriesWithMovies()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
+            .doFinally { progress_feed.visibility = View.INVISIBLE }
+            .subscribe({
+                val a = it
+            },{})
+
+
+        val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.popular))
+        val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.recommended))
+        val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.upcoming))
 
         val disposable =
             Single.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
                 Function3<CategoryWithMovies, CategoryWithMovies, CategoryWithMovies, Map<MovieCategory,ResultFeedMovies<Movie>>> { popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
-                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(popularMovieFromDb.category.categoryId, popularMovieFromDb.movies),
+                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovieFromDb.movies),
                         MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovieFromDb.movies),
                         MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovieFromDb.movies)
                     )
@@ -121,18 +141,6 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                 .subscribe({
                     createCardMovies(it)
                     getMoviesFromApi()
-//                    val movies = it.flatMap{
-//                        it.value.movies
-////                            .map {
-////                            mapper.convertMovie(it)
-////                        }
-//                    }
-//                    val moviesByCat = it.flatMap {
-//                        it.value.movies.map {m->
-//                            MovieAndCategoryCrossRef(it.value.titleRes,
-//                                m.id )
-//                        }
-//                    }
                 }, { error ->
                     Timber.d("Error", error.message)
                 })
@@ -168,8 +176,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                     }
                     val moviesByCat = it.flatMap {
                         it.value.movies.map {m->
-                            MovieAndCategoryCrossRef(it.value.titleRes,
-                                m.id )
+                            MovieAndCategoryCrossRef(m.id, getString(it.value.titleRes))
                         }
                     }.distinct()
                     dbMovieRepository.setMovies(movies)
@@ -182,7 +189,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                                 .subscribe({}, {
                                     println(it.message)
                                 })
-                        }, {})
+                        }, {
+                            println("lalala ${it.message}")
+                        })
 
                 }, { error ->
                     Timber.d("Error", error.message)
