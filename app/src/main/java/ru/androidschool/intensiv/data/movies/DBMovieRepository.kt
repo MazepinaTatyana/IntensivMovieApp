@@ -2,6 +2,7 @@ package ru.androidschool.intensiv.data.movies
 
 import android.content.Context
 import io.reactivex.Observable
+import io.reactivex.Single
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.model.db_movie_model.Category
 import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
@@ -10,7 +11,7 @@ import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 class DBMovieRepository(var context: Context) {
 
-     fun getMovies(resString: Int): Observable<CategoryWithMovies> = MovieDatabase
+     fun getMovies(resString: Int): Single<CategoryWithMovies> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(resString)
@@ -40,7 +41,7 @@ class DBMovieRepository(var context: Context) {
 //        .getMoviesByCategoryDao()
 //        .getAllCategoriesWithMovies()
 
-    fun getCategories(): Observable<List<Category>> = MovieDatabase
+    fun getCategories(): Single<List<Category>> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategories()
@@ -61,7 +62,7 @@ class DBMovieRepository(var context: Context) {
         .getMoviesByCategoryDao()
         .getCategoryByMovieCategory(categoryTitle)
 
-    fun getCategoryWithMoviesById(categoryId: Int): Observable<CategoryWithMovies> = MovieDatabase
+    fun getCategoryWithMoviesById(categoryId: Int): Single<CategoryWithMovies> = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(categoryId)

@@ -11,6 +11,7 @@ import androidx.navigation.navOptions
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -99,14 +100,15 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun getMoviesFromDb() {
+
         val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.popular)
         val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.recommended)
         val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(R.string.upcoming)
 
         val disposable =
-            Observable.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
+            Single.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
                 Function3<CategoryWithMovies, CategoryWithMovies, CategoryWithMovies, Map<MovieCategory,ResultFeedMovies<Movie>>> { popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
-                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovieFromDb.movies),
+                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(popularMovieFromDb.category.categoryId, popularMovieFromDb.movies),
                         MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovieFromDb.movies),
                         MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovieFromDb.movies)
                     )
@@ -189,6 +191,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     }
 
     private fun <T>createCardMovies(movies: Map<MovieCategory, ResultFeedMovies<T>>) {
+        adapter.clear()
         for (movie in movies) {
             val listMovieItem = movie.value.movies.map {
                 MovieItem(it as ResultApi) { movie ->
