@@ -1,19 +1,14 @@
-package ru.androidschool.intensiv.data.dto
+package ru.androidschool.intensiv.data.dto.details_movie_dto
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class ProductionCompanyDto(
     @SerializedName("id")
-    @Expose
     val id: Int,
     @SerializedName("logo_path")
-    @Expose
     val logoPath: Any,
     @SerializedName("name")
-    @Expose
     val name: String,
     @SerializedName("origin_country")
-    @Expose
     val originCountry: String
 )

@@ -10,6 +10,6 @@ class PopularMoviesRemoteRepository: MovieRepository {
 
     override fun getMovies(): Single<List<Movie>> {
        return MovieApiClient.movieApiClient.getPopularMovies()
-           .map { Mapper().toValueObject(it) }
+           .map { Mapper().convertToListMovie(it) }
     }
 }

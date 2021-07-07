@@ -10,6 +10,6 @@ class DetailsMovieRemoteRepository: DetailsMovieRepository {
 
     override fun getDetailsMovieById(movieId: Int): Single<DetailsMovie> {
         return MovieApiClient.movieApiClient.getDetailsMovieById(movieId)
-            .map { Mapper().convertMovie(it) }
+            .map { Mapper().convertToDetailsMovie(it) }
     }
 }

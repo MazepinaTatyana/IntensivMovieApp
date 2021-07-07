@@ -1,12 +1,11 @@
 package ru.androidschool.intensiv.data.repository.db_repository
 
 import android.content.Context
-import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
 import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
 
 class DBMovieRepository(var context: Context) {
@@ -16,17 +15,17 @@ class DBMovieRepository(var context: Context) {
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(resString)
 
-    fun setMovies(listMovie: List<Movie>) = MovieDatabase
+    fun setMovies(listMovieFromDb: List<MovieFromDb>) = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
-        .setMovies(listMovie)
+        .setMovies(listMovieFromDb)
 
     fun deleteAllCat() = MovieDatabase
         .getInstance(context)
         .getMoviesByCategoryDao()
         .deleteAllCategories()
 
-    fun getMovies(): Single<List<Movie>> = MovieDatabase
+    fun getMovies(): Single<List<MovieFromDb>> = MovieDatabase
         .getInstance(context)
         .getMovieDao()
         .getMovies()

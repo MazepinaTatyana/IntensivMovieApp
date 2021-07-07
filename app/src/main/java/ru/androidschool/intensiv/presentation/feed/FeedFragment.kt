@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -17,7 +16,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.feed_fragment.*
-import kotlinx.android.synthetic.main.feed_fragment.view.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
@@ -34,7 +32,6 @@ import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
 import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
 import ru.androidschool.intensiv.databinding.FeedFragmentBinding
-import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.presentation.extension.applyVisibilityProgressBar
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
@@ -176,7 +173,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                     createCardMovies(it)
                    val movies =  it.flatMap {
                         it.value.movies.map {
-                            Mapper().toValueObjectForDbMovie(it)
+                            Mapper().convertToMovieFromDb(it)
                         }
                     }
                     val moviesByCat = it.flatMap {

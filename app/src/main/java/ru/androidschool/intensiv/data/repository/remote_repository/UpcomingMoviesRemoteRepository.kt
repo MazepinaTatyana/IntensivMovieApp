@@ -9,6 +9,6 @@ import ru.androidschool.intensiv.domain.repository.MovieRepository
 class UpcomingMoviesRemoteRepository: MovieRepository {
     override fun getMovies(): Single<List<Movie>> {
         return MovieApiClient.movieApiClient.getUpcomingMovies()
-            .map { Mapper().toValueObject(it) }
+            .map { Mapper().convertToListMovie(it) }
     }
 }

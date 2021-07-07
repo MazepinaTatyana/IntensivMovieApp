@@ -5,22 +5,22 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
 
 @Dao
 interface MovieDao {
 
     @Insert
-    fun saveMovie(movie: Movie): Completable
+    fun saveMovie(movieFromDb: MovieFromDb): Completable
 
     @Delete
-    fun deleteMovie(movie: Movie): Completable
+    fun deleteMovie(movieFromDb: MovieFromDb): Completable
 
     @Query("SELECT * FROM movies")
-    fun getMovies(): Single<List<Movie>>
+    fun getMovies(): Single<List<MovieFromDb>>
 
     @Query("SELECT * FROM movies WHERE movieId =:movieId")
-    fun getMovieById(movieId: Int): Observable<Movie>
+    fun getMovieById(movieId: Int): Observable<MovieFromDb>
 
     @Transaction
     @Query("SELECT * FROM category")

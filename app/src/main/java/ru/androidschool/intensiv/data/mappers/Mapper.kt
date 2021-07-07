@@ -1,12 +1,13 @@
 package ru.androidschool.intensiv.data.mappers
 
-import ru.androidschool.intensiv.data.dto.DetailsMovieDto
-import ru.androidschool.intensiv.data.dto.MovieDto
-import ru.androidschool.intensiv.data.dto.MoviesApiResponseDto
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
+import ru.androidschool.intensiv.data.dto.details_movie_dto.DetailsMovieDto
+import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
+import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.vo.*
 
 class Mapper {
-    fun convertMovie(dto: DetailsMovieDto): DetailsMovie {
+    fun convertToDetailsMovie(dto: DetailsMovieDto): DetailsMovie {
         return DetailsMovie(
             id = dto.id,
             originalTitle = dto.originalTitle,
@@ -32,8 +33,8 @@ class Mapper {
         )
     }
 
-    fun convertMovieFromDb(dto: DetailsMovie): ru.androidschool.intensiv.data.db.model_db.entities_db.Movie {
-        return ru.androidschool.intensiv.data.db.model_db.entities_db.Movie(
+    fun convertToMovieFromDb(dto: DetailsMovie): MovieFromDb {
+        return MovieFromDb(
             id = dto.id,
             originalTitle = dto.originalTitle?.let { it } ?: "",
             overview = dto.overview,
@@ -45,11 +46,11 @@ class Mapper {
         )
     }
 
-    fun toValueObject(dto: MoviesApiResponseDto): List<Movie> {
-        return dto.results.map { toValueObject(it) }
+    fun convertToListMovie(dto: MoviesApiResponseDto): List<Movie> {
+        return dto.results.map { convertToMovie(it) }
     }
 
-    private fun toValueObject(dto: MovieDto): Movie {
+    private fun convertToMovie(dto: MovieDto): Movie {
         return Movie(
             id = dto.id,
             originalTitle = dto.originalTitle,
@@ -63,8 +64,8 @@ class Mapper {
         )
     }
 
-    fun toValueObjectForDbMovie(movie: Movie): ru.androidschool.intensiv.data.db.model_db.entities_db.Movie {
-        return ru.androidschool.intensiv.data.db.model_db.entities_db.Movie(
+    fun convertToMovieFromDb(movie: Movie): MovieFromDb {
+        return MovieFromDb(
             id = movie.id,
             originalTitle = movie.originalTitle?.let { it } ?: "",
             overview = movie.overview,

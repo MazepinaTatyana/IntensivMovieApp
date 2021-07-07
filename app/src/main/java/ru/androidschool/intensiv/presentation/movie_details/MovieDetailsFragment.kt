@@ -19,7 +19,7 @@ import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.domain.usecase.extensions.load
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
 import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
 import ru.androidschool.intensiv.domain.usecase.ActorsMovieRemoteUseCase
@@ -39,7 +39,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
     private lateinit var detailsMovie: DetailsMovie
-    private lateinit var movie: Movie
+    private lateinit var movieFromDb: MovieFromDb
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -89,7 +89,9 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         disposable = actorsDetailRemoteUseCase.getActorsMovie(id)
             .subscribe({
                 val actors = it.actors.map { actor ->
-                    ActorItem(actor)
+                    ActorItem(
+                        actor
+                    )
                 }.toList()
                 movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
                     adapter.apply {
@@ -117,11 +119,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie() {
-        movie = Mapper().convertMovieFromDb(detailsMovie)
+        movieFromDb = Mapper().convertToMovieFromDb(detailsMovie)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
-                    MovieDatabase.getInstance(requireContext()).getMovieDao().saveMovie(movie)
+                    MovieDatabase.getInstance(requireContext()).getMovieDao().saveMovie(movieFromDb)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -131,7 +133,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    MovieDatabase.getInstance(requireContext()).getMovieDao().deleteMovie(movie)
+                    MovieDatabase.getInstance(requireContext()).getMovieDao().deleteMovie(movieFromDb)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

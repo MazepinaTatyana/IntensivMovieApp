@@ -9,6 +9,6 @@ import ru.androidschool.intensiv.domain.repository.TvShowsRepository
 class TvShowsRemoteRepository: TvShowsRepository {
     override fun getTVShows(): Single<List<Movie>> {
         return MovieApiClient.movieApiClient.getTvShows()
-            .map { Mapper().toValueObject(it) }
+            .map { Mapper().convertToListMovie(it) }
     }
 }

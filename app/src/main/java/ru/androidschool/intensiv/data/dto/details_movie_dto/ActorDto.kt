@@ -1,9 +1,9 @@
-package ru.androidschool.intensiv.presentation.movie_details
+package ru.androidschool.intensiv.data.dto.details_movie_dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Actor(
+data class ActorDto(
     @SerializedName("name")
     @Expose
     val name: String,

@@ -7,7 +7,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "movies")
-data class Movie(
+data class MovieFromDb(
     @SerializedName("id")
     @Expose
     @PrimaryKey

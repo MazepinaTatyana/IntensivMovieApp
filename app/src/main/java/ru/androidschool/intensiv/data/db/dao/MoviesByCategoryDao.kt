@@ -3,7 +3,7 @@ package ru.androidschool.intensiv.data.db.dao
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
 import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
@@ -15,7 +15,7 @@ interface MoviesByCategoryDao {
     fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
     @Update
-    fun setMovies(listMovie: List<Movie>): Completable
+    fun setMovies(listMovieFromDb: List<MovieFromDb>): Completable
 
     @Query("DELETE FROM category")
     fun deleteAllCategories(): Completable
