@@ -48,7 +48,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
-        getMovieDatabase(id)
+        getMovieDatabase(508943)
 
         movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
             findNavController().popBackStack()

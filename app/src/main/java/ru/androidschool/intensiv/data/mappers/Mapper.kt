@@ -22,11 +22,11 @@ class Mapper {
     fun convertMovieFromDb(dto: DetailsMovie): ru.androidschool.intensiv.data.db.model_db.entities_db.Movie {
         return ru.androidschool.intensiv.data.db.model_db.entities_db.Movie(
             id = dto.id,
-            originalTitle = dto.originalTitle,
+            originalTitle = dto.originalTitle?.let { it } ?: "",
             overview = dto.overview,
             popularity = dto.popularity,
-            posterPath = dto.posterPath,
-            releaseDate = dto.releaseDate,
+            posterPath = dto.posterPath?.let { it } ?: "",
+            releaseDate = dto.releaseDate?.let { it } ?: "",
             title = dto.title,
             voteAverage = dto.voteAverage
         )

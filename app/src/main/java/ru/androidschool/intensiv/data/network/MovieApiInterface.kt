@@ -6,7 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.androidschool.intensiv.BuildConfig
-import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import ru.androidschool.intensiv.data.dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.presentation.movie_details.ActorResponse

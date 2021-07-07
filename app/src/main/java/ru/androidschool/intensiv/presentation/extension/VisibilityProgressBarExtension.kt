@@ -7,7 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.feed_fragment.*
 
-fun <T> Single<T>.applyVisibilityProgressBar(progressBar: ProgressBar): Single<T> {
+fun <T> Single<T>.applyVisibilityProgressBar(progressBar: View): Single<T> {
     return this.doOnSubscribe { progressBar.visibility = View.VISIBLE }
         .doFinally { progressBar.visibility = View.INVISIBLE }
 }

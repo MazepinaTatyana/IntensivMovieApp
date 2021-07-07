@@ -19,8 +19,8 @@ interface MovieDao {
     @Query("SELECT * FROM movies")
     fun getMovies(): Single<List<Movie>>
 
-    @Query("SELECT * FROM movies WHERE movieId = :movieId")
-    fun getMovieById(movieId: Int): Single<Movie>
+    @Query("SELECT * FROM movies WHERE movieId =:movieId")
+    fun getMovieById(movieId: Int): Observable<Movie>
 
     @Transaction
     @Query("SELECT * FROM category")

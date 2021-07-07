@@ -9,6 +9,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.tv_shows_fragment.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.repository.remote_repository.TvShowsRemoteRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
@@ -32,7 +33,7 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
         disposable = twShowsRemoteUseCase.getTVShows()
-            .applyVisibilityProgressBar(tvShowsFragmentBinding.progressTvShows as ProgressBar)
+            .applyVisibilityProgressBar(progress_tv_shows)
             .subscribe({
                 val list = it.map {
                     TvShowItem(

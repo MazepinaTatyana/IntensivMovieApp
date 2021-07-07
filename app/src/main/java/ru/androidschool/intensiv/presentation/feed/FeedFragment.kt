@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.feed_fragment.*
+import kotlinx.android.synthetic.main.feed_fragment.view.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
@@ -81,13 +82,13 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         disposable = dbMovieRepository.getMovies()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
+            .applyVisibilityProgressBar(progress_feed)
             .subscribe({
                 val a = it
             },{})
         compositeDisposable.add(disposable)
-
-        getMoviesFromDb()
+        getMoviesFromApi()
+//        getMoviesFromDb()
     }
 
     private fun initCategories() {
@@ -117,40 +118,43 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             , {})
     }
 
-    @SuppressLint("TimberArgCount")
-    private fun getMoviesFromDb() {
-
-        dbMovieRepository.getCategoriesWithMovies()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
-            .subscribe({
-                val a = it
-            },{})
-
-
-        val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.popular))
-        val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.recommended))
-        val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.upcoming))
-
-        val disposable =
-            Single.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
-                { popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
-                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovieFromDb.movies),
-                        MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovieFromDb.movies),
-                        MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovieFromDb.movies)
-                    )
-                }
-            )
-                .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
-                .subscribe({
-                    createCardMovies(it)
-                    getMoviesFromApi()
-                }, { error ->
-                    Timber.d("Error", error.message)
-                })
-        compositeDisposable.add(disposable)
-    }
+//    @SuppressLint("TimberArgCount")
+//    private fun getMoviesFromDb() {
+//
+//        disposable = dbMovieRepository.getCategoriesWithMovies()
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .applyVisibilityProgressBar(progress_feed)
+//            .subscribe({
+//                val a = it
+//            },{})
+//        compositeDisposable.add(disposable)
+//
+//
+//        val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.popular))
+//        val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.recommended))
+//        val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.upcoming))
+//
+//        val disposable =
+//            Single.zip( popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
+//                { popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
+//                    linkedMapOf(MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovieFromDb.movies),
+//                        MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovieFromDb.movies),
+//                        MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovieFromDb.movies)
+//                    )
+//                }
+//            )
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .applyVisibilityProgressBar(progress_feed)
+//                .subscribe({
+//                    createCardMovies(it)
+//                    getMoviesFromApi()
+//                }, { error ->
+//                    Timber.d("Error", error.message)
+//                })
+//        compositeDisposable.add(disposable)
+//    }
 
     @SuppressLint("TimberArgCount")
     private fun getMoviesFromApi() {
@@ -167,10 +171,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                     )
                 }
             )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
-                .doFinally { progress_feed.visibility = View.INVISIBLE }
+                .applyVisibilityProgressBar(progress_feed)
                 .subscribe({
                     createCardMovies(it)
                    val movies =  it.flatMap {

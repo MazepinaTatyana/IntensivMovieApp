@@ -16,7 +16,7 @@ data class Movie(
 
     @SerializedName("original_title")
     @Expose
-    val originalTitle: String,
+    val originalTitle: String? = null,
 
     @SerializedName("overview")
     @Expose
@@ -28,11 +28,11 @@ data class Movie(
 
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String? = null,
 
     @SerializedName("release_date")
     @Expose
-    val releaseDate: String,
+    val releaseDate: String? = null,
 
     @SerializedName("title")
     @Expose
