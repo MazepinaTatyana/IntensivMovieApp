@@ -16,11 +16,14 @@ import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.mappers.Mapper
 import ru.androidschool.intensiv.data.vo.DetailsMovie
-import ru.androidschool.intensiv.model.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.domain.usecase.extensions.load
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
+import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
+import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
+import ru.androidschool.intensiv.domain.usecase.ActorsMovieRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.DetailsMovieRemoteUseCase
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,7 +34,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         GroupAdapter<GroupieViewHolder>()
     }
     private lateinit var movieDetailsFragmentBinding: MovieDetailsFragmentBinding
-    private val detailsMovieRepository = DetailsMovieRepository
+    private val detailsMovieRemoteUseCase = DetailsMovieRemoteUseCase(DetailsMovieRemoteRepository())
+    private val actorsDetailRemoteUseCase = ActorsMovieRemoteUseCase(ActorsMovieRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
     private lateinit var detailsMovie: DetailsMovie
@@ -50,9 +54,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             findNavController().popBackStack()
         }
 
-        disposable = detailsMovieRepository.getDetailsMovieById(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        disposable = detailsMovieRemoteUseCase.getDetailsMovieById(id)
             .subscribe({
                 detailsMovie = it
                 checkFavouriteMovie()
@@ -84,14 +86,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                 Timber.d("error details movie", error.message)
             })
 
-        disposable = detailsMovieRepository.getActorsMovie(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+        disposable = actorsDetailRemoteUseCase.getActorsMovie(id)
             .subscribe({
                 val actors = it.actors.map { actor ->
                     ActorItem(actor)
                 }.toList()
-
                 movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
                     adapter.apply {
                         addAll(actors)
@@ -118,7 +117,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie() {
-        movie = Mapper().convertMovie(detailsMovie)
+        movie = Mapper().convertMovieFromDb(detailsMovie)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
