@@ -24,12 +24,12 @@ import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.NowPlayingMoviesRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.PopularMoviesRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.UpcomingMoviesRemoteRepository
+import ru.androidschool.intensiv.data.vo.Movie
 import ru.androidschool.intensiv.domain.usecase.NowPlayingMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.PopularMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.UpcomingMoviesRemoteUseCase
 import ru.androidschool.intensiv.model.db_movie_model.Category
 import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
-import ru.androidschool.intensiv.model.movie_model.ResultApi
 import ru.androidschool.intensiv.model.movie_model.ResultFeedMovies
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
@@ -212,7 +212,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         adapter.clear()
         for (movie in movies) {
             val listMovieItem = movie.value.movies.map {
-                MovieItem(it as ResultApi) { movie ->
+                MovieItem(it as Movie) { movie ->
                     openMovieDetails(
                         movie
                     )
@@ -228,11 +228,11 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         }
     }
 
-    private fun openMovieDetails(resultApi: ResultApi) {
-        if (resultApi.id != null) {
+    private fun openMovieDetails(movie: Movie) {
+        if (movie.id != null) {
             findNavController().navigate(
                 FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(
-                    resultApi.id
+                    movie.id
                 )
             )
         }

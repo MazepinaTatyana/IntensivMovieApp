@@ -36,7 +36,7 @@ interface MovieApiInterface {
     fun getTvShows(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<MoviesApiResponseDto>
+    ): Single<MoviesApiResponseDto>
 
     @GET("movie/{movie_id}")
     fun getDetailsMovieById(

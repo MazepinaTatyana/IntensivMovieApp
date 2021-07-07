@@ -31,22 +31,22 @@ class Mapper {
             popularity = dto.popularity,
             posterPath = dto.posterPath?.let { it } ?: "",
             releaseDate = dto.releaseDate,
-            title = dto.title,
+            title = dto.title?.let { it } ?: "",
             voteAverage = dto.voteAverage,
+            name = dto.name?.let { it } ?: ""
         )
     }
 
     fun toValueObjectForDbMovie(movie: Movie): ru.androidschool.intensiv.model.movie_model.Movie {
       return ru.androidschool.intensiv.model.movie_model.Movie(
                 id = movie.id,
-                originalTitle = movie.originalTitle,
-                overview = (movie.overview?.let { movie } ?: "") as String,
+                originalTitle = movie.originalTitle?.let { it } ?: "",
+                overview = movie.overview,
                 popularity = movie.popularity,
-                posterPath = (movie.posterPath?.let { movie } ?: "") as String,
-                releaseDate = movie.releaseDate,
-                title = movie.title,
+                posterPath = movie.posterPath,
+                releaseDate = movie.releaseDate?.let { it } ?: "",
+                title = movie.title?.let { it } ?: "",
                 voteAverage = movie.voteAverage
             )
-
         }
 }

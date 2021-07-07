@@ -16,6 +16,7 @@ import ru.androidschool.intensiv.data.mappers.Mapper
 import ru.androidschool.intensiv.presentation.tv_shows.TVShowsRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
 

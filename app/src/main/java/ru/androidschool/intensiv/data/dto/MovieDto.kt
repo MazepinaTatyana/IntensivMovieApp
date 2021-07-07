@@ -1,5 +1,6 @@
 package ru.androidschool.intensiv.data.dto
 
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class MovieDto (
@@ -19,12 +20,13 @@ data class MovieDto (
     @SerializedName("poster_path")
     val posterPath: String? = null,
     @SerializedName("release_date")
-    val releaseDate: String,
+    val releaseDate: String? = null,
     val title: String,
     val video: Boolean,
     @SerializedName("vote_average")
     val voteAverage: Double,
     @SerializedName("vote_count")
-    val voteCount: Int
-
+    val voteCount: Int,
+    @SerializedName("name")
+    val name: String
 )
