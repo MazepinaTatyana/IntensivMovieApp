@@ -43,12 +43,12 @@ interface MovieApiInterface {
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<DetailsMovie>
+    ): Single<DetailsMovie>
 
     @GET("movie/{movie_id}/credits")
     fun getMovieActors(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<ActorResponse>
+    ): Single<ActorResponse>
 }

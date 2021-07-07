@@ -6,8 +6,8 @@ import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.data.vo.Movie
 
 class Mapper {
-    fun convertMovie(dto: DetailsMovie): ru.androidschool.intensiv.model.movie_model.Movie {
-        return ru.androidschool.intensiv.model.movie_model.Movie(
+    fun convertMovie(dto: DetailsMovie): Movie {
+        return Movie(
             id = dto.id,
             originalTitle = dto.originalTitle,
             overview = dto.overview,
@@ -38,15 +38,15 @@ class Mapper {
     }
 
     fun toValueObjectForDbMovie(movie: Movie): ru.androidschool.intensiv.model.movie_model.Movie {
-      return ru.androidschool.intensiv.model.movie_model.Movie(
-                id = movie.id,
-                originalTitle = movie.originalTitle?.let { it } ?: "",
-                overview = movie.overview,
-                popularity = movie.popularity,
-                posterPath = movie.posterPath,
-                releaseDate = movie.releaseDate?.let { it } ?: "",
-                title = movie.title?.let { it } ?: "",
-                voteAverage = movie.voteAverage
-            )
-        }
+        return ru.androidschool.intensiv.model.movie_model.Movie(
+            id = movie.id,
+            originalTitle = movie.originalTitle?.let { it } ?: "",
+            overview = movie.overview,
+            popularity = movie.popularity,
+            posterPath = movie.posterPath,
+            releaseDate = movie.releaseDate?.let { it } ?: "",
+            title = movie.title?.let { it } ?: "",
+            voteAverage = movie.voteAverage
+        )
+    }
 }
