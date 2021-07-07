@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -28,9 +29,12 @@ import ru.androidschool.intensiv.data.vo.Movie
 import ru.androidschool.intensiv.domain.usecase.NowPlayingMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.PopularMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.UpcomingMoviesRemoteUseCase
-import ru.androidschool.intensiv.model.db_movie_model.Category
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
-import ru.androidschool.intensiv.model.movie_model.ResultFeedMovies
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
+import ru.androidschool.intensiv.databinding.FeedFragmentBinding
+import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
+import ru.androidschool.intensiv.presentation.extension.applyVisibilityProgressBar
 import ru.androidschool.intensiv.ui.afterTextChanged
 import timber.log.Timber
 
@@ -39,6 +43,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
+    private lateinit var feedFragmentBinding: FeedFragmentBinding
 
     private val nowPlayingMoviesRemoteUseCase = NowPlayingMoviesRemoteUseCase(NowPlayingMoviesRemoteRepository())
     private val popularMoviesRemoteUseCase = PopularMoviesRemoteUseCase(PopularMoviesRemoteRepository())
@@ -62,6 +67,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        feedFragmentBinding = FeedFragmentBinding.bind(view)
         search_toolbar.search_edit_text.afterTextChanged {
             Timber.d(it.toString())
             if (it.toString().length > MIN_LENGTH) {
@@ -72,14 +78,14 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         dbMovieRepository = DBMovieRepository(requireContext())
         initCategories()
 
-        dbMovieRepository.getMovies()
+        disposable = dbMovieRepository.getMovies()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
-            .doFinally { progress_feed.visibility = View.INVISIBLE }
+            .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
             .subscribe({
                 val a = it
             },{})
+        compositeDisposable.add(disposable)
 
         getMoviesFromDb()
     }
@@ -117,8 +123,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         dbMovieRepository.getCategoriesWithMovies()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
-            .doFinally { progress_feed.visibility = View.INVISIBLE }
+            .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
             .subscribe({
                 val a = it
             },{})
@@ -137,10 +142,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                     )
                 }
             )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
-                .doFinally { progress_feed.visibility = View.INVISIBLE }
+                .applyVisibilityProgressBar(feedFragmentBinding.progressFeed as ProgressBar)
                 .subscribe({
                     createCardMovies(it)
                     getMoviesFromApi()
@@ -176,13 +178,6 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                             Mapper().toValueObjectForDbMovie(it)
                         }
                     }
-
-//                    val mapper = Mapper();
-//                    val movies = it.flatMap{map ->
-//                        map.value.movies.map {result ->
-//                            mapper.toValueObjectForDbMovie(result);
-//                        }
-//                    }
                     val moviesByCat = it.flatMap {
                         it.value.movies.map {m->
                             MovieAndCategoryCrossRef(m.id, getString(it.value.titleRes))

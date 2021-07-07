@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
 import ru.androidschool.intensiv.presentation.watchlist.MoviePreviewItem
 import timber.log.Timber
@@ -27,7 +27,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
-    val countMovies = MutableLiveData<Int>()
+    private val countMovies = MutableLiveData<Int>()
 
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

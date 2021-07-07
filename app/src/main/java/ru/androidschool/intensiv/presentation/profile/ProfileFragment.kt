@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import timber.log.Timber
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {

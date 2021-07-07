@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.model.db_movie_model
+package ru.androidschool.intensiv.data.db.model_db.entities_db
 
 import androidx.room.Entity
 

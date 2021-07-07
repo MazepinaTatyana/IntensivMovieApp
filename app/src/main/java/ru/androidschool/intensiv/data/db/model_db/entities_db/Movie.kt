@@ -1,5 +1,4 @@
-package ru.androidschool.intensiv.model.movie_model
-
+package ru.androidschool.intensiv.data.db.model_db.entities_db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -9,7 +8,6 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "movies")
 data class Movie(
-
     @SerializedName("id")
     @Expose
     @PrimaryKey
@@ -43,9 +41,4 @@ data class Movie(
     @SerializedName("vote_average")
     @Expose
     val voteAverage: Double
-
-) {
-    val rating: Float
-        get() = voteAverage.div(2).toFloat()
-}
-
+)

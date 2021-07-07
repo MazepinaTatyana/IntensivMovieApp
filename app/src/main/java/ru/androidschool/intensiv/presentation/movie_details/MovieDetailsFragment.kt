@@ -17,11 +17,10 @@ import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.mappers.Mapper
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.model.details_movie.DetailsMovieRepository
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.domain.usecase.extensions.load
-import ru.androidschool.intensiv.model.movie_model.Movie
-import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*

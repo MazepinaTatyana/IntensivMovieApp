@@ -37,8 +37,8 @@ class Mapper {
         )
     }
 
-    fun toValueObjectForDbMovie(movie: Movie): ru.androidschool.intensiv.model.movie_model.Movie {
-        return ru.androidschool.intensiv.model.movie_model.Movie(
+    fun toValueObjectForDbMovie(movie: Movie): ru.androidschool.intensiv.data.db.model_db.entities_db.Movie {
+        return ru.androidschool.intensiv.data.db.model_db.entities_db.Movie(
             id = movie.id,
             originalTitle = movie.originalTitle?.let { it } ?: "",
             overview = movie.overview,

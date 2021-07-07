@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.domain.usecase.extensions.load
-import ru.androidschool.intensiv.model.movie_model.Movie
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Movie
 
 class MoviePreviewItem(
     private val content: Movie,
