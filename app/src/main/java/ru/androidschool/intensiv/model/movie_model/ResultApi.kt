@@ -2,10 +2,10 @@ package ru.androidschool.intensiv.model.movie_model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import ru.androidschool.intensiv.model.details_movie_model.Genre
-import ru.androidschool.intensiv.model.details_movie_model.ProductionCompany
-import ru.androidschool.intensiv.model.details_movie_model.ProductionCountry
-import ru.androidschool.intensiv.model.details_movie_model.SpokenLanguage
+import ru.androidschool.intensiv.data.dto.GenreDto
+import ru.androidschool.intensiv.data.dto.ProductionCompanyDto
+import ru.androidschool.intensiv.data.dto.ProductionCountryDto
+import ru.androidschool.intensiv.data.dto.SpokenLanguageDto
 
 data class ResultApi(
 
@@ -91,7 +91,7 @@ data class ResultApi(
 
     @SerializedName("genres")
     @Expose
-    val genres: List<Genre>,
+    val genreDtos: List<GenreDto>,
 
     @SerializedName("homepage")
     @Expose
@@ -103,11 +103,11 @@ data class ResultApi(
 
     @SerializedName("production_companies")
     @Expose
-    val productionCompanies: List<ProductionCompany>,
+    val productionCompanyDtos: List<ProductionCompanyDto>,
 
     @SerializedName("production_countries")
     @Expose
-    val productionCountries: List<ProductionCountry>,
+    val productionCountryDtos: List<ProductionCountryDto>,
 
     @SerializedName("revenue")
     @Expose
@@ -119,7 +119,7 @@ data class ResultApi(
 
     @SerializedName("spoken_languages")
     @Expose
-    val spokenLanguages: List<SpokenLanguage>,
+    val spokenLanguageDtos: List<SpokenLanguageDto>,
 
     @SerializedName("status")
     @Expose

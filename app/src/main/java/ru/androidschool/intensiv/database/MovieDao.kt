@@ -4,8 +4,7 @@ import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Observable
 import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
-import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.model.movie_model.Movie
 
 @Dao
 interface MovieDao {
