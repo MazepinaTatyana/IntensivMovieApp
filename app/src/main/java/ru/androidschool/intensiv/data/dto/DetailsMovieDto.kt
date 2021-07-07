@@ -2,6 +2,10 @@ package ru.androidschool.intensiv.data.dto
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import ru.androidschool.intensiv.data.vo.Genre
+import ru.androidschool.intensiv.data.vo.ProductionCompany
+import ru.androidschool.intensiv.data.vo.ProductionCountry
+import ru.androidschool.intensiv.data.vo.SpokenLanguage
 
 data class DetailsMovieDto(
     @SerializedName("backdrop_path")
@@ -9,7 +13,7 @@ data class DetailsMovieDto(
     val backdropPath: String,
     @SerializedName("genres")
     @Expose
-    val genreDtos: List<GenreDto>,
+    val genres: List<Genre>,
     @SerializedName("homepage")
     @Expose
     val homepage: String,
@@ -33,10 +37,10 @@ data class DetailsMovieDto(
     val posterPath: String,
     @SerializedName("production_companies")
     @Expose
-    val productionCompanyDtos: List<ProductionCompanyDto>,
+    val productionCompany: List<ProductionCompany>,
     @SerializedName("production_countries")
     @Expose
-    val productionCountryDtos: List<ProductionCountryDto>,
+    val productionCountry: List<ProductionCountry>,
     @SerializedName("release_date")
     @Expose
     val releaseDate: String,
@@ -48,7 +52,7 @@ data class DetailsMovieDto(
     val runtime: Int,
     @SerializedName("spoken_languages")
     @Expose
-    val spokenLanguageDtos: List<SpokenLanguageDto>,
+    val spokenLanguage: List<SpokenLanguage>,
     @SerializedName("status")
     @Expose
     val status: String,

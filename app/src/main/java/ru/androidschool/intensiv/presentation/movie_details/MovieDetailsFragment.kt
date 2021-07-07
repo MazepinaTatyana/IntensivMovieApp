@@ -48,7 +48,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
-        getMovieDatabase(508943)
+        getMovieDatabase(id)
 
         movieDetailsFragmentBinding.detailsMovieBackIcon.setOnClickListener {
             findNavController().popBackStack()
@@ -59,7 +59,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                 detailsMovie = it
                 checkFavouriteMovie()
                 val genresName = arrayListOf<String>()
-                detailsMovie.genreDtos.forEach {
+                detailsMovie.genreDtos?.forEach {
                     genresName.add(it.name)
                 }
                 movieDetailsFragmentBinding.detailsMovieGenre.text =
@@ -76,7 +76,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                 movieDetailsFragmentBinding.detailsMovieTextDescription.text =
                     detailsMovie.overview
 
-                val year = getYear(detailsMovie.releaseDate)
+                val year = detailsMovie.releaseDate?.let { releaseDate -> getYear(releaseDate) }
                 movieDetailsFragmentBinding.detailsMovieYear.text = year.toString()
                 movieDetailsFragmentBinding.detailsMovieImg.load(
                     sizePoster = BuildConfig.BIG_POSTER_SIZE,
@@ -135,7 +135,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            Timber.e("delete movie", "dalete movie")
+                            Timber.e("delete movie", "delete movie")
                         },{
                             Timber.e("error db", it.message)
                         })

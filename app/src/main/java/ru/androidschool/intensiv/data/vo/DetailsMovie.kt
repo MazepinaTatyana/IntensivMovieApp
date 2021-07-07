@@ -1,12 +1,5 @@
 package ru.androidschool.intensiv.data.vo
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
-import ru.androidschool.intensiv.data.dto.GenreDto
-import ru.androidschool.intensiv.data.dto.ProductionCompanyDto
-import ru.androidschool.intensiv.data.dto.ProductionCountryDto
-import ru.androidschool.intensiv.data.dto.SpokenLanguageDto
-
 data class DetailsMovie(
 
     val backdropPath: String,
@@ -20,7 +13,7 @@ data class DetailsMovie(
     val posterPath: String,
     val productionCompanyDtos: List<ProductionCompany>,
     val productionCountryDtos: List<ProductionCountry>,
-    val releaseDate: String,
+    val releaseDate: String? = null,
     val revenue: Int,
     val runtime: Int,
     val spokenLanguageDtos: List<SpokenLanguage>,

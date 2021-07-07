@@ -6,6 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.androidschool.intensiv.BuildConfig
+import ru.androidschool.intensiv.data.dto.DetailsMovieDto
 import ru.androidschool.intensiv.data.dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.presentation.movie_details.ActorResponse
@@ -42,7 +43,7 @@ interface MovieApiInterface {
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Single<DetailsMovie>
+    ): Single<DetailsMovieDto>
 
     @GET("movie/{movie_id}/credits")
     fun getMovieActors(
