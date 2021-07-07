@@ -3,25 +3,23 @@ package ru.androidschool.intensiv.presentation.tvshows
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.tv_shows_fragment.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.mappers.Mapper
-import ru.androidschool.intensiv.presentation.tv_shows.TVShowsRepository
+import ru.androidschool.intensiv.data.repository.remote_repository.TvShowsRemoteRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
+import ru.androidschool.intensiv.domain.usecase.TvShowsRemoteUseCase
+import ru.androidschool.intensiv.presentation.extension.applyVisibilityProgressBar
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
 
     private lateinit var tvShowsFragmentBinding: TvShowsFragmentBinding
-    private var tvShowsRepository = TVShowsRepository
+    private val twShowsRemoteUseCase = TvShowsRemoteUseCase(TvShowsRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
 
@@ -33,14 +31,10 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
-        disposable = tvShowsRepository.getTVShows()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress_tv_shows.visibility = View.VISIBLE }
-            .doFinally { progress_tv_shows.visibility = View.INVISIBLE }
+        disposable = twShowsRemoteUseCase.getTVShows()
+            .applyVisibilityProgressBar(tvShowsFragmentBinding.progressTvShows as ProgressBar)
             .subscribe({
-                val listMov = Mapper().toValueObject(it)
-                val list = listMov.map {
+                val list = it.map {
                     TvShowItem(
                         it
                     ) { tvShow -> }
