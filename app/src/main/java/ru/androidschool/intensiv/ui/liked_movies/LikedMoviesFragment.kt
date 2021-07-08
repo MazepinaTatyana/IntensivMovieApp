@@ -14,7 +14,9 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
+import ru.androidschool.intensiv.data.movies.MovieVo
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
+import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
 import timber.log.Timber
 
@@ -42,11 +44,21 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movies ->
-                moviesList = movies.map {
-                    MoviePreviewItem(
-                        it
-                    ) { movie -> }
-                }.toList()
+                var movie: Movie
+                val movies = movies.map {
+                    val favouriteMovies = arrayListOf<Movie>()
+                    dbRepository.getMovieById(it)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({ it ->
+                            moviesList = listOf(MoviePreviewItem(
+                                it
+                            ) { movie -> })
+                        }, {
+
+                        })
+//                    setMoviePreviewItem(movie)
+                }
 
                 likedMoviesRecycler.adapter = adapter.apply {
                     addAll(moviesList)
@@ -58,6 +70,10 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
             })
         compositeDisposable.add(disposable)
     }
+
+    private fun setMoviePreviewItem(movie: Movie) = MoviePreviewItem(
+        movie
+    ) { movie -> }
 
     override fun onDestroy() {
         super.onDestroy()

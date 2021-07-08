@@ -107,7 +107,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     fun getMovieDatabase(movieId: Int) {
-        disposable = MovieDatabase.getInstance(requireContext()).getMovieDao().getMovieById(movieId)
+        disposable = dbRepository.getFavouriteMovieById(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({movie ->
@@ -125,7 +125,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
-                    dbRepository.saveFavouriteMovie(movie)
+                    dbRepository.saveFavouriteMovie(movie.id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -135,7 +135,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    dbRepository.deleteFavouriteMovie(movie)
+                    dbRepository.deleteFavouriteMovie(movie.id)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

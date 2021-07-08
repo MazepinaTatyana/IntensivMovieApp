@@ -18,21 +18,25 @@ class DBMovieRepository(var context: Context) {
         .getMovieDao()
         .setMovies(listMovie)
 
-
-    fun getFavouriteMovies(): Single<List<Movie>> = MovieDatabase
+    fun getFavouriteMovies(): Single<List<Int>> = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
         .getFavouriteMovies()
 
-    fun saveFavouriteMovie(movie: Movie) = MovieDatabase
+    fun getFavouriteMovieById(id: Int): Single<MovieVo> = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
-        .saveFavouriteMovie(movie)
+        .getFavouriteMovieById(id)
 
-    fun deleteFavouriteMovie(movie: Movie) = MovieDatabase
+    fun saveFavouriteMovie(movieId: Int) = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
-        .deleteFavouriteMovie(movie)
+        .saveFavouriteMovie(movieId)
+
+    fun deleteFavouriteMovie(movieId: Int) = MovieDatabase
+        .getInstance(context)
+        .getFavouriteMovieDao()
+        .deleteFavouriteMovie(movieId)
 
     fun getCategories(): Single<List<Category>> = MovieDatabase
         .getInstance(context)
@@ -58,4 +62,9 @@ class DBMovieRepository(var context: Context) {
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoriesWithMovies()
+
+    fun getMovieById(movieId: Int): Single<Movie> = MovieDatabase
+        .getInstance(context)
+        .getMovieDao()
+        .getMovieById(movieId)
 }
