@@ -106,12 +106,13 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({}
             , {})
+        compositeDisposable.add(disposable)
     }
 
     @SuppressLint("TimberArgCount")
     private fun getMoviesFromDb() {
 
-        dbMovieRepository.getCategoriesWithMovies()
+       disposable = dbMovieRepository.getCategoriesWithMovies()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { progress_feed.visibility = View.VISIBLE }
@@ -119,6 +120,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
             .subscribe({
                 val a = it
             },{})
+        compositeDisposable.add(disposable)
 
 
         val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.popular))
@@ -178,7 +180,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                         it.value.movies.map {m->
                             MovieAndCategoryCrossRef(m.id, getString(it.value.titleRes))
                         }
-                    }.distinct()
+                    }
                     dbMovieRepository.setMovies(movies)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -203,7 +205,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         adapter.clear()
         for (movie in movies) {
             val listMovieItem = movie.value.movies.map {
-                MovieItem(it as ResultApi) { movie ->
+                MovieItem(it) { movie ->
                     openMovieDetails(
                         movie
                     )
@@ -219,7 +221,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         }
     }
 
-    private fun openMovieDetails(resultApi: ResultApi) {
+    private fun openMovieDetails(resultApi: Movie) {
         if (resultApi.id != null) {
             findNavController().navigate(
                 FeedFragmentDirections.actionHomeDestToMovieDetailsFragment(

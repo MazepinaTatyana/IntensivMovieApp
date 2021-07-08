@@ -10,7 +10,7 @@ import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 @Dao
 interface MovieDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMovie(movie: Movie): Completable
 
     @Delete

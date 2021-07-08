@@ -5,6 +5,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.extensions.load
+import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class MovieItem(

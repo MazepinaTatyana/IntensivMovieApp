@@ -13,10 +13,10 @@ import ru.androidschool.intensiv.ui.feed.MovieCategory
 @Dao
 interface MoviesByCategoryDao {
 
-    @Update(entity = MovieAndCategoryCrossRef::class)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
-    @Update
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun setMovies(listMovie: List<Movie>): Completable
 
     @Query("DELETE FROM category")
