@@ -14,14 +14,11 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.Mapper
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
-import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
-import ru.androidschool.intensiv.model.db_movie_model.Movie
+import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -38,7 +35,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
     private lateinit var detailsMovie: DetailsMovieModel
-    private lateinit var movie: FavouriteMovies
+    private lateinit var favouriteMovie: FavouriteMoviesEntity
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -59,7 +56,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 detailsMovie = it
-                checkFavouriteMovie()
+                checkFavouriteMovie(detailsMovie.id)
                 val genresName = arrayListOf<String>()
                 detailsMovie.genres.forEach {
                     genresName.add(it.name)
@@ -111,8 +108,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         disposable = dbRepository.getFavouriteMovieById(movieId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({movie ->
-                movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked = movie.id == movieId
+            .subscribe({favouriteMovie ->
+                movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked = favouriteMovie.movie.id == movieId
             },{
                 Timber.e("error db", it.message)
             })
@@ -121,12 +118,12 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     }
 
     @SuppressLint("TimberArgCount")
-    private fun checkFavouriteMovie() {
-        movie = Mapper().convertToFavouriteMovie(detailsMovie)
+    private fun checkFavouriteMovie(id: Int) {
+        favouriteMovie = FavouriteMoviesEntity(id)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
-                    dbRepository.saveFavouriteMovie(movie)
+                    dbRepository.saveFavouriteMovie(favouriteMovie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -136,7 +133,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    dbRepository.deleteFavouriteMovie(movie)
+                    dbRepository.deleteFavouriteMovie(favouriteMovie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

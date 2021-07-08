@@ -1,9 +1,6 @@
 package ru.androidschool.intensiv.data.movies
 
 import android.content.Context
-import androidx.room.Delete
-import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.model.db_movie_model.*
@@ -25,12 +22,12 @@ class DBMovieRepository(var context: Context) {
         .getFavouriteMovieDao()
         .getFavouriteMovieById(id)
 
-    fun saveFavouriteMovie(movie: FavouriteMovies) = MovieDatabase
+    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
         .saveFavouriteMovie(movie)
 
-    fun deleteFavouriteMovie(movie: FavouriteMovies) = MovieDatabase
+    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
         .deleteFavouriteMovie(movie)

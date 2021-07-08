@@ -1,7 +1,7 @@
 package ru.androidschool.intensiv.data
 
 import ru.androidschool.intensiv.data.movies.MovieVo
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
+import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import ru.androidschool.intensiv.model.movie_model.ResultApi
@@ -93,25 +93,25 @@ class Mapper {
         )
     }
 
-    fun convertToFavouriteMovie(vo: DetailsMovieModel): FavouriteMovies {
-        return FavouriteMovies(
-            id = vo.id,
-            backdropPath = vo.backdropPath?.let { it } ?: "",
-            originalLanguage = vo.originalLanguage,
-            originalTitle = vo.originalTitle,
-            overview = vo.overview?.let { it } ?: "",
-            popularity = vo.popularity,
-            posterPath = vo.posterPath?.let { it } ?: "",
-            releaseDate = vo.releaseDate,
-            title = vo.title,
-            voteAverage = vo.voteAverage,
-            voteCount = vo.voteCount,
-            status = vo.status?.let { it } ?: "",
-            revenue = vo.revenue,
-            runtime = vo.runtime?.let { it } ?: 0,
-            tagline = vo.tagline?.let { it } ?: "",
-            homepage = vo.homepage?.let { it } ?: ""
+//    fun convertToFavouriteMovie(vo: DetailsMovieModel): FavouriteMoviesEntity {
+//        return FavouriteMoviesEntity(
+//            id = vo.id
+//            backdropPath = vo.backdropPath?.let { it } ?: "",
+//            originalLanguage = vo.originalLanguage,
+//            originalTitle = vo.originalTitle,
+//            overview = vo.overview?.let { it } ?: "",
+//            popularity = vo.popularity,
+//            posterPath = vo.posterPath?.let { it } ?: "",
+//            releaseDate = vo.releaseDate,
+//            title = vo.title,
+//            voteAverage = vo.voteAverage,
+//            voteCount = vo.voteCount,
+//            status = vo.status?.let { it } ?: "",
+//            revenue = vo.revenue,
+//            runtime = vo.runtime?.let { it } ?: 0,
+//            tagline = vo.tagline?.let { it } ?: "",
+//            homepage = vo.homepage?.let { it } ?: ""
 
-        )
-    }
+//        )
+//    }
 }

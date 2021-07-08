@@ -30,7 +30,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
-    val countMovies = MutableLiveData<Int>()
+    private val countMovies = MutableLiveData<Int>()
 
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
             .subscribe({ movies ->
                 moviesList = movies.map {
                     MoviePreviewItem(
-                        it
+                        it.movie
                     ) { movie -> }
                 }.toList()
 
