@@ -15,8 +15,8 @@ import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.Mapper
-import ru.androidschool.intensiv.data.details_movie.DetailsMovie
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
+import ru.androidschool.intensiv.data.movies.DBMovieRepository
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
@@ -33,6 +33,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     }
     private lateinit var movieDetailsFragmentBinding: MovieDetailsFragmentBinding
     private val detailsMovieRepository = DetailsMovieRepository
+    private lateinit var dbRepository: DBMovieRepository
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
     private lateinit var detailsMovie: DetailsMovieModel
@@ -43,6 +44,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
+        dbRepository = DBMovieRepository(requireContext())
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
         getMovieDatabase(id)
@@ -119,11 +121,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie() {
-        movie = Mapper().convertMovie(detailsMovie)
+        movie = Mapper().convertToMovie(detailsMovie)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
-                    MovieDatabase.getInstance(requireContext()).getMovieDao().saveMovie(movie)
+                    dbRepository.saveFavouriteMovie(movie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -133,7 +135,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    MovieDatabase.getInstance(requireContext()).getMovieDao().deleteMovie(movie)
+                    dbRepository.deleteFavouriteMovie(movie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

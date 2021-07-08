@@ -1,13 +1,10 @@
 package ru.androidschool.intensiv.ui.watchlist
 
-import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import kotlinx.android.synthetic.main.item_card.*
 import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.movies.MovieDto
 import ru.androidschool.intensiv.extensions.load
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 

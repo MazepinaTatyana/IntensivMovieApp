@@ -1,6 +1,8 @@
 package ru.androidschool.intensiv.data.movies
 
 import android.content.Context
+import androidx.room.Delete
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.database.MovieDatabase
@@ -11,40 +13,26 @@ import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 class DBMovieRepository(var context: Context) {
 
-     fun getMovies(resString: String): Single<CategoryWithMovies> = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoryWithMoviesById(resString)
-
     fun setMovies(listMovie: List<Movie>) = MovieDatabase
         .getInstance(context)
-        .getMoviesByCategoryDao()
+        .getMovieDao()
         .setMovies(listMovie)
 
-    fun deleteAllCat() = MovieDatabase
+
+    fun getFavouriteMovies(): Single<List<Movie>> = MovieDatabase
         .getInstance(context)
-        .getMoviesByCategoryDao()
-        .deleteAllCategories()
+        .getFavouriteMovieDao()
+        .getFavouriteMovies()
 
-    fun getMovies(): Observable<List<Movie>> = MovieDatabase
+    fun saveFavouriteMovie(movie: Movie) = MovieDatabase
         .getInstance(context)
-        .getMovieDao()
-        .getMovies()
+        .getFavouriteMovieDao()
+        .saveFavouriteMovie(movie)
 
-//     fun getNowPlayingMovies(): Observable<CategoryWithMovies> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getCategoryWithMovies(R.string.recommended)
-//
-//     fun getUpcomingMovies(): Observable<CategoryWithMovies> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getCategoryWithMovies(R.string.upcoming)
-
-//    fun getAllCategories(): Observable<List<CategoryWithMovies>> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getAllCategoriesWithMovies()
+    fun deleteFavouriteMovie(movie: Movie) = MovieDatabase
+        .getInstance(context)
+        .getFavouriteMovieDao()
+        .deleteFavouriteMovie(movie)
 
     fun getCategories(): Single<List<Category>> = MovieDatabase
         .getInstance(context)
@@ -60,12 +48,6 @@ class DBMovieRepository(var context: Context) {
         .getInstance(context)
         .getMoviesByCategoryDao()
         .setCategories(categories)
-
-
-    fun getCategoryByMovieCategory(categoryTitle: Int) = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoryByMovieCategory(categoryTitle)
 
     fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = MovieDatabase
         .getInstance(context)

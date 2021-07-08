@@ -16,9 +16,6 @@ interface MoviesByCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun setMovies(listMovie: List<Movie>): Completable
-
     @Query("DELETE FROM category")
     fun deleteAllCategories(): Completable
 

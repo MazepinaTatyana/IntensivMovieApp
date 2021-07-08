@@ -13,6 +13,9 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMovie(movie: Movie): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun setMovies(listMovie: List<Movie>): Completable
+
     @Delete
     fun deleteMovie(movie: Movie): Completable
 

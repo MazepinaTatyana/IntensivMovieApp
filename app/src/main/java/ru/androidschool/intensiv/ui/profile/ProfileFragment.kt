@@ -17,6 +17,7 @@ import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.androidschool.intensiv.R
+import ru.androidschool.intensiv.data.movies.DBMovieRepository
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.ui.liked_movies.LikedMoviesFragment
 import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
@@ -26,6 +27,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private lateinit var profileTabLayoutTitles: Array<String>
     private var countLikedMovies = 0
+    private lateinit var dbRepository: DBMovieRepository
 
     private var profilePageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -40,6 +42,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dbRepository = DBMovieRepository(requireContext())
 
         Picasso.get()
             .load(R.drawable.ic_avatar)
@@ -61,7 +64,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             var title = ""
             when (position) {
                 0 -> {
-                    MovieDatabase.getInstance(requireContext()).getMovieDao().getMovies()
+                    dbRepository.getFavouriteMovies()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ movies ->

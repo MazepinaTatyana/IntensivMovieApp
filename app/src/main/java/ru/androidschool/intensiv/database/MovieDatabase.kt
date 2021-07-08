@@ -30,5 +30,6 @@ abstract class MovieDatabase : RoomDatabase() {
     }
 
     abstract fun getMovieDao(): MovieDao
+    abstract fun getFavouriteMovieDao(): FavouriteMovieDao
     abstract fun getMoviesByCategoryDao(): MoviesByCategoryDao
 }

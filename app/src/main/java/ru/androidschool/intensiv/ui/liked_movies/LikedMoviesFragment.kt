@@ -13,7 +13,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.movies.DBMovieRepository
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
 import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
 import timber.log.Timber
@@ -23,6 +23,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private lateinit var likedMoviesBinding: FragmentLikedMoviesBinding
     var moviesList = listOf<MoviePreviewItem>()
     private lateinit var disposable: Disposable
+    private lateinit var dbRepository: DBMovieRepository
     private var compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
@@ -33,10 +34,11 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
+        dbRepository = DBMovieRepository(requireContext())
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 
-        disposable = MovieDatabase.getInstance(requireContext()).getMovieDao().getMovies()
+        disposable = dbRepository.getFavouriteMovies()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movies ->

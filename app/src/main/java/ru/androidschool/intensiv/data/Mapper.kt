@@ -1,11 +1,12 @@
 package ru.androidschool.intensiv.data
 
+import ru.androidschool.intensiv.data.movies.MovieVo
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class Mapper {
-    fun convertMovie(dto: DetailsMovieModel): Movie {
+    fun convertToMovie(dto: DetailsMovieModel): Movie {
         return Movie(
             id = dto.id,
             backdropPath = dto.backdropPath,
@@ -26,8 +27,8 @@ class Mapper {
         )
     }
 
-    fun convertMovie(dto: ResultApi): Movie {
-        return Movie(
+    fun convertToMovieVo(dto: ResultApi): MovieVo {
+        return MovieVo(
             id = dto.id,
             backdropPath = dto.backdropPath?.let { it } ?: "",
             originalLanguage = dto.originalLanguage,
@@ -44,6 +45,50 @@ class Mapper {
             runtime = dto.runtime?.let { it } ?: 0,
             tagline = dto.tagline?.let { it } ?: "",
             homepage = dto.homepage?.let { it } ?: ""
+        )
+    }
+
+    fun convertToMovieDb(vo: MovieVo): Movie {
+        return Movie(
+            id = vo.id,
+            backdropPath = vo.backdropPath?.let { it } ?: "",
+            originalLanguage = vo.originalLanguage,
+            originalTitle = vo.originalTitle,
+            overview = vo.overview?.let { it } ?: "",
+            popularity = vo.popularity,
+            posterPath = vo.posterPath?.let { it } ?: "",
+            releaseDate = vo.releaseDate,
+            title = vo.title,
+            voteAverage = vo.voteAverage,
+            voteCount = vo.voteCount,
+            status = vo.status?.let { it } ?: "",
+            revenue = vo.revenue,
+            runtime = vo.runtime?.let { it } ?: 0,
+            tagline = vo.tagline?.let { it } ?: "",
+            homepage = vo.homepage?.let { it } ?: ""
+
+        )
+    }
+
+    fun convertToMovieVo(vo: Movie): MovieVo {
+        return MovieVo(
+            id = vo.id,
+            backdropPath = vo.backdropPath?.let { it } ?: "",
+            originalLanguage = vo.originalLanguage,
+            originalTitle = vo.originalTitle,
+            overview = vo.overview?.let { it } ?: "",
+            popularity = vo.popularity,
+            posterPath = vo.posterPath?.let { it } ?: "",
+            releaseDate = vo.releaseDate,
+            title = vo.title,
+            voteAverage = vo.voteAverage,
+            voteCount = vo.voteCount,
+            status = vo.status?.let { it } ?: "",
+            revenue = vo.revenue,
+            runtime = vo.runtime?.let { it } ?: 0,
+            tagline = vo.tagline?.let { it } ?: "",
+            homepage = vo.homepage?.let { it } ?: ""
+
         )
     }
 }
