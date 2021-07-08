@@ -6,10 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.database.MovieDatabase
-import ru.androidschool.intensiv.model.db_movie_model.Category
-import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
-import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.model.db_movie_model.*
 
 class DBMovieRepository(var context: Context) {
 
@@ -18,25 +15,25 @@ class DBMovieRepository(var context: Context) {
         .getMovieDao()
         .setMovies(listMovie)
 
-    fun getFavouriteMovies(): Single<List<Int>> = MovieDatabase
+    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
         .getFavouriteMovies()
 
-    fun getFavouriteMovieById(id: Int): Single<MovieVo> = MovieDatabase
+    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
         .getFavouriteMovieById(id)
 
-    fun saveFavouriteMovie(movieId: Int) = MovieDatabase
+    fun saveFavouriteMovie(movie: FavouriteMovies) = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
-        .saveFavouriteMovie(movieId)
+        .saveFavouriteMovie(movie)
 
-    fun deleteFavouriteMovie(movieId: Int) = MovieDatabase
+    fun deleteFavouriteMovie(movie: FavouriteMovies) = MovieDatabase
         .getInstance(context)
         .getFavouriteMovieDao()
-        .deleteFavouriteMovie(movieId)
+        .deleteFavouriteMovie(movie)
 
     fun getCategories(): Single<List<Category>> = MovieDatabase
         .getInstance(context)

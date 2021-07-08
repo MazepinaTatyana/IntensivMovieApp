@@ -44,21 +44,11 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ movies ->
-                var movie: Movie
-                val movies = movies.map {
-                    val favouriteMovies = arrayListOf<Movie>()
-                    dbRepository.getMovieById(it)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ it ->
-                            moviesList = listOf(MoviePreviewItem(
-                                it
-                            ) { movie -> })
-                        }, {
-
-                        })
-//                    setMoviePreviewItem(movie)
-                }
+                moviesList = movies.map {
+                    MoviePreviewItem(
+                        it
+                    ) { movie -> }
+                }.toList()
 
                 likedMoviesRecycler.adapter = adapter.apply {
                     addAll(moviesList)
@@ -70,10 +60,6 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
             })
         compositeDisposable.add(disposable)
     }
-
-    private fun setMoviePreviewItem(movie: Movie) = MoviePreviewItem(
-        movie
-    ) { movie -> }
 
     override fun onDestroy() {
         super.onDestroy()

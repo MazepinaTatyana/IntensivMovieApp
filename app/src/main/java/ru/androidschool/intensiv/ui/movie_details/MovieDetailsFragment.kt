@@ -20,6 +20,7 @@ import ru.androidschool.intensiv.data.movies.DBMovieRepository
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.load
+import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
 import timber.log.Timber
@@ -37,7 +38,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
     private lateinit var detailsMovie: DetailsMovieModel
-    private lateinit var movie: Movie
+    private lateinit var movie: FavouriteMovies
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -121,11 +122,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie() {
-        movie = Mapper().convertToMovie(detailsMovie)
+        movie = Mapper().convertToFavouriteMovie(detailsMovie)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when(isChecked) {
                 true -> {
-                    dbRepository.saveFavouriteMovie(movie.id)
+                    dbRepository.saveFavouriteMovie(movie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
@@ -135,7 +136,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    dbRepository.deleteFavouriteMovie(movie.id)
+                    dbRepository.deleteFavouriteMovie(movie)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
