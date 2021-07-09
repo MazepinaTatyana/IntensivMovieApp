@@ -18,6 +18,6 @@ interface FavouriteMovieDao {
     @Query("SELECT * FROM favourite_movies")
     fun getFavouriteMovies(): Single<List<FavouriteMovies>>
 
-    @Query("SELECT * FROM favourite_movies WHERE movieId = :id")
+    @Query("SELECT * FROM favourite_movies WHERE favouriteMovieId = :id")
     fun getFavouriteMovieById(id: Int): Single<FavouriteMovies>
 }

@@ -6,8 +6,6 @@ import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.MovieVo
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class MovieItem(
     private val content: MovieVo,

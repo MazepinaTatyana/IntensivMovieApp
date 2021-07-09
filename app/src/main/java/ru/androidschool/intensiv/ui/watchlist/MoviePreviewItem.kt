@@ -6,8 +6,6 @@ import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
 import ru.androidschool.intensiv.model.db_movie_model.Movie
 
 class MoviePreviewItem(

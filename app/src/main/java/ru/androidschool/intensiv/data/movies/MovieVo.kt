@@ -1,6 +1,5 @@
 package ru.androidschool.intensiv.data.movies
 
-
 data class MovieVo(
     var id: Int,
     var title: String,

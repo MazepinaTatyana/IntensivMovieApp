@@ -7,20 +7,15 @@ import android.text.style.RelativeSizeSpan
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
-import ru.androidschool.intensiv.database.MovieDatabase
-import ru.androidschool.intensiv.ui.liked_movies.LikedMoviesFragment
-import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
+import ru.androidschool.intensiv.extensions.applySchedulers
 import timber.log.Timber
 
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
@@ -65,8 +60,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             when (position) {
                 0 -> {
                     dbRepository.getFavouriteMovies()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .applySchedulers()
                         .subscribe({ movies ->
                             countLikedMovies = movies.size
                             title = String.format(getString(R.string.liked), countLikedMovies)

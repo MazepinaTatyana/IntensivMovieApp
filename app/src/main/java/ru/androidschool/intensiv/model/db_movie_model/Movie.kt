@@ -74,8 +74,4 @@ data class Movie(
     @SerializedName("tagline")
     @Expose
     val tagline: String
-) {
-    val rating: Float
-        get() = voteAverage.div(2).toFloat()
-}
-
+)

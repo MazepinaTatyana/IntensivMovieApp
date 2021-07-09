@@ -1,10 +1,10 @@
 package ru.androidschool.intensiv.data.movies
 
-import io.reactivex.Observable
+import io.reactivex.Single
 
 interface MovieRepository {
 
-    fun getPopularMovies(): Observable<*>
-    fun getNowPlayingMovies(): Observable<*>
-    fun getUpcomingMovies(): Observable<*>
+    fun getPopularMovies(): Single<*>
+    fun getNowPlayingMovies(): Single<*>
+    fun getUpcomingMovies(): Single<*>
 }

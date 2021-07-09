@@ -51,14 +51,4 @@ class DBMovieRepository(var context: Context) {
         .getInstance(context)
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(categoryId)
-
-    fun getCategoriesWithMovies(): Single<List<CategoryWithMovies>> = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoriesWithMovies()
-
-    fun getMovieById(movieId: Int): Single<Movie> = MovieDatabase
-        .getInstance(context)
-        .getMovieDao()
-        .getMovieById(movieId)
 }

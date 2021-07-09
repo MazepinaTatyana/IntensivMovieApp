@@ -8,15 +8,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
+import ru.androidschool.intensiv.extensions.applySchedulers
 import ru.androidschool.intensiv.extensions.load
 import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
 import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
@@ -52,8 +51,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         }
 
         disposable = detailsMovieRepository.getDetailsMovieById(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .applySchedulers()
             .subscribe({
                 detailsMovie = it
                 checkFavouriteMovie(detailsMovie.id)
@@ -86,8 +84,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             })
 
         disposable = detailsMovieRepository.getActorsMovie(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .applySchedulers()
             .subscribe({
                 val actors = it.actors.map { actor ->
                     ActorItem(actor)
@@ -100,17 +97,16 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             }, { error ->
                 Timber.d("error actors", error.message)
             })
-
     }
 
     @SuppressLint("TimberArgCount")
     fun getMovieDatabase(movieId: Int) {
         disposable = dbRepository.getFavouriteMovieById(movieId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({favouriteMovie ->
-                movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked = favouriteMovie.movie.id == movieId
-            },{
+            .applySchedulers()
+            .subscribe({ favouriteMovie ->
+                movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked =
+                    favouriteMovie.movie.id == movieId
+            }, {
                 Timber.e("error db", it.message)
             })
 
@@ -121,24 +117,22 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private fun checkFavouriteMovie(id: Int) {
         favouriteMovie = FavouriteMoviesEntity(id)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
-            when(isChecked) {
+            when (isChecked) {
                 true -> {
                     dbRepository.saveFavouriteMovie(favouriteMovie)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .applySchedulers()
                         .subscribe({
                             Timber.e("saved movie", "saved movie")
-                        },{
+                        }, {
                             Timber.e("error db", it.message)
                         })
                 }
                 false -> {
                     dbRepository.deleteFavouriteMovie(favouriteMovie)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .applySchedulers()
                         .subscribe({
                             Timber.e("delete movie", "dalete movie")
-                        },{
+                        }, {
                             Timber.e("error db", it.message)
                         })
                 }

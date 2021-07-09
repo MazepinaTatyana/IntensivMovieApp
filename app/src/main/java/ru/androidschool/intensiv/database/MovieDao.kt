@@ -6,7 +6,6 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
 import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 @Dao
 interface MovieDao {
@@ -29,5 +28,4 @@ interface MovieDao {
     @Transaction
     @Query("SELECT * FROM category")
     fun getMoviesByCategory(): Observable<List<CategoryWithMovies>>
-
 }
