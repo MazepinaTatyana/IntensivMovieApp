@@ -1,17 +1,15 @@
-package ru.androidschool.intensiv.data.db.database
+package ru.androidschool.intensiv.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.androidschool.intensiv.data.db.dao.MovieDao
-import ru.androidschool.intensiv.data.db.dao.MoviesByCategoryDao
-import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
+import ru.androidschool.intensiv.model.db_movie_model.Movie
+import ru.androidschool.intensiv.model.db_movie_model.Category
+import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
-@Database(entities = [MovieFromDb::class, Category::class, FavouriteMovies::class, MovieAndCategoryCrossRef::class], version = 8, exportSchema = false)
+@Database(entities = [Movie::class, Category::class, FavouriteMoviesEntity::class, MovieAndCategoryCrossRef::class], version = 8, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
     companion object {
         private var DB: MovieDatabase? = null
@@ -32,5 +30,6 @@ abstract class MovieDatabase : RoomDatabase() {
     }
 
     abstract fun getMovieDao(): MovieDao
+    abstract fun getFavouriteMovieDao(): FavouriteMovieDao
     abstract fun getMoviesByCategoryDao(): MoviesByCategoryDao
 }

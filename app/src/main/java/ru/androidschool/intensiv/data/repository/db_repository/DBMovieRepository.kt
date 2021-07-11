@@ -1,78 +1,44 @@
-package ru.androidschool.intensiv.data.repository.db_repository
+package ru.androidschool.intensiv.data.movies
 
-import android.content.Context
 import io.reactivex.Single
-import ru.androidschool.intensiv.data.db.database.MovieDatabase
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
-import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.model.db_movie_model.*
 
-class DBMovieRepository(var context: Context) {
+class DBMovieRepository(var database: MovieDatabase) {
 
-     fun getMovies(resString: String): Single<CategoryWithMovies> = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoryWithMoviesById(resString)
-
-    fun setMovies(listMovieFromDb: List<MovieFromDb>) = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .setMovies(listMovieFromDb)
-
-    fun deleteAllCat() = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .deleteAllCategories()
-
-    fun getMovies(): Single<List<MovieFromDb>> = MovieDatabase
-        .getInstance(context)
+    fun setMovies(listMovie: List<Movie>) = database
         .getMovieDao()
-        .getMovies()
+        .setMovies(listMovie)
 
-//     fun getNowPlayingMovies(): Observable<CategoryWithMovies> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getCategoryWithMovies(R.string.recommended)
-//
-//     fun getUpcomingMovies(): Observable<CategoryWithMovies> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getCategoryWithMovies(R.string.upcoming)
+    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
+        .getFavouriteMovieDao()
+        .getFavouriteMovies()
 
-//    fun getAllCategories(): Observable<List<CategoryWithMovies>> = MovieDatabase
-//        .getInstance(context)
-//        .getMoviesByCategoryDao()
-//        .getAllCategoriesWithMovies()
+    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = database
+        .getFavouriteMovieDao()
+        .getFavouriteMovieById(id)
 
-    fun getCategories(): Single<List<Category>> = MovieDatabase
-        .getInstance(context)
+    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = database
+        .getFavouriteMovieDao()
+        .saveFavouriteMovie(movie)
+
+    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = database
+        .getFavouriteMovieDao()
+        .deleteFavouriteMovie(movie)
+
+    fun getCategories(): Single<List<Category>> = database
         .getMoviesByCategoryDao()
         .getCategories()
 
-    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>) = MovieDatabase
-        .getInstance(context)
+    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>) = database
         .getMoviesByCategoryDao()
         .saveMoviesByCategories(categoriesWithMovies)
 
-    fun setCategories(categories: List<Category>) = MovieDatabase
-        .getInstance(context)
+    fun setCategories(categories: List<Category>) = database
         .getMoviesByCategoryDao()
         .setCategories(categories)
 
-
-    fun getCategoryByMovieCategory(categoryTitle: Int) = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoryByMovieCategory(categoryTitle)
-
-    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = MovieDatabase
-        .getInstance(context)
+    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = database
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(categoryId)
-
-    fun getCategoriesWithMovies(): Single<List<CategoryWithMovies>> = MovieDatabase
-        .getInstance(context)
-        .getMoviesByCategoryDao()
-        .getCategoriesWithMovies()
 }

@@ -1,21 +1,17 @@
-package ru.androidschool.intensiv.data.db.dao
+package ru.androidschool.intensiv.database
 
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
-import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.model.db_movie_model.Category
+import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
+import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
 
 @Dao
 interface MoviesByCategoryDao {
 
-    @Update(entity = MovieAndCategoryCrossRef::class)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
-
-    @Update
-    fun setMovies(listMovieFromDb: List<MovieFromDb>): Completable
 
     @Query("DELETE FROM category")
     fun deleteAllCategories(): Completable

@@ -1,11 +1,8 @@
-package ru.androidschool.intensiv.data.db.model_db
+package ru.androidschool.intensiv.model.db_movie_model
 
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
 
 data class CategoryWithMovies(
     @Embedded val category: Category,
@@ -16,5 +13,5 @@ data class CategoryWithMovies(
             MovieAndCategoryCrossRef::class
         )
     )
-    val movieFromDbs: List<MovieFromDb>
+    val movies: List<Movie>
 )

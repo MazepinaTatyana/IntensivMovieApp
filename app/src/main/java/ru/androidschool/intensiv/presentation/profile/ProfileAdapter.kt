@@ -15,7 +15,7 @@ class ProfileAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when(position) {
+        return when (position) {
             0 -> LikedMoviesFragment()
             else -> WatchlistFragment()
         }

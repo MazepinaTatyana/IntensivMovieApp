@@ -1,11 +1,13 @@
-package ru.androidschool.intensiv.data.db.model_db.entities_db
+package ru.androidschool.intensiv.model.db_movie_model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.Embedded
+import androidx.room.Relation
 
-@Entity(tableName = "favourite_movies")
 data class FavouriteMovies(
-    @PrimaryKey(autoGenerate = true)
-    val favouriteId: Int,
-    val movieId: Int
+    @Embedded val favouriteMovie: FavouriteMoviesEntity,
+    @Relation(
+        parentColumn = "favouriteMovieId",
+        entityColumn = "movieId"
+    )
+    val movie: Movie
 )
