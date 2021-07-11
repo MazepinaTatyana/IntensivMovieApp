@@ -4,12 +4,12 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.R
+import ru.androidschool.intensiv.data.movies.MovieVo
 import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.movie_model.ResultApi
 
 class MovieItem(
-    private val content: ResultApi,
-    private val onClick: (resultApi: ResultApi) -> Unit
+    private val content: MovieVo,
+    private val onClick: (resultApi: MovieVo) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_with_text

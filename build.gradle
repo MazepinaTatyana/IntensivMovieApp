@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.res.XPATHErrorResources_sv
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
@@ -56,4 +58,7 @@ ext {
 
     rxjavaVersion = '2.2.6'
     rxandroidVersion = '2.1.1'
+    roomVersion = '2.3.0'
+    roomRxJava2Version = '2.3.0'
+    persistenceRoomRxJava2Version = '1.1.1'
 }

@@ -6,15 +6,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_search.view.*
 import kotlinx.android.synthetic.main.tv_shows_fragment.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.tv_shows.TVShowsRepository
 import ru.androidschool.intensiv.databinding.TvShowsFragmentBinding
+import ru.androidschool.intensiv.extensions.applySchedulers
+import ru.androidschool.intensiv.extensions.applyVisibilityProgressBar
 import timber.log.Timber
 
 class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
@@ -33,10 +32,8 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment) {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
         disposable = tvShowsRepository.getTVShows()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { progress_tv_shows.visibility = View.VISIBLE }
-            .doFinally { progress_tv_shows.visibility = View.INVISIBLE }
+            .applySchedulers()
+            .applyVisibilityProgressBar(progress_tv_shows)
             .subscribe({
                 val list = it.results.map {
                     TvShowItem(

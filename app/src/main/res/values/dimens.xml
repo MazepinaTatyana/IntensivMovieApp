@@ -35,5 +35,6 @@
     <dimen name="details_movie_size_icon">25dp</dimen>
     <dimen name="details_movie_text_size">15sp</dimen>
     <dimen name="details_movie_radius">20sp</dimen>
+    <dimen name="progress_bar_size">50dp</dimen>
 
 </resources>

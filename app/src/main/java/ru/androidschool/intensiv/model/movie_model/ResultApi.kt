@@ -8,14 +8,14 @@ import ru.androidschool.intensiv.model.details_movie_model.ProductionCountry
 import ru.androidschool.intensiv.model.details_movie_model.SpokenLanguage
 
 data class ResultApi(
-//
-//    @SerializedName("adult")
-//    @Expose
-//    val isAdult: Boolean,
+
+    @SerializedName("adult")
+    @Expose
+    val isAdult: Boolean,
 
     @SerializedName("backdrop_path")
     @Expose
-    val backdropPath: String,
+    val backdropPath: String? = null,
 
     @SerializedName("genre_ids")
     @Expose
@@ -35,7 +35,7 @@ data class ResultApi(
 
     @SerializedName("overview")
     @Expose
-    val overview: String,
+    val overview: String? = null,
 
     @SerializedName("popularity")
     @Expose
@@ -43,7 +43,7 @@ data class ResultApi(
 
     @SerializedName("poster_path")
     @Expose
-    val posterPath: String,
+    val posterPath: String? = null,
 
     @SerializedName("release_date")
     @Expose
@@ -83,7 +83,7 @@ data class ResultApi(
 
     @SerializedName("belongs_to_collection")
     @Expose
-    val belongsToCollection: Any,
+    val belongsToCollection: Any? = null,
 
     @SerializedName("budget")
     @Expose
@@ -95,11 +95,11 @@ data class ResultApi(
 
     @SerializedName("homepage")
     @Expose
-    val homepage: String,
+    val homepage: String? = null,
 
     @SerializedName("imdb_id")
     @Expose
-    val imdbId: String,
+    val imdbId: String? = null,
 
     @SerializedName("production_companies")
     @Expose
@@ -115,7 +115,7 @@ data class ResultApi(
 
     @SerializedName("runtime")
     @Expose
-    val runtime: Int,
+    val runtime: Int? = null,
 
     @SerializedName("spoken_languages")
     @Expose
@@ -123,11 +123,11 @@ data class ResultApi(
 
     @SerializedName("status")
     @Expose
-    val status: String,
+    val status: String? = null,
 
     @SerializedName("tagline")
     @Expose
-    val tagline: String
+    val tagline: String? = null
 ) {
     val rating: Float
         get() = voteAverage.div(2).toFloat()

@@ -4,18 +4,9 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class DetailsMovieModel(
-    @SerializedName("adult")
-    @Expose
-    val adult: Boolean,
     @SerializedName("backdrop_path")
     @Expose
     val backdropPath: String,
-    @SerializedName("belongs_to_collection")
-    @Expose
-    val belongsToCollection: Any,
-    @SerializedName("budget")
-    @Expose
-    val budget: Int,
     @SerializedName("genres")
     @Expose
     val genres: List<Genre>,
@@ -25,9 +16,6 @@ data class DetailsMovieModel(
     @SerializedName("id")
     @Expose
     val id: Int,
-    @SerializedName("imdb_id")
-    @Expose
-    val imdbId: String,
     @SerializedName("original_language")
     @Expose
     val originalLanguage: String,

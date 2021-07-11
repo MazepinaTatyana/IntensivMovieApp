@@ -3,13 +3,14 @@ package ru.androidschool.intensiv.ui.watchlist
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_with_text.*
+import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.movies.Movie
 import ru.androidschool.intensiv.extensions.load
+import ru.androidschool.intensiv.model.db_movie_model.Movie
 
 class MoviePreviewItem(
     private val content: Movie,
-    private val onClick: (movieModel: Movie) -> Unit
+    private val onClick: (movieDtoModel: Movie) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_small
@@ -18,6 +19,6 @@ class MoviePreviewItem(
         viewHolder.image_preview.setOnClickListener {
             onClick.invoke(content)
         }
-        viewHolder.image_preview.load(url = "https://www.kinopoisk.ru/images/film_big/1143242.jpg")
+        viewHolder.image_preview.load(sizePoster = BuildConfig.SMALL_POSTER_SIZE, url = content.posterPath)
     }
 }

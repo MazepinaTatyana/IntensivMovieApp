@@ -1,6 +1,6 @@
 package ru.androidschool.intensiv.network
 
-import io.reactivex.Observable
+import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -14,39 +14,39 @@ interface MovieApiInterface {
     fun getPopularMovies(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<ApiResponse>
+    ): Single<ApiResponse>
 
     @GET("movie/now_playing")
     fun getNowPlayingMovies(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU,
         @Query("region") region: String = BuildConfig.REGION_RU
-    ): Observable<ApiResponse>
+    ): Single<ApiResponse>
 
     @GET("movie/upcoming")
     fun getUpcomingMovies(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU,
         @Query("region") region: String = BuildConfig.REGION_RU
-    ): Observable<ApiResponse>
+    ): Single<ApiResponse>
 
     @GET("tv/popular")
     fun getTvShows(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<ApiResponse>
+    ): Single<ApiResponse>
 
     @GET("movie/{movie_id}")
     fun getDetailsMovieById(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<DetailsMovieModel>
+    ): Single<DetailsMovieModel>
 
     @GET("movie/{movie_id}/credits")
     fun getMovieActors(
         @Path("movie_id") movieId: Int,
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Observable<ActorResponse>
+    ): Single<ActorResponse>
 }
