@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.ui.liked_movies
+package ru.androidschool.intensiv.presentation.liked_movies
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,9 +11,11 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
-import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
+import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
+import ru.androidschool.intensiv.presentation.watchlist.MoviePreviewItem
 import timber.log.Timber
 
 class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {

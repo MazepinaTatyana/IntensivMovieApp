@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.ui.movie_details
+package ru.androidschool.intensiv.presentation.movie_details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,20 +8,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.Mapper
-import ru.androidschool.intensiv.data.details_movie.DetailsMovie
-import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
-import ru.androidschool.intensiv.database.MovieDatabase
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
+import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
+import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
+import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
+import ru.androidschool.intensiv.data.vo.DetailsMovie
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
-import ru.androidschool.intensiv.extensions.load
-import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
+import ru.androidschool.intensiv.domain.usecase.ActorsMovieRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.DetailsMovieRemoteUseCase
+import ru.androidschool.intensiv.presentation.extension.load
+import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,14 +38,17 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private val actorsDetailRemoteUseCase = ActorsMovieRemoteUseCase(ActorsMovieRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
+    private lateinit var dbMovieRepository: DBMovieRepository
     private lateinit var detailsMovie: DetailsMovie
-    private lateinit var movieFromDb: MovieFromDb
+    private lateinit var movieFromDb: MovieDb
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
+        val database = MovieDatabase.getInstance(requireContext())
+        dbMovieRepository = DBMovieRepository(database)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
         getMovieDatabase(id)
@@ -55,7 +60,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         disposable = detailsMovieRemoteUseCase.getDetailsMovieById(id)
             .subscribe({
                 detailsMovie = it
-                checkFavouriteMovie()
+                checkFavouriteMovie(id)
                 val genresName = arrayListOf<String>()
                 detailsMovie.genreDtos?.forEach {
                     genresName.add(it.name)
@@ -101,11 +106,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     fun getMovieDatabase(movieId: Int) {
-        disposable = dbRepository.getFavouriteMovieById(movieId)
+        disposable = dbMovieRepository.getFavouriteMovieById(movieId)
             .applySchedulers()
             .subscribe({ favouriteMovie ->
                 movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked =
-                    favouriteMovie.movie.id == movieId
+                    favouriteMovie.favouriteMovie.favouriteMovieId == movieId
             }, {
                 Timber.e("error db", it.message)
             })
@@ -115,11 +120,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun checkFavouriteMovie(id: Int) {
-        favouriteMovie = FavouriteMoviesEntity(id)
+        val favouriteMovie = FavouriteMoviesEntity(id)
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {
-                    dbRepository.saveFavouriteMovie(favouriteMovie)
+                    dbMovieRepository.saveFavouriteMovie(favouriteMovie)
                         .applySchedulers()
                         .subscribe({
                             Timber.e("saved movie", "saved movie")
@@ -128,7 +133,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    dbRepository.deleteFavouriteMovie(favouriteMovie)
+                    dbMovieRepository.deleteFavouriteMovie(favouriteMovie)
                         .applySchedulers()
                         .subscribe({
                             Timber.e("delete movie", "dalete movie")

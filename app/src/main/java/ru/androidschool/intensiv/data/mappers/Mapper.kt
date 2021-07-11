@@ -1,6 +1,6 @@
 package ru.androidschool.intensiv.data.mappers
 
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
 import ru.androidschool.intensiv.data.dto.details_movie_dto.DetailsMovieDto
 import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
 import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
@@ -33,8 +33,8 @@ class Mapper {
         )
     }
 
-    fun convertToMovieFromDb(dto: DetailsMovie): MovieFromDb {
-        return MovieFromDb(
+    fun convertToMovieFromDb(dto: DetailsMovie): MovieDb {
+        return MovieDb(
             id = dto.id,
             originalTitle = dto.originalTitle?.let { it } ?: "",
             overview = dto.overview,
@@ -64,8 +64,8 @@ class Mapper {
         )
     }
 
-    fun convertToMovieFromDb(movie: Movie): MovieFromDb {
-        return MovieFromDb(
+    fun convertToMovieFromDb(movie: Movie): MovieDb {
+        return MovieDb(
             id = movie.id,
             originalTitle = movie.originalTitle?.let { it } ?: "",
             overview = movie.overview,

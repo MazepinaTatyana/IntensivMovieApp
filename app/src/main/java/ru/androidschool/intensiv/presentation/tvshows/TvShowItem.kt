@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.item_tv_show.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.vo.Movie
-import ru.androidschool.intensiv.domain.usecase.extensions.load
+import ru.androidschool.intensiv.presentation.extension.load
 
 class TvShowItem(
     private val tvShowContent: Movie,

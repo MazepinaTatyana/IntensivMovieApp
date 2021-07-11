@@ -1,15 +1,18 @@
-package ru.androidschool.intensiv.database
+package ru.androidschool.intensiv.data.db.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
-import ru.androidschool.intensiv.model.db_movie_model.Movie
-import ru.androidschool.intensiv.model.db_movie_model.Category
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.dao.MovieDao
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
+import ru.androidschool.intensiv.data.db.dao.FavouriteMovieDao
+import ru.androidschool.intensiv.data.db.dao.MoviesByCategoryDao
 
-@Database(entities = [Movie::class, Category::class, FavouriteMoviesEntity::class, MovieAndCategoryCrossRef::class], version = 8, exportSchema = false)
+@Database(entities = [MovieDb::class, Category::class, FavouriteMoviesEntity::class, MovieAndCategoryCrossRef::class], version = 9, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {
     companion object {
         private var DB: MovieDatabase? = null

@@ -1,8 +1,8 @@
-package ru.androidschool.intensiv.model.movie_model
+package ru.androidschool.intensiv.data.db.model_db
 
-import ru.androidschool.intensiv.data.movies.MovieVo
+import ru.androidschool.intensiv.data.vo.Movie
 
-data class ResultFeedMovies<T>(
+data class ResultFeedMovies(
     val titleRes: Int,
-    val movies: List<MovieVo>
+    val movies: List<Movie>
 )

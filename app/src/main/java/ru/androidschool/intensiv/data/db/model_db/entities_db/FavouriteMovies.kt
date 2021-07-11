@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.model.db_movie_model
+package ru.androidschool.intensiv.data.db.model_db.entities_db
 
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -9,5 +9,5 @@ data class FavouriteMovies(
         parentColumn = "favouriteMovieId",
         entityColumn = "movieId"
     )
-    val movie: Movie
+    val movie: MovieDb
 )

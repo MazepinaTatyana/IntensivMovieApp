@@ -5,7 +5,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_actor.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.dto.details_movie_dto.ActorDto
-import ru.androidschool.intensiv.domain.usecase.extensions.load
+import ru.androidschool.intensiv.presentation.extension.load
 
 class ActorItem(
     private val content: ActorDto

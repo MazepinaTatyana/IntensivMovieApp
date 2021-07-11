@@ -1,11 +1,11 @@
-package ru.androidschool.intensiv.database
+package ru.androidschool.intensiv.data.db.dao
 
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.androidschool.intensiv.model.db_movie_model.Category
-import ru.androidschool.intensiv.model.db_movie_model.CategoryWithMovies
-import ru.androidschool.intensiv.model.db_movie_model.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
 
 @Dao
 interface MoviesByCategoryDao {

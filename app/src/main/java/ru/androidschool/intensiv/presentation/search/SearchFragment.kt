@@ -9,7 +9,7 @@ import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.search_toolbar.*
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.ui.afterTextChanged
+import ru.androidschool.intensiv.presentation.extension.afterTextChanged
 import ru.androidschool.intensiv.presentation.feed.FeedFragment.Companion.KEY_SEARCH
 import java.util.concurrent.TimeUnit
 

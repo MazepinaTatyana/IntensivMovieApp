@@ -5,12 +5,12 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.item_with_text.*
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.domain.usecase.extensions.load
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieFromDb
+import ru.androidschool.intensiv.presentation.extension.load
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
 
 class MoviePreviewItem(
-    private val content: MovieFromDb,
-    private val onClick: (movieFromDbDtoModel: MovieFromDb) -> Unit
+    private val content: MovieDb,
+    private val onClick: (movieFromDbDtoModel: MovieDb) -> Unit
 ) : Item() {
 
     override fun getLayout() = R.layout.item_small

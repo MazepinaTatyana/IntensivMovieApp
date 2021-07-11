@@ -1,13 +1,13 @@
-package ru.androidschool.intensiv.network
+package ru.androidschool.intensiv.data.network
 
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.androidschool.intensiv.BuildConfig
-import ru.androidschool.intensiv.model.details_movie_model.DetailsMovieModel
-import ru.androidschool.intensiv.model.movie_model.ApiResponse
-import ru.androidschool.intensiv.ui.movie_details.ActorResponse
+import ru.androidschool.intensiv.data.dto.details_movie_dto.ActorResponseDto
+import ru.androidschool.intensiv.data.dto.details_movie_dto.DetailsMovieDto
+import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 
 interface MovieApiInterface {
     @GET("movie/popular")

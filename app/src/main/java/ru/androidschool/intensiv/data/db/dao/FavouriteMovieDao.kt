@@ -1,10 +1,10 @@
-package ru.androidschool.intensiv.database
+package ru.androidschool.intensiv.data.db.dao
 
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Single
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMovies
-import ru.androidschool.intensiv.model.db_movie_model.FavouriteMoviesEntity
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 
 @Dao
 interface FavouriteMovieDao {

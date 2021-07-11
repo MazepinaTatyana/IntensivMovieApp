@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.domain.usecase.extensions
+package ru.androidschool.intensiv.presentation.extension
 
 import android.widget.ImageView
 import com.squareup.picasso.Picasso

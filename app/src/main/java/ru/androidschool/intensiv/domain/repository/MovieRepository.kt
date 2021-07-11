@@ -1,14 +1,10 @@
 package ru.androidschool.intensiv.domain.repository
 
-import io.reactivex.Observable
 import io.reactivex.Single
-import ru.androidschool.intensiv.data.vo.Movie
+import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 
 interface MovieRepository {
 
-    fun getMovies(): Single<List<Movie>>
+    fun getMovies(): Single<MoviesApiResponseDto>
 
-//    fun getPopularMovies(): Observable<*>
-//    fun getNowPlayingMovies(): Observable<*>
-//    fun getUpcomingMovies(): Observable<*>
 }
