@@ -15,6 +15,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
+import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.extensions.applySchedulers
 import timber.log.Timber
 
@@ -37,7 +38,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dbRepository = DBMovieRepository(requireContext())
+        val database = MovieDatabase.getInstance(requireContext())
+        dbRepository = DBMovieRepository(database)
 
         Picasso.get()
             .load(R.drawable.ic_avatar)

@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
+import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
 import ru.androidschool.intensiv.extensions.applySchedulers
 import ru.androidschool.intensiv.ui.watchlist.MoviePreviewItem
@@ -33,7 +34,8 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
-        dbRepository = DBMovieRepository(requireContext())
+        val database = MovieDatabase.getInstance(requireContext())
+        dbRepository = DBMovieRepository(database)
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 

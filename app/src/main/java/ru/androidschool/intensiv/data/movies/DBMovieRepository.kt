@@ -1,54 +1,44 @@
 package ru.androidschool.intensiv.data.movies
 
-import android.content.Context
 import io.reactivex.Single
 import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.model.db_movie_model.*
 
-class DBMovieRepository(var context: Context) {
+class DBMovieRepository(var database: MovieDatabase) {
 
-    fun setMovies(listMovie: List<Movie>) = MovieDatabase
-        .getInstance(context)
+    fun setMovies(listMovie: List<Movie>) = database
         .getMovieDao()
         .setMovies(listMovie)
 
-    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = MovieDatabase
-        .getInstance(context)
+    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
         .getFavouriteMovieDao()
         .getFavouriteMovies()
 
-    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = MovieDatabase
-        .getInstance(context)
+    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = database
         .getFavouriteMovieDao()
         .getFavouriteMovieById(id)
 
-    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = MovieDatabase
-        .getInstance(context)
+    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = database
         .getFavouriteMovieDao()
         .saveFavouriteMovie(movie)
 
-    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = MovieDatabase
-        .getInstance(context)
+    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = database
         .getFavouriteMovieDao()
         .deleteFavouriteMovie(movie)
 
-    fun getCategories(): Single<List<Category>> = MovieDatabase
-        .getInstance(context)
+    fun getCategories(): Single<List<Category>> = database
         .getMoviesByCategoryDao()
         .getCategories()
 
-    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>) = MovieDatabase
-        .getInstance(context)
+    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>) = database
         .getMoviesByCategoryDao()
         .saveMoviesByCategories(categoriesWithMovies)
 
-    fun setCategories(categories: List<Category>) = MovieDatabase
-        .getInstance(context)
+    fun setCategories(categories: List<Category>) = database
         .getMoviesByCategoryDao()
         .setCategories(categories)
 
-    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = MovieDatabase
-        .getInstance(context)
+    fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies> = database
         .getMoviesByCategoryDao()
         .getCategoryWithMoviesById(categoryId)
 }

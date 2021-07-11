@@ -14,6 +14,7 @@ import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.details_movie.DetailsMovieRepository
 import ru.androidschool.intensiv.data.movies.DBMovieRepository
+import ru.androidschool.intensiv.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
 import ru.androidschool.intensiv.extensions.applySchedulers
 import ru.androidschool.intensiv.extensions.load
@@ -41,7 +42,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
-        dbRepository = DBMovieRepository(requireContext())
+        val database = MovieDatabase.getInstance(requireContext())
+        dbRepository = DBMovieRepository(database)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
         getMovieDatabase(id)
