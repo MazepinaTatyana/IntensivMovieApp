@@ -1,4 +1,4 @@
-package ru.androidschool.intensiv.domain.usecase
+package ru.androidschool.intensiv.domain.usecase.remote_use_case
 
 import io.reactivex.Single
 import ru.androidschool.intensiv.domain.repository.ActorsMovieRepository

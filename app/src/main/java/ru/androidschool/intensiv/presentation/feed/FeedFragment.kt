@@ -28,9 +28,9 @@ import ru.androidschool.intensiv.data.repository.remote_repository.PopularMovies
 import ru.androidschool.intensiv.data.repository.remote_repository.UpcomingMoviesRemoteRepository
 import ru.androidschool.intensiv.data.vo.Movie
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
-import ru.androidschool.intensiv.domain.usecase.NowPlayingMoviesRemoteUseCase
-import ru.androidschool.intensiv.domain.usecase.PopularMoviesRemoteUseCase
-import ru.androidschool.intensiv.domain.usecase.UpcomingMoviesRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.remote_use_case.NowPlayingMoviesRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.remote_use_case.PopularMoviesRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.remote_use_case.UpcomingMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 import ru.androidschool.intensiv.domain.usecase.extensions.applyVisibilityProgressBar
 import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
@@ -38,6 +38,7 @@ import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
 import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.mappers.MapperRemoteToVo
 import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
+import ru.androidschool.intensiv.domain.usecase.db_use_case.DbMovieUseCase
 import ru.androidschool.intensiv.presentation.extension.afterTextChanged
 import timber.log.Timber
 
@@ -57,6 +58,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     )
 
     private lateinit var dbMovieRepository: DBMovieRepository
+    private lateinit var dbMovieUseCase: DbMovieUseCase
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
 
@@ -81,6 +83,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         }
         val database = MovieDatabase.getInstance(requireContext())
         dbMovieRepository = DBMovieRepository(database)
+        dbMovieUseCase = DbMovieUseCase(dbMovieRepository)
         initCategories()
         getMoviesFromDb()
     }
@@ -88,7 +91,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     @SuppressLint("TimberArgCount")
     private fun initCategories() {
         var categories = listOf<Category>()
-        disposable = dbMovieRepository.getCategories()
+        disposable = dbMovieUseCase.getCategories()
             .applySchedulers()
             .subscribe({
                 categories = it
@@ -106,7 +109,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         categories.add(Category(categoryId = getString(R.string.popular)))
         categories.add(Category(categoryId = getString(R.string.upcoming)))
         categories.add(Category(categoryId = getString(R.string.recommended)))
-        disposable = dbMovieRepository.setCategories(categories)
+        disposable = dbMovieUseCase.setCategories(categories)
             .applySchedulers()
             .subscribe({
                 Timber.e("setCategories", "successfully")
@@ -118,13 +121,17 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
     @SuppressLint("TimberArgCount")
     private fun getMoviesFromDb() {
-        val popularMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.popular))
-        val nowPlayingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.recommended))
-        val upcomingMovieFromDb = dbMovieRepository.getCategoryWithMoviesById(getString(R.string.upcoming))
+        val popularMovieFromDb = dbMovieUseCase.getCategoryWithMoviesById(getString(R.string.popular))
+        val nowPlayingMovieFromDb = dbMovieUseCase.getCategoryWithMoviesById(getString(R.string.recommended))
+        val upcomingMovieFromDb = dbMovieUseCase.getCategoryWithMoviesById(getString(R.string.upcoming))
 
         val disposable =
             Single.zip(popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb,
-                Function3<CategoryWithMovies, CategoryWithMovies, CategoryWithMovies, Map<MovieCategory, ResultFeedMovies>> { popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
+                Function3<CategoryWithMovies,
+                        CategoryWithMovies,
+                        CategoryWithMovies,
+                        Map<MovieCategory, ResultFeedMovies>> {
+                        popularMovieFromDb, nowPlayingMovieFromDb, upcomingMovieFromDb ->
                     linkedMapOf(
                         MovieCategory.POPULAR to ResultFeedMovies(
                             R.string.popular,
@@ -158,11 +165,24 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
         val disposable =
             Single.zip(popularMovie, nowPlayingMovie, upcomingMovie,
-            Function3<MoviesApiResponseDto, MoviesApiResponseDto, MoviesApiResponseDto, Map<MovieCategory, ResultFeedMovies>> { popularMovie, nowPlayingMovie, upcomingMovie ->
+            Function3<MoviesApiResponseDto,
+                    MoviesApiResponseDto,
+                    MoviesApiResponseDto,
+                    Map<MovieCategory, ResultFeedMovies>>
+            { popularMovie, nowPlayingMovie, upcomingMovie ->
                 linkedMapOf(
-                    MovieCategory.POPULAR to ResultFeedMovies(R.string.popular, popularMovie.results.map { MapperRemoteToVo.toViewObject(it) }),
-                    MovieCategory.NOWPLAYING to ResultFeedMovies(R.string.recommended, nowPlayingMovie.results.map { MapperRemoteToVo.toViewObject(it) }),
-                    MovieCategory.UPCOMING to ResultFeedMovies(R.string.upcoming, upcomingMovie.results.map { MapperRemoteToVo.toViewObject(it) })
+                    MovieCategory.POPULAR to ResultFeedMovies(
+                        R.string.popular,
+                        popularMovie.results
+                            .map { MapperRemoteToVo.toViewObject(it) }),
+                    MovieCategory.NOWPLAYING to ResultFeedMovies(
+                        R.string.recommended,
+                        nowPlayingMovie.results
+                            .map { MapperRemoteToVo.toViewObject(it) }),
+                    MovieCategory.UPCOMING to ResultFeedMovies(
+                        R.string.upcoming,
+                        upcomingMovie.results
+                            .map { MapperRemoteToVo.toViewObject(it) })
                 )
             }
         )
@@ -183,7 +203,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         movies: List<MovieDb>,
         moviesByCat: List<MovieAndCategoryCrossRef>
     ) {
-        disposable = dbMovieRepository.setMovies(movies)
+        disposable = dbMovieUseCase.setMovies(movies)
             .applySchedulers()
             .subscribe({
                 saveMoviesByCategories(moviesByCat)
@@ -193,10 +213,9 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         compositeDisposable.add(disposable)
     }
 
-
     @SuppressLint("TimberArgCount")
     private fun saveMoviesByCategories(moviesByCat: List<MovieAndCategoryCrossRef>) {
-        disposable = dbMovieRepository.saveMoviesByCategories(moviesByCat)
+        disposable = dbMovieUseCase.saveMoviesByCategories(moviesByCat)
             .applySchedulers()
             .subscribe({
                 Timber.e("saveMoviesByCategories", "successfully")
@@ -206,7 +225,8 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
         compositeDisposable.add(disposable)
     }
 
-    private fun setMoviesByCategories(list: Map<MovieCategory, ResultFeedMovies>): List<MovieAndCategoryCrossRef> {
+    private fun setMoviesByCategories(list: Map<MovieCategory, ResultFeedMovies>):
+            List<MovieAndCategoryCrossRef> {
 
         val moviesByCat = arrayListOf<MovieAndCategoryCrossRef>()
         list.forEach() {
@@ -223,8 +243,8 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     ): List<MovieDb> {
         val moviesDb = arrayListOf<MovieDb>()
         movies.forEach() {
-            it.value.movies.forEach {m ->
-               val mov = MapperToMovieDb.convertTo(m)
+            it.value.movies.forEach { m ->
+                val mov = MapperToMovieDb.convertTo(m)
                 moviesDb.add(mov)
             }
         }

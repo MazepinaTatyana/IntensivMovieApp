@@ -2,7 +2,7 @@ package ru.androidschool.intensiv.data.dto.movie_dto
 
 import com.google.gson.annotations.SerializedName
 
-data class MovieDto (
+data class MovieDto(
     @SerializedName("adult")
     val adult: Boolean,
     @SerializedName("backdrop_path")

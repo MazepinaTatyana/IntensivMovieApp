@@ -11,9 +11,10 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
+import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieRepository
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
+import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 import ru.androidschool.intensiv.presentation.watchlist.MoviePreviewItem
 import timber.log.Timber
@@ -23,7 +24,8 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private lateinit var likedMoviesBinding: FragmentLikedMoviesBinding
     var moviesList = listOf<MoviePreviewItem>()
     private lateinit var disposable: Disposable
-    private lateinit var dbRepository: DBMovieRepository
+    private lateinit var dbFavouriteRepository: DbFavouriteMovieRepository
+    private lateinit var dbFavouriteUseCase: DbFavouriteMovieUseCase
     private var compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
@@ -35,11 +37,12 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
-        dbRepository = DBMovieRepository(database)
+        dbFavouriteRepository = DbFavouriteMovieRepository(database)
+        dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 
-        disposable = dbRepository.getFavouriteMovies()
+        disposable = dbFavouriteUseCase.getFavouriteMovies()
             .applySchedulers()
             .subscribe({ movies ->
                 moviesList = movies.map {

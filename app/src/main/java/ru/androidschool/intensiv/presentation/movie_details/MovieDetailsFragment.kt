@@ -12,18 +12,17 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
-import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
-import ru.androidschool.intensiv.domain.usecase.ActorsMovieRemoteUseCase
-import ru.androidschool.intensiv.domain.usecase.DetailsMovieRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.remote_use_case.ActorsMovieRemoteUseCase
+import ru.androidschool.intensiv.domain.usecase.remote_use_case.DetailsMovieRemoteUseCase
 import ru.androidschool.intensiv.presentation.extension.load
-import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
+import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieRepository
+import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,9 +37,9 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private val actorsDetailRemoteUseCase = ActorsMovieRemoteUseCase(ActorsMovieRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
-    private lateinit var dbMovieRepository: DBMovieRepository
+    private lateinit var dbFavouriteMovieRepository: DbFavouriteMovieRepository
+    private lateinit var dbFavouriteMovieUseCase: DbFavouriteMovieUseCase
     private lateinit var detailsMovie: DetailsMovie
-    private lateinit var movieFromDb: MovieDb
 
     @SuppressLint("TimberArgCount")
     @ExperimentalStdlibApi
@@ -48,7 +47,8 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
-        dbMovieRepository = DBMovieRepository(database)
+        dbFavouriteMovieRepository = DbFavouriteMovieRepository(database)
+        dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
         getMovieDatabase(id)
@@ -101,13 +101,11 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
             }, { error ->
                 Timber.d("error actors", error.message)
             })
-
     }
 
     @SuppressLint("TimberArgCount")
     fun getMovieDatabase(movieId: Int) {
-        disposable = dbMovieRepository.getFavouriteMovieById(movieId)
-            .applySchedulers()
+        disposable = dbFavouriteMovieUseCase.getFavouriteMovieById(movieId)
             .subscribe({ favouriteMovie ->
                 movieDetailsFragmentBinding.detailsMovieFavoriteIcon.isChecked =
                     favouriteMovie.favouriteMovie.favouriteMovieId == movieId
@@ -124,8 +122,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         movieDetailsFragmentBinding.detailsMovieFavoriteIcon.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {
-                    dbMovieRepository.saveFavouriteMovie(favouriteMovie)
-                        .applySchedulers()
+                    dbFavouriteMovieUseCase.saveFavouriteMovie(favouriteMovie)
                         .subscribe({
                             Timber.e("saved movie", "saved movie")
                         }, {
@@ -133,8 +130,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                         })
                 }
                 false -> {
-                    dbMovieRepository.deleteFavouriteMovie(favouriteMovie)
-                        .applySchedulers()
+                    dbFavouriteMovieUseCase.deleteFavouriteMovie(favouriteMovie)
                         .subscribe({
                             Timber.e("delete movie", "dalete movie")
                         }, {

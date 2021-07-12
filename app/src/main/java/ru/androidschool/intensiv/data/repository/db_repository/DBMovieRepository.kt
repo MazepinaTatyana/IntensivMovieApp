@@ -11,22 +11,6 @@ class DBMovieRepository(var database: MovieDatabase) {
         .getMovieDao()
         .setMovies(listMovieDb)
 
-    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
-        .getFavouriteMovieDao()
-        .getFavouriteMovies()
-
-    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = database
-        .getFavouriteMovieDao()
-        .getFavouriteMovieById(id)
-
-    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = database
-        .getFavouriteMovieDao()
-        .saveFavouriteMovie(movie)
-
-    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = database
-        .getFavouriteMovieDao()
-        .deleteFavouriteMovie(movie)
-
     fun getCategories(): Single<List<Category>> = database
         .getMoviesByCategoryDao()
         .getCategories()

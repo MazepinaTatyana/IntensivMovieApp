@@ -28,7 +28,7 @@ data class DetailsMovie(
     val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int
-){
+) {
     val rating: Double
         get() = voteAverage / 2
 }

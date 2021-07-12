@@ -3,7 +3,6 @@ package ru.androidschool.intensiv.data.mappers
 import ru.androidschool.intensiv.data.vo.Movie
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
 
-
 object MapperDbToVo :
     BaseMapper<MovieDb> {
 
