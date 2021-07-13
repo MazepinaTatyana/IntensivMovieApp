@@ -7,9 +7,9 @@ import ru.androidschool.intensiv.data.db.database.MovieDatabase
 
 class DBMovieRepository(var database: MovieDatabase) {
 
-    fun setMovies(listMovieDb: List<MovieDb>) = database
+    fun setMovies(listMovieEntity: List<MovieEntity>) = database
         .getMovieDao()
-        .setMovies(listMovieDb)
+        .setMovies(listMovieEntity)
 
     fun getCategories(): Single<List<Category>> = database
         .getMoviesByCategoryDao()

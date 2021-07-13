@@ -9,31 +9,32 @@ object MapperRemoteToVo :
 
     override fun toViewObject(dto: MovieDto): Movie {
         return Movie(
-            id = dto.id,
-            originalTitle = dto.originalTitle,
+            id = dto.id?.let { it } ?: 0,
+            originalTitle = dto.originalTitle?.let { it } ?: "",
             overview = dto.overview?.let { it } ?: "",
-            popularity = dto.popularity,
+            popularity = dto.popularity?.let { it } ?: 0.0,
             posterPath = dto.posterPath?.let { it } ?: "",
-            releaseDate = dto.releaseDate,
-            title = dto.title,
-            voteAverage = dto.voteAverage
+            releaseDate = dto.releaseDate?.let { it } ?: "",
+            title = dto.title?.let { it } ?: "",
+            voteAverage = dto.voteAverage?.let { it } ?: 0.0,
+            name = dto.name?.let { it } ?: ""
         )
     }
 
     fun convertToListMovie(dto: MoviesApiResponseDto): List<Movie> {
-        return dto.results.map { convertToMovie(it) }
+        return dto.results?.map { convertToMovie(it) } ?: listOf()
     }
 
     private fun convertToMovie(dto: MovieDto): Movie {
         return Movie(
-            id = dto.id,
-            originalTitle = dto.originalTitle,
+            id = dto.id?.let { it } ?: 0,
+            originalTitle = dto.originalTitle?.let { it } ?: "",
             overview = dto.overview?.let { it } ?: "",
-            popularity = dto.popularity,
+            popularity = dto.popularity?.let { it } ?: 0.0,
             posterPath = dto.posterPath?.let { it } ?: "",
-            releaseDate = dto.releaseDate,
+            releaseDate = dto.releaseDate?.let { it } ?: "",
             title = dto.title?.let { it } ?: "",
-            voteAverage = dto.voteAverage,
+            voteAverage = dto.voteAverage?.let { it } ?: 0.0,
             name = dto.name?.let { it } ?: ""
         )
     }

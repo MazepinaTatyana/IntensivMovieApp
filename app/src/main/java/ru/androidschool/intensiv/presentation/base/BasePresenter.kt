@@ -1,6 +1,9 @@
 package ru.androidschool.intensiv.presentation.base
 
+import io.reactivex.disposables.CompositeDisposable
+
 abstract class BasePresenter<V> {
+    var compositeDisposable = CompositeDisposable()
 
     protected var view: V? = null
 
@@ -10,5 +13,9 @@ abstract class BasePresenter<V> {
 
     fun detachView() {
         this.view = null
+    }
+
+    fun clear() {
+        compositeDisposable.clear()
     }
 }

@@ -63,14 +63,14 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
                 checkFavouriteMovie(id)
                 val genresName = arrayListOf<String>()
                 detailsMovie.genreDtos?.forEach {
-                    genresName.add(it.name)
+                    it.name?.let { it1 -> genresName.add(it1) }
                 }
                 movieDetailsFragmentBinding.detailsMovieGenre.text =
                     genresName.joinToString(", ")
 
                 val productionsCompany = arrayListOf<String>()
                 detailsMovie.productionCompanyDtos.forEach {
-                    productionsCompany.add(it.name)
+                    it.name?.let { it1 -> productionsCompany.add(it1) }
                 }
                 movieDetailsFragmentBinding.detailsMovieStudioName.text =
                     productionsCompany.joinToString(", ")
@@ -91,12 +91,12 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
 
         disposable = actorsDetailRemoteUseCase.getActorsMovie(id)
             .subscribe({
-                val actors = it.actors.map { actor ->
+                val actors = it.actors?.map { actor ->
                     ActorItem(actor)
-                }.toList()
+                }?.toList()
                 movieDetailsFragmentBinding.detailsMovieRecyclerView.adapter =
                     adapter.apply {
-                        addAll(actors)
+                        actors?.let { addAll(actors) }
                     }
             }, { error ->
                 Timber.d("error actors", error.message)

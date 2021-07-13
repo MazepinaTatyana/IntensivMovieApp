@@ -9,12 +9,9 @@ import timber.log.Timber
 
 class TvShowPresenter(private val useCase: TvShowsRemoteUseCase) : BasePresenter<TvShowView>() {
 
-    private lateinit var disposable: Disposable
-    private var compositeDisposable = CompositeDisposable()
-
     @SuppressLint("TimberArgCount")
     fun getTvShows() {
-        disposable = useCase.getTVShows()
+        val disposable = useCase.getTVShows()
             .doOnSubscribe { view?.showProgressBar() }
             .doFinally { view?.hideProgressBar() }
             .subscribe({
@@ -23,9 +20,5 @@ class TvShowPresenter(private val useCase: TvShowsRemoteUseCase) : BasePresenter
                 Timber.d("Error tvShow", error.message)
             })
         compositeDisposable.add(disposable)
-    }
-
-    fun clear() {
-        compositeDisposable.clear()
     }
 }

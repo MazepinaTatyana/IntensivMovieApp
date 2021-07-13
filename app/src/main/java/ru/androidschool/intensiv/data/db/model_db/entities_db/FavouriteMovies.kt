@@ -9,5 +9,5 @@ data class FavouriteMovies(
         parentColumn = "favouriteMovieId",
         entityColumn = "movieId"
     )
-    val movie: MovieDb
+    val movie: MovieEntity
 )

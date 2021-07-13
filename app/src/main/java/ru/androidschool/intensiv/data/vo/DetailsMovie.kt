@@ -1,9 +1,9 @@
 package ru.androidschool.intensiv.data.vo
 
-import ru.androidschool.intensiv.data.dto.details_movie_dto.GenreDto
-import ru.androidschool.intensiv.data.dto.details_movie_dto.ProductionCompanyDto
-import ru.androidschool.intensiv.data.dto.details_movie_dto.ProductionCountryDto
-import ru.androidschool.intensiv.data.dto.details_movie_dto.SpokenLanguageDto
+import ru.androidschool.intensiv.data.dto.details_movie.GenreDto
+import ru.androidschool.intensiv.data.dto.details_movie.ProductionCompanyDto
+import ru.androidschool.intensiv.data.dto.details_movie.ProductionCountryDto
+import ru.androidschool.intensiv.data.dto.details_movie.SpokenLanguageDto
 
 data class DetailsMovie(
 
@@ -18,7 +18,7 @@ data class DetailsMovie(
     val posterPath: String,
     val productionCompanyDtos: List<ProductionCompanyDto>,
     val productionCountryDtos: List<ProductionCountryDto>,
-    val releaseDate: String? = null,
+    val releaseDate: String,
     val revenue: Int,
     val runtime: Int,
     val spokenLanguageDtos: List<SpokenLanguageDto>,

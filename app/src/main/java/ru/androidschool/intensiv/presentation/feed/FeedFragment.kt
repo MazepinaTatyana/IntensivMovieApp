@@ -18,27 +18,25 @@ import kotlinx.android.synthetic.main.feed_fragment.*
 import kotlinx.android.synthetic.main.feed_header.*
 import kotlinx.android.synthetic.main.search_toolbar.view.*
 import ru.androidschool.intensiv.R
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
+import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
+import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieEntity
 import ru.androidschool.intensiv.data.mappers.MapperDbToVo
 import ru.androidschool.intensiv.data.mappers.MapperToMovieDb
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
 import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.NowPlayingMoviesRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.PopularMoviesRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.UpcomingMoviesRemoteRepository
 import ru.androidschool.intensiv.data.vo.Movie
-import ru.androidschool.intensiv.data.db.database.MovieDatabase
+import ru.androidschool.intensiv.domain.usecase.db_use_case.DbMovieUseCase
+import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
+import ru.androidschool.intensiv.domain.usecase.extensions.applyVisibilityProgressBar
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.NowPlayingMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.PopularMoviesRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.UpcomingMoviesRemoteUseCase
-import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
-import ru.androidschool.intensiv.domain.usecase.extensions.applyVisibilityProgressBar
-import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieDb
-import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
-import ru.androidschool.intensiv.data.mappers.MapperRemoteToVo
-import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
-import ru.androidschool.intensiv.domain.usecase.db_use_case.DbMovieUseCase
 import ru.androidschool.intensiv.presentation.extension.afterTextChanged
 import timber.log.Timber
 
@@ -135,13 +133,13 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
                     linkedMapOf(
                         MovieCategory.POPULAR to ResultFeedMovies(
                             R.string.popular,
-                            popularMovieFromDb.movieDbs.map { MapperDbToVo.toViewObject(it) }),
+                            popularMovieFromDb.movieEntities.map { MapperDbToVo.toViewObject(it) }),
                         MovieCategory.NOWPLAYING to ResultFeedMovies(
                             R.string.recommended,
-                            nowPlayingMovieFromDb.movieDbs.map { MapperDbToVo.toViewObject(it) }),
+                            nowPlayingMovieFromDb.movieEntities.map { MapperDbToVo.toViewObject(it) }),
                         MovieCategory.UPCOMING to ResultFeedMovies(
                             R.string.upcoming,
-                            upcomingMovieFromDb.movieDbs.map { MapperDbToVo.toViewObject(it) })
+                            upcomingMovieFromDb.movieEntities.map { MapperDbToVo.toViewObject(it) })
                     )
                 }
             )
@@ -165,24 +163,24 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
         val disposable =
             Single.zip(popularMovie, nowPlayingMovie, upcomingMovie,
-            Function3<MoviesApiResponseDto,
-                    MoviesApiResponseDto,
-                    MoviesApiResponseDto,
+            Function3<List<Movie>,
+                    List<Movie>,
+                    List<Movie>,
                     Map<MovieCategory, ResultFeedMovies>>
             { popularMovie, nowPlayingMovie, upcomingMovie ->
                 linkedMapOf(
                     MovieCategory.POPULAR to ResultFeedMovies(
                         R.string.popular,
-                        popularMovie.results
-                            .map { MapperRemoteToVo.toViewObject(it) }),
+                        popularMovie),
+//                            .map { MapperRemoteToVo.toViewObject(it) }),
                     MovieCategory.NOWPLAYING to ResultFeedMovies(
                         R.string.recommended,
-                        nowPlayingMovie.results
-                            .map { MapperRemoteToVo.toViewObject(it) }),
+                        nowPlayingMovie),
+//                            .map { MapperRemoteToVo.toViewObject(it) }),
                     MovieCategory.UPCOMING to ResultFeedMovies(
                         R.string.upcoming,
-                        upcomingMovie.results
-                            .map { MapperRemoteToVo.toViewObject(it) })
+                        upcomingMovie)
+//                            .map { MapperRemoteToVo.toViewObject(it) })
                 )
             }
         )
@@ -200,7 +198,7 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
     }
 
     private fun saveMovies(
-        movies: List<MovieDb>,
+        movies: List<MovieEntity>,
         moviesByCat: List<MovieAndCategoryCrossRef>
     ) {
         disposable = dbMovieUseCase.setMovies(movies)
@@ -240,8 +238,8 @@ class FeedFragment : Fragment(R.layout.feed_fragment) {
 
     private fun setListMovie(
         movies: Map<MovieCategory, ResultFeedMovies>
-    ): List<MovieDb> {
-        val moviesDb = arrayListOf<MovieDb>()
+    ): List<MovieEntity> {
+        val moviesDb = arrayListOf<MovieEntity>()
         movies.forEach() {
             it.value.movies.forEach { m ->
                 val mov = MapperToMovieDb.convertTo(m)

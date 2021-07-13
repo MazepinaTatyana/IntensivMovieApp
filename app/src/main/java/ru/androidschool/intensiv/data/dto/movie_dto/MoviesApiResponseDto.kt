@@ -6,11 +6,11 @@ data class MoviesApiResponseDto(
     @SerializedName("dates")
     var dates: DateDto? = null,
     @SerializedName("page")
-    var page: Int,
+    var page: Int? = null,
     @SerializedName("results")
-    var results: List<MovieDto>,
+    var results: List<MovieDto>? = null,
     @SerializedName("total_pages")
-    var totalPages: Int,
+    var totalPages: Int? = null,
     @SerializedName("total_results")
-    var totalResults: Int
+    var totalResults: Int? = null
 )
