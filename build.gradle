@@ -4,7 +4,7 @@ import com.sun.org.apache.xpath.internal.res.XPATHErrorResources_sv
 
 buildscript {
     ext.kotlinVersion = '1.3.72'
-    ext.navigationVersion = '2.3.5'
+    ext.navigationVersion = "2.3.5"
     repositories {
         google()
         jcenter()
@@ -30,7 +30,7 @@ task clean(type: Delete) {
 
 ext {
     materialVersion = '1.4.0-beta01'
-    navigationVersion = '2.3.5'
+    navigationVersion = "2.3.5"
     constraintLayoutVersion = '2.0.4'
     recyclerViewVersion = '1.2.0'
     picassoVersion = '2.71828'
@@ -58,7 +58,7 @@ ext {
 
     rxjavaVersion = '2.2.6'
     rxandroidVersion = '2.1.1'
-    roomVersion = '2.3.0'
+    roomVersion = "2.3.0"
     roomRxJava2Version = '2.3.0'
     persistenceRoomRxJava2Version = '1.1.1'
 }

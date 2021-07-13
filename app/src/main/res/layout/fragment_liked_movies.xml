@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.liked_movies.LikedMoviesFragment">
+    tools:context=".presentation.liked_movies.LikedMoviesFragment">
 
     <include
         layout="@layout/movies_recycler_view"
