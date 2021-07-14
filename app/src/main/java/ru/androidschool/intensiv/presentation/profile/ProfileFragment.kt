@@ -13,18 +13,19 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMoviesRepository
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import timber.log.Timber
 
-class ProfileFragment : Fragment(R.layout.fragment_profile) {
+class ProfileFragment : Fragment(R.layout.fragment_profile), KoinComponent {
 
     private lateinit var profileTabLayoutTitles: Array<String>
     private var countLikedMovies = 0
-    private lateinit var dbFavouriteMovieRepository: DbFavouriteMoviesRepository
-    private lateinit var dbFavouriteMovieUseCase: DbFavouriteMovieUseCase
+    private val dbFavouriteMovieUseCase: DbFavouriteMovieUseCase by inject()
 
     private var profilePageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
@@ -39,9 +40,9 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val database = MovieDatabase.getInstance(requireContext())
-        this.dbFavouriteMovieRepository = DbFavouriteMoviesRepository(database)
-        dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
+//        val database = MovieDatabase.getInstance(requireContext())
+//        this.dbFavouriteMovieRepository = DbFavouriteMoviesRepository(database)
+//        dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
 
         Picasso.get()
             .load(R.drawable.ic_avatar)

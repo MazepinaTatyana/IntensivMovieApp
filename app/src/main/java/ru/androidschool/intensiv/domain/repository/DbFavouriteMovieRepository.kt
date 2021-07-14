@@ -2,6 +2,7 @@ package ru.androidschool.intensiv.domain.repository
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.koin.core.KoinComponent
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 

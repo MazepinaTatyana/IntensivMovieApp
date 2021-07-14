@@ -9,7 +9,7 @@ class LikedMovieModelFactory(private val dbFavouriteRepository: DbFavouriteMovie
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LikedMovieViewModel::class.java)) {
-            return LikedMovieViewModel(dbFavouriteRepository) as T
+            return LikedMovieViewModel() as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

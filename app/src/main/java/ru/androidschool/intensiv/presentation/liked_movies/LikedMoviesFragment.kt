@@ -31,9 +31,8 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
 
-        val likedMoviesModelFactory = LikedMovieModelFactory(DbFavouriteMoviesRepository(database))
-        likedMovieViewModel = ViewModelProvider(this, likedMoviesModelFactory)
-            .get(LikedMovieViewModel::class.java)
+//        val likedMoviesModelFactory = LikedMovieModelFactory(DbFavouriteMoviesRepository(database))
+        likedMovieViewModel = ViewModelProvider(this).get(LikedMovieViewModel::class.java)
 
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
