@@ -4,21 +4,22 @@ import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
+import ru.androidschool.intensiv.domain.repository.DbFavouriteMoviesRepository
 
-class DbFavouriteMovieRepository(var database: MovieDatabase) {
-    fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
+class DbFavouriteMoviesRepository(var database: MovieDatabase): DbFavouriteMoviesRepository {
+    override fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
         .getFavouriteMovieDao()
         .getFavouriteMovies()
 
-    fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = database
+    override fun getFavouriteMovieById(id: Int): Single<FavouriteMovies> = database
         .getFavouriteMovieDao()
         .getFavouriteMovieById(id)
 
-    fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = database
+    override fun saveFavouriteMovie(movie: FavouriteMoviesEntity) = database
         .getFavouriteMovieDao()
         .saveFavouriteMovie(movie)
 
-    fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = database
+    override fun deleteFavouriteMovie(movie: FavouriteMoviesEntity) = database
         .getFavouriteMovieDao()
         .deleteFavouriteMovie(movie)
 }

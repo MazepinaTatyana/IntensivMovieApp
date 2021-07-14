@@ -21,7 +21,7 @@ import ru.androidschool.intensiv.domain.usecase.remote_use_case.ActorsMovieRemot
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.DetailsMovieRemoteUseCase
 import ru.androidschool.intensiv.presentation.extension.load
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
-import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieRepository
+import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMoviesRepository
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -37,7 +37,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     private val actorsDetailRemoteUseCase = ActorsMovieRemoteUseCase(ActorsMovieRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
-    private lateinit var dbFavouriteMovieRepository: DbFavouriteMovieRepository
+    private lateinit var dbFavouriteMovieRepository: DbFavouriteMoviesRepository
     private lateinit var dbFavouriteMovieUseCase: DbFavouriteMovieUseCase
     private lateinit var detailsMovie: DetailsMovie
 
@@ -47,7 +47,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
-        dbFavouriteMovieRepository = DbFavouriteMovieRepository(database)
+        dbFavouriteMovieRepository = DbFavouriteMoviesRepository(database)
         dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
