@@ -30,7 +30,6 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
-    val countMovies = MutableLiveData<Int>()
 
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +53,6 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
                 likedMoviesRecycler.adapter = adapter.apply {
                     addAll(moviesList)
                 }
-                countMovies.postValue(movies.size)
             }, {
                 Timber.e("error db", it.message)
             })
