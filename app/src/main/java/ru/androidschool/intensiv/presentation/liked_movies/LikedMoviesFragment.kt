@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -23,10 +24,11 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
 
     private lateinit var likedMoviesBinding: FragmentLikedMoviesBinding
     var moviesList = listOf<MoviePreviewItem>()
-    private lateinit var disposable: Disposable
-    private lateinit var dbFavouriteRepository: DbFavouriteMovieRepository
-    private lateinit var dbFavouriteUseCase: DbFavouriteMovieUseCase
-    private var compositeDisposable = CompositeDisposable()
+    private lateinit var likedMovieViewModel: LikedMovieViewModel
+//    private lateinit var disposable: Disposable
+//    private lateinit var dbFavouriteRepository: DbFavouriteMovieRepository
+//    private lateinit var dbFavouriteUseCase: DbFavouriteMovieUseCase
+//    private var compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
@@ -36,8 +38,13 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
-        dbFavouriteRepository = DbFavouriteMovieRepository(database)
-        dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
+//        dbFavouriteRepository = DbFavouriteMovieRepository(database)
+//        dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
+
+        val likedMoviesModelFactory = LikedMovieModelFactory(DbFavouriteMovieRepository(database))
+        likedMovieViewModel = ViewModelProvider(this, likedMoviesModelFactory)
+            .get(LikedMovieViewModel::class.java)
+
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 

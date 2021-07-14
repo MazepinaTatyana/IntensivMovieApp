@@ -2,6 +2,7 @@ package ru.androidschool.intensiv.presentation.liked_movies
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
@@ -10,7 +11,8 @@ import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseC
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 import timber.log.Timber
 
-class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRepository) {
+class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRepository)
+    : ViewModel() {
 
     private var dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
     private lateinit var disposable: Disposable
