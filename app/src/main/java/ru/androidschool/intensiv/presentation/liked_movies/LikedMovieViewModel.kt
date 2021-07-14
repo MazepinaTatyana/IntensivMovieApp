@@ -1,5 +1,6 @@
 package ru.androidschool.intensiv.presentation.liked_movies
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -15,8 +16,14 @@ class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRep
     private var dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
-    var moviesList = MutableLiveData<List<FavouriteMovies>>()
-    var error = MutableLiveData<Throwable>()
+
+    val moviesList: LiveData<List<FavouriteMovies>>
+    get() = list
+    private var list = MutableLiveData<List<FavouriteMovies>>()
+
+    val  error: LiveData<Throwable>
+    get() = throwable
+    private var throwable = MutableLiveData<Throwable>()
 
     init {
         getFavouriteMovies()
@@ -26,9 +33,9 @@ class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRep
         disposable = dbFavouriteUseCase.getFavouriteMovies()
             .applySchedulers()
             .subscribe({ movies ->
-                moviesList.postValue(movies)
+                list.postValue(movies)
             }, {
-               error.postValue(it)
+                throwable.postValue(it)
             })
         compositeDisposable.add(disposable)
     }
