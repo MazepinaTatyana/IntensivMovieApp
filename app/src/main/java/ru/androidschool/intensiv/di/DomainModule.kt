@@ -1,7 +1,10 @@
 package ru.androidschool.intensiv.di
 
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import ru.androidschool.intensiv.data.db.database.MovieDatabase
+import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
 import ru.androidschool.intensiv.domain.repository.ActorsMovieRepository
@@ -16,4 +19,6 @@ val domainModule = module {
     single { ActorsMovieRemoteUseCase(get(named("ActorsMovieRemoteRepository"))) }
     single<ActorsMovieRepository> { ActorsMovieRemoteRepository() }
     single { DbMovieUseCase(get(named("DbMovieRepository"))) }
+    single { DbMovieUseCase(get(named("DbFavouriteMoviesRepository"))) }
+
 }

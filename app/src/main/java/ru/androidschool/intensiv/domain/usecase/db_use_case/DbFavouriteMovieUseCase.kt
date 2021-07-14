@@ -3,10 +3,10 @@ package ru.androidschool.intensiv.domain.usecase.db_use_case
 import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
-import ru.androidschool.intensiv.domain.repository.DbFavouriteMoviesRepository
+import ru.androidschool.intensiv.domain.repository.DbFavouriteMovieRepository
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 
-class DbFavouriteMovieUseCase(private val dbFavouriteMoviesRepository: DbFavouriteMoviesRepository) {
+class DbFavouriteMovieUseCase(private val dbFavouriteMoviesRepository: DbFavouriteMovieRepository) {
 
     fun getFavouriteMovies(): Single<List<FavouriteMovies>> = dbFavouriteMoviesRepository
         .getFavouriteMovies()

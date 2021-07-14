@@ -5,7 +5,7 @@ import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 
-interface DbFavouriteMoviesRepository {
+interface DbFavouriteMovieRepository {
     fun getFavouriteMovies(): Single<List<FavouriteMovies>>
 
     fun getFavouriteMovieById(id: Int): Single<FavouriteMovies>

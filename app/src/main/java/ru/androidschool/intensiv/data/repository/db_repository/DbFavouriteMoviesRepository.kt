@@ -4,9 +4,9 @@ import io.reactivex.Single
 import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
-import ru.androidschool.intensiv.domain.repository.DbFavouriteMoviesRepository
+import ru.androidschool.intensiv.domain.repository.DbFavouriteMovieRepository
 
-class DbFavouriteMoviesRepository(var database: MovieDatabase): DbFavouriteMoviesRepository {
+class DbFavouriteMoviesRepository(var database: MovieDatabase): DbFavouriteMovieRepository {
     override fun getFavouriteMovies(): Single<List<FavouriteMovies>> = database
         .getFavouriteMovieDao()
         .getFavouriteMovies()
