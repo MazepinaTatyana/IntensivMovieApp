@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
@@ -25,10 +26,6 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     private lateinit var likedMoviesBinding: FragmentLikedMoviesBinding
     var moviesList = listOf<MoviePreviewItem>()
     private lateinit var likedMovieViewModel: LikedMovieViewModel
-//    private lateinit var disposable: Disposable
-//    private lateinit var dbFavouriteRepository: DbFavouriteMovieRepository
-//    private lateinit var dbFavouriteUseCase: DbFavouriteMovieUseCase
-//    private var compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
@@ -38,8 +35,6 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
         val database = MovieDatabase.getInstance(requireContext())
-//        dbFavouriteRepository = DbFavouriteMovieRepository(database)
-//        dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
 
         val likedMoviesModelFactory = LikedMovieModelFactory(DbFavouriteMovieRepository(database))
         likedMovieViewModel = ViewModelProvider(this, likedMoviesModelFactory)
@@ -48,26 +43,18 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 
-        disposable = dbFavouriteUseCase.getFavouriteMovies()
-            .applySchedulers()
-            .subscribe({ movies ->
-                moviesList = movies.map {
-                    MoviePreviewItem(
-                        it.movie
-                    ) { movie -> }
-                }.toList()
+        likedMovieViewModel.moviesList.observe(viewLifecycleOwner, Observer { list ->
+            moviesList = list.map { MoviePreviewItem(
+                it.movie
+            ) { movie -> }
+            }.toList()
+            likedMoviesRecycler.adapter = adapter.apply {
+                addAll(moviesList)
+            }
+        })
 
-                likedMoviesRecycler.adapter = adapter.apply {
-                    addAll(moviesList)
-                }
-            }, {
-                Timber.e("error db", it.message)
-            })
-        compositeDisposable.add(disposable)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        compositeDisposable.dispose()
+        likedMovieViewModel.error.observe(viewLifecycleOwner, Observer {error ->
+            Timber.e("Error liked movies", error.message)
+        })
     }
 }
