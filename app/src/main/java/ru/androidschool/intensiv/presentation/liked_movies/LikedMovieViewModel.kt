@@ -10,8 +10,7 @@ import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieR
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 
-class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRepository)
-    : ViewModel() {
+class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRepository) : ViewModel() {
 
     private var dbFavouriteUseCase = DbFavouriteMovieUseCase(dbFavouriteRepository)
     private lateinit var disposable: Disposable
@@ -21,7 +20,7 @@ class LikedMovieViewModel(private val dbFavouriteRepository: DbFavouriteMovieRep
     get() = list
     private var list = MutableLiveData<List<FavouriteMovies>>()
 
-    val  error: LiveData<Throwable>
+    val error: LiveData<Throwable>
     get() = throwable
     private var throwable = MutableLiveData<Throwable>()
 
