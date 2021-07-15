@@ -11,6 +11,7 @@ import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMoviesRepository
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
+import ru.androidschool.intensiv.presentation.base.Resource
 
 class LikedMovieViewModel : ViewModel(), KoinComponent {
 
@@ -19,13 +20,13 @@ class LikedMovieViewModel : ViewModel(), KoinComponent {
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
 
-    val moviesList: LiveData<List<FavouriteMovies>>
+    val moviesList: LiveData<Resource<List<FavouriteMovies>>>
     get() = list
-    private var list = MutableLiveData<List<FavouriteMovies>>()
+    private var list = MutableLiveData<Resource<List<FavouriteMovies>>>()
 
-    val error: LiveData<Throwable>
+    val error: LiveData<Resource<Throwable>>
     get() = throwable
-    private var throwable = MutableLiveData<Throwable>()
+    private var throwable = MutableLiveData<Resource<Throwable>>()
 
     init {
         getFavouriteMovies()
@@ -35,9 +36,9 @@ class LikedMovieViewModel : ViewModel(), KoinComponent {
         disposable = dbFavouriteUseCase.getFavouriteMovies()
             .applySchedulers()
             .subscribe({ movies ->
-                list.postValue(movies)
+                list.value = Resource.success(movies)
             }, {
-                throwable.postValue(it)
+                throwable.value = Resource.error(it.message)
             })
         compositeDisposable.add(disposable)
     }
