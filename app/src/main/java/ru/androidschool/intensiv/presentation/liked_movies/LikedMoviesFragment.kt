@@ -19,7 +19,7 @@ import timber.log.Timber
 class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
 
     private lateinit var likedMoviesBinding: FragmentLikedMoviesBinding
-    var moviesList = listOf<MoviePreviewItem>()
+    private var moviesList = listOf<MoviePreviewItem>()
     private lateinit var likedMovieViewModel: LikedMovieViewModel
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
@@ -39,10 +39,12 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)
 
         likedMovieViewModel.moviesList.observe(viewLifecycleOwner, Observer { list ->
-            moviesList = list.map { MoviePreviewItem(
-                it.movie
-            ) { movie -> }
-            }.toList()
+            moviesList = list.data?.map {
+                    MoviePreviewItem(
+                        it.movie
+                    ) { movie -> }
+                }?.toList() ?: listOf()
+
             likedMoviesRecycler.adapter = adapter.apply {
                 addAll(moviesList)
             }
