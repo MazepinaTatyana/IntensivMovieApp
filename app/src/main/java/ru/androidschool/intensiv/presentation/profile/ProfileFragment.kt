@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.db.database.MovieDatabase
-import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMoviesRepository
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import timber.log.Timber
 
@@ -40,9 +38,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile), KoinComponent {
     @SuppressLint("TimberArgCount")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val database = MovieDatabase.getInstance(requireContext())
-//        this.dbFavouriteMovieRepository = DbFavouriteMoviesRepository(database)
-//        dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
 
         Picasso.get()
             .load(R.drawable.ic_avatar)

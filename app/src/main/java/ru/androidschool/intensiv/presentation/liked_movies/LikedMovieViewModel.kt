@@ -8,7 +8,6 @@ import io.reactivex.disposables.Disposable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
-import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMoviesRepository
 import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import ru.androidschool.intensiv.domain.usecase.extensions.applySchedulers
 import ru.androidschool.intensiv.presentation.base.Resource

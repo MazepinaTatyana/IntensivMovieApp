@@ -17,5 +17,5 @@ val domainModule = module {
     single { ActorsMovieRemoteUseCase(get()) }
     single<ActorsMovieRepository> { ActorsMovieRemoteRepository() }
     single { DbFavouriteMovieUseCase(get()) }
-    single <DbFavouriteMovieRepository>{ DbFavouriteMoviesRepository() }
+    single <DbFavouriteMovieRepository> { DbFavouriteMoviesRepository() }
 }

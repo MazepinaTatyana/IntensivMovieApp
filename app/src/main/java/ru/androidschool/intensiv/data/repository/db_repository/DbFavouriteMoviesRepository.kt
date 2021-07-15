@@ -8,7 +8,7 @@ import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 import ru.androidschool.intensiv.domain.repository.DbFavouriteMovieRepository
 
-class DbFavouriteMoviesRepository: DbFavouriteMovieRepository, KoinComponent {
+class DbFavouriteMoviesRepository : DbFavouriteMovieRepository, KoinComponent {
 
     private val database: MovieDatabase by inject()
 

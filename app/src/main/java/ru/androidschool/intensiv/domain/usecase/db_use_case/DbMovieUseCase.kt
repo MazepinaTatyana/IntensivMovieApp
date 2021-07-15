@@ -1,8 +1,6 @@
 package ru.androidschool.intensiv.domain.usecase.db_use_case
 
 import io.reactivex.Single
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 import ru.androidschool.intensiv.data.db.model_db.CategoryWithMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef

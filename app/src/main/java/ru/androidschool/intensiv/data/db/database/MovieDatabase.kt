@@ -4,14 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import org.koin.core.KoinComponent
-import ru.androidschool.intensiv.data.db.dao.MovieDao
-import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
-import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
-import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieEntity
 import ru.androidschool.intensiv.data.db.dao.FavouriteMovieDao
+import ru.androidschool.intensiv.data.db.dao.MovieDao
 import ru.androidschool.intensiv.data.db.dao.MoviesByCategoryDao
+import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
+import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieEntity
 
 @Database(entities = [MovieEntity::class, Category::class, FavouriteMoviesEntity::class, MovieAndCategoryCrossRef::class], version = 10, exportSchema = false)
 abstract class MovieDatabase : RoomDatabase() {

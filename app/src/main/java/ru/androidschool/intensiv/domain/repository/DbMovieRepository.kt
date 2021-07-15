@@ -12,9 +12,9 @@ interface DbMovieRepository {
 
     fun getCategories(): Single<List<Category>>
 
-    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>) : Completable
+    fun saveMoviesByCategories(categoriesWithMovies: List<MovieAndCategoryCrossRef>): Completable
 
-    fun setCategories(categories: List<Category>) : Completable
+    fun setCategories(categories: List<Category>): Completable
 
     fun getCategoryWithMoviesById(categoryId: String): Single<CategoryWithMovies>
 }
