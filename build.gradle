@@ -61,4 +61,6 @@ ext {
     roomVersion = "2.3.0"
     roomRxJava2Version = '2.3.0'
     persistenceRoomRxJava2Version = '1.1.1'
+
+    koin_version = '2.1.5'
 }

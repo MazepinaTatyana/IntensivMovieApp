@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.db.database.MovieDatabase
-import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieRepository
 import ru.androidschool.intensiv.databinding.FragmentLikedMoviesBinding
 import ru.androidschool.intensiv.presentation.watchlist.MoviePreviewItem
 import timber.log.Timber
@@ -29,11 +27,7 @@ class LikedMoviesFragment : Fragment(R.layout.fragment_liked_movies) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         likedMoviesBinding = FragmentLikedMoviesBinding.bind(view)
-        val database = MovieDatabase.getInstance(requireContext())
-
-        val likedMoviesModelFactory = LikedMovieModelFactory(DbFavouriteMovieRepository(database))
-        likedMovieViewModel = ViewModelProvider(this, likedMoviesModelFactory)
-            .get(LikedMovieViewModel::class.java)
+        likedMovieViewModel = ViewModelProvider(this).get(LikedMovieViewModel::class.java)
 
         val likedMoviesRecycler = likedMoviesBinding.likedMovies.root
         likedMoviesRecycler.layoutManager = GridLayoutManager(context, 4)

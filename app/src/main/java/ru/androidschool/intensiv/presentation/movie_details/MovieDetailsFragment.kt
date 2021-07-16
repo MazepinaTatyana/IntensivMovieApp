@@ -10,35 +10,34 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.androidschool.intensiv.BuildConfig
 import ru.androidschool.intensiv.R
-import ru.androidschool.intensiv.data.repository.remote_repository.ActorsMovieRemoteRepository
-import ru.androidschool.intensiv.data.repository.remote_repository.DetailsMovieRemoteRepository
+import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
 import ru.androidschool.intensiv.data.vo.DetailsMovie
-import ru.androidschool.intensiv.data.db.database.MovieDatabase
 import ru.androidschool.intensiv.databinding.MovieDetailsFragmentBinding
+import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.ActorsMovieRemoteUseCase
 import ru.androidschool.intensiv.domain.usecase.remote_use_case.DetailsMovieRemoteUseCase
 import ru.androidschool.intensiv.presentation.extension.load
-import ru.androidschool.intensiv.data.db.model_db.entities_db.FavouriteMoviesEntity
-import ru.androidschool.intensiv.data.repository.db_repository.DbFavouriteMovieRepository
-import ru.androidschool.intensiv.domain.usecase.db_use_case.DbFavouriteMovieUseCase
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
+class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment), KoinComponent {
 
     private val adapter by lazy {
         GroupAdapter<GroupieViewHolder>()
     }
+
+    private val detailsMovieRemoteUseCase: DetailsMovieRemoteUseCase by inject()
+    private val actorsDetailRemoteUseCase: ActorsMovieRemoteUseCase by inject()
+    private val dbFavouriteMovieUseCase: DbFavouriteMovieUseCase by inject()
+
     private lateinit var movieDetailsFragmentBinding: MovieDetailsFragmentBinding
-    private val detailsMovieRemoteUseCase = DetailsMovieRemoteUseCase(DetailsMovieRemoteRepository())
-    private val actorsDetailRemoteUseCase = ActorsMovieRemoteUseCase(ActorsMovieRemoteRepository())
     private lateinit var disposable: Disposable
     private var compositeDisposable = CompositeDisposable()
-    private lateinit var dbFavouriteMovieRepository: DbFavouriteMovieRepository
-    private lateinit var dbFavouriteMovieUseCase: DbFavouriteMovieUseCase
     private lateinit var detailsMovie: DetailsMovie
 
     @SuppressLint("TimberArgCount")
@@ -46,9 +45,6 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         movieDetailsFragmentBinding = MovieDetailsFragmentBinding.bind(view)
-        val database = MovieDatabase.getInstance(requireContext())
-        dbFavouriteMovieRepository = DbFavouriteMovieRepository(database)
-        dbFavouriteMovieUseCase = DbFavouriteMovieUseCase(dbFavouriteMovieRepository)
         val navArgs: MovieDetailsFragmentArgs by navArgs()
         val id = navArgs.movieId
         getMovieDatabase(id)
