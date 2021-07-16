@@ -35,7 +35,6 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment), TvShowView {
         lifecycleScope.launch {
             presenter.getTvShows()
         }
-
     }
 
     override fun onStop() {

@@ -9,5 +9,3 @@ class TvShowsRemoteUseCase(private val repository: TvShowsRepository) {
         return repository.getTVShows()
     }
 }
-
-
