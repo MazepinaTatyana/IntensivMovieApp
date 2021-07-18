@@ -4,9 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import kotlinx.android.synthetic.main.tv_shows_fragment.*
+import kotlinx.coroutines.launch
 import ru.androidschool.intensiv.R
 import ru.androidschool.intensiv.data.repository.remote_repository.TvShowsRemoteRepository
 import ru.androidschool.intensiv.data.vo.Movie
@@ -30,7 +32,9 @@ class TvShowsFragment : Fragment(R.layout.tv_shows_fragment), TvShowView {
         super.onViewCreated(view, savedInstanceState)
         tvShowsFragmentBinding = TvShowsFragmentBinding.bind(view)
         presenter.attachView(this)
-        presenter.getTvShows()
+        lifecycleScope.launch {
+            presenter.getTvShows()
+        }
     }
 
     override fun onStop() {

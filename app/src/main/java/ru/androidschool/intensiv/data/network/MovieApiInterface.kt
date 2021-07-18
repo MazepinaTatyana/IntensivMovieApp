@@ -31,10 +31,10 @@ interface MovieApiInterface {
     ): Single<MoviesApiResponseDto>
 
     @GET("tv/popular")
-    fun getTvShows(
+    suspend fun getTvShows(
         @Query("api_key") api_key: String = BuildConfig.THE_MOVIE_DATABASE_API,
         @Query("language") language: String = BuildConfig.LANGUAGE_RU
-    ): Single<MoviesApiResponseDto>
+    ): MoviesApiResponseDto
 
     @GET("movie/{movie_id}")
     fun getDetailsMovieById(
