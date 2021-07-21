@@ -10,4 +10,6 @@ interface BaseMapper<T> {
         list.mapTo(result) { toViewObject(it) }
         return result
     }
+
+    fun getRating(dto: T): Double
 }

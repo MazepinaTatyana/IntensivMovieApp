@@ -1,5 +1,6 @@
 package ru.androidschool.intensiv.data.mappers
 
+import ru.androidschool.intensiv.data.constants.RATING
 import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
 import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.vo.Movie
@@ -17,11 +18,16 @@ object MapperRemoteToVo :
             releaseDate = dto.releaseDate?.let { it } ?: "",
             title = dto.title?.let { it } ?: "",
             voteAverage = dto.voteAverage?.let { it } ?: 0.0,
-            name = dto.name?.let { it } ?: ""
+            name = dto.name?.let { it } ?: "",
+            rating = getRating(dto)
         )
     }
 
     fun convertToListMovie(dto: MoviesApiResponseDto): List<Movie> {
         return dto.results?.map { toViewObject(it) } ?: listOf()
+    }
+
+    override fun getRating(dto: MovieDto): Double {
+        return dto.voteAverage?.let { it / RATING } ?: 0.0
     }
 }
