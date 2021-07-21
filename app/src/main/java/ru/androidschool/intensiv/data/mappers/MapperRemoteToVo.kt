@@ -1,6 +1,5 @@
 package ru.androidschool.intensiv.data.mappers
 
-import ru.androidschool.intensiv.data.constants.RATING
 import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
 import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.vo.Movie
@@ -25,9 +24,5 @@ object MapperRemoteToVo :
 
     fun convertToListMovie(dto: MoviesApiResponseDto): List<Movie> {
         return dto.results?.map { toViewObject(it) } ?: listOf()
-    }
-
-    fun getRating(dto: MovieDto): Double {
-        return dto.voteAverage?.let { it / RATING } ?: 0.0
     }
 }

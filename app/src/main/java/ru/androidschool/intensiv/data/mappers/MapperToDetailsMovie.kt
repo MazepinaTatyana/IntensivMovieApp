@@ -1,6 +1,5 @@
 package ru.androidschool.intensiv.data.mappers
 
-import ru.androidschool.intensiv.data.constants.RATING
 import ru.androidschool.intensiv.data.dto.details_movie.*
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 
@@ -30,9 +29,5 @@ object MapperToDetailsMovie {
             voteCount = dto.voteCount ?: 0,
             rating = getRating(dto)
         )
-    }
-
-    fun getRating(dto: DetailsMovieDto): Double {
-        return dto.voteAverage?.let { it / RATING } ?: 0.0
     }
 }

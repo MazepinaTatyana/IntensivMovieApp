@@ -1,6 +1,5 @@
 package ru.androidschool.intensiv.data.mappers
 
-import ru.androidschool.intensiv.data.constants.RATING
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieEntity
 import ru.androidschool.intensiv.data.vo.Movie
 
@@ -20,8 +19,5 @@ object MapperDbToVo :
             name = movie.name,
             rating = getRating(movie)
         )
-    }
-    fun getRating(movie: MovieEntity): Double {
-        return movie.voteAverage / RATING
     }
 }
