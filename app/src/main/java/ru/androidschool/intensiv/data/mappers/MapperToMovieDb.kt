@@ -7,12 +7,12 @@ object MapperToMovieDb {
     fun convertTo(vo: Movie): MovieEntity {
         return MovieEntity(
             id = vo.id,
-            originalTitle = vo.originalTitle ?: "",
-            overview = vo.overview ?: "",
+            originalTitle = vo.originalTitle,
+            overview = vo.overview,
             popularity = vo.popularity,
-            posterPath = vo.posterPath ?: "",
-            releaseDate = vo.releaseDate ?: "",
-            title = vo.title ?: "",
+            posterPath = vo.posterPath,
+            releaseDate = vo.releaseDate,
+            title = vo.title,
             voteAverage = vo.voteAverage,
             name = vo.name
         )
