@@ -96,10 +96,10 @@ class MapperToDetailsMovieTest {
         MatcherAssert.assertThat(detailVo.rating, CoreMatchers.`is`(4.2))
     }
 
-    @Test
-    fun checkGetRating() {
-        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
-    }
+//    @Test
+//    fun checkGetRating() {
+//        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
+//    }
 
     @After
     fun afterTest() {
@@ -145,11 +145,11 @@ class MapperToDetailsMovieNullTest {
         MatcherAssert.assertThat(0.0, CoreMatchers.`is`(detailVo.voteAverage))
         MatcherAssert.assertThat(0.0, CoreMatchers.`is`(detailVo.rating))
     }
-
-    @Test
-    fun checkGetRating() {
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
-    }
+//
+//    @Test
+//    fun checkGetRating() {
+//        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
+//    }
 
     @After
     fun afterTest() {

@@ -6,11 +6,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
+import ru.androidschool.intensiv.data.dto.movie_dto.MoviesApiResponseDto
 import ru.androidschool.intensiv.data.mappers.MapperRemoteToVo
 import ru.androidschool.intensiv.data.vo.Movie
 
 class MapperRemoteToVoTest {
     private lateinit var movieMapper: MapperRemoteToVo
+    private lateinit var moviesApiResponseDto: MoviesApiResponseDto
     private lateinit var movieDto: MovieDto
     private lateinit var movieVo: Movie
 
@@ -36,6 +38,10 @@ class MapperRemoteToVoTest {
             voteCount = 1965,
             name = "Gabriel's Inferno"
         )
+
+        moviesApiResponseDto = MoviesApiResponseDto(
+            results = listOf(movieDto)
+        )
     }
 
     @Test
@@ -54,9 +60,15 @@ class MapperRemoteToVoTest {
     }
 
     @Test
-    fun checkGetRating() {
-        MatcherAssert.assertThat(4.35, CoreMatchers.`is`(MapperRemoteToVo.getRating(movieDto)))
+    fun checkConvertToListMovie(){
+        MapperRemoteToVo.convertToListMovie(moviesApiResponseDto)
+        MatcherAssert.assertThat(movieDto, CoreMatchers.`is`(moviesApiResponseDto.results?.get(0)))
     }
+
+//    @Test
+//    fun checkGetRating() {
+//        MatcherAssert.assertThat(4.35, CoreMatchers.`is`(MapperRemoteToVo.getRating(movieDto)))
+//    }
 
     @After
     fun afterTest() {
@@ -69,12 +81,16 @@ class MapperRemoteToVoTestNull {
     private lateinit var movieMapper: MapperRemoteToVo
     private lateinit var movieDto: MovieDto
     private lateinit var movieVo: Movie
+    private lateinit var moviesApiResponseDto: MoviesApiResponseDto
 
     @Before
     @Throws(Exception::class)
     fun setUpNull() {
        movieMapper = MapperRemoteToVo
        movieDto = MovieDto()
+       moviesApiResponseDto = MoviesApiResponseDto(
+            results = listOf(movieDto)
+        )
     }
 
     @Test
@@ -89,12 +105,18 @@ class MapperRemoteToVoTestNull {
         MatcherAssert.assertThat("", CoreMatchers.`is` (movieVo.title))
         MatcherAssert.assertThat(0.0, CoreMatchers.`is` (movieVo.voteAverage))
         MatcherAssert.assertThat("", CoreMatchers.`is` (movieVo.name))
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is` (MapperRemoteToVo.getRating(movieDto)))
+        MatcherAssert.assertThat(0.0, CoreMatchers.`is` (movieVo.rating))
     }
 
+//    @Test
+//    fun checkNullGetRating() {
+//        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(MapperRemoteToVo.getRating(movieDto)))
+//    }
+
     @Test
-    fun checkNullGetRating() {
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(MapperRemoteToVo.getRating(movieDto)))
+    fun checkConvertToListMovieNull(){
+        MapperRemoteToVo.convertToListMovie(moviesApiResponseDto)
+        MatcherAssert.assertThat(movieDto, CoreMatchers.`is`(moviesApiResponseDto.results?.get(0)))
     }
 
     @After
