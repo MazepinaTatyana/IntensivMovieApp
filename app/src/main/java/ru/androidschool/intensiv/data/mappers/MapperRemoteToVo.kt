@@ -22,20 +22,6 @@ object MapperRemoteToVo :
     }
 
     fun convertToListMovie(dto: MoviesApiResponseDto): List<Movie> {
-        return dto.results?.map { convertToMovie(it) } ?: listOf()
-    }
-
-    private fun convertToMovie(dto: MovieDto): Movie {
-        return Movie(
-            id = dto.id?.let { it } ?: 0,
-            originalTitle = dto.originalTitle?.let { it } ?: "",
-            overview = dto.overview?.let { it } ?: "",
-            popularity = dto.popularity?.let { it } ?: 0.0,
-            posterPath = dto.posterPath?.let { it } ?: "",
-            releaseDate = dto.releaseDate?.let { it } ?: "",
-            title = dto.title?.let { it } ?: "",
-            voteAverage = dto.voteAverage?.let { it } ?: 0.0,
-            name = dto.name?.let { it } ?: ""
-        )
+        return dto.results?.map { toViewObject(it) } ?: listOf()
     }
 }
