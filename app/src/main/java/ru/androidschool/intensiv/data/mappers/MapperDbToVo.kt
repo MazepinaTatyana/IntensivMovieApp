@@ -11,9 +11,9 @@ object MapperDbToVo :
         return Movie(
             id = movie.id,
             originalTitle = movie.originalTitle,
-            overview = movie.overview?.let { it } ?: "",
+            overview = movie.overview,
             popularity = movie.popularity,
-            posterPath = movie.posterPath?.let { it } ?: "",
+            posterPath = movie.posterPath,
             releaseDate = movie.releaseDate,
             title = movie.title,
             voteAverage = movie.voteAverage,
@@ -22,6 +22,6 @@ object MapperDbToVo :
         )
     }
     fun getRating(movie: MovieEntity): Double {
-        return movie.voteAverage?.let { it / RATING } ?: 0.0
+        return movie.voteAverage / RATING
     }
 }
