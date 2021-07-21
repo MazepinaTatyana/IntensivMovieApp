@@ -7,18 +7,20 @@ import org.junit.Before
 import org.junit.Test
 import ru.androidschool.intensiv.data.dto.details_movie.*
 import ru.androidschool.intensiv.data.mappers.MapperToDetailsMovie
+import ru.androidschool.intensiv.data.mappers.Rating
 import ru.androidschool.intensiv.data.vo.DetailsMovie
 
 class MapperToDetailsMovieTest {
     private lateinit var movieMapper: MapperToDetailsMovie
     private lateinit var detailDto: DetailsMovieDto
     private lateinit var detailVo: DetailsMovie
+    private lateinit var rating: Rating
 
     @Before
     @Throws(Exception::class)
     fun setUp() {
         movieMapper = MapperToDetailsMovie
-
+        rating = Rating()
         detailDto = DetailsMovieDto(
             backdropPath = "/uWVkEo9PWHu9algZsiLPi6sRU64.jpg",
             id = 556574,
@@ -35,19 +37,22 @@ class MapperToDetailsMovieTest {
             genres = listOf(
                 GenreDto(10402, "музыка"),
                 GenreDto(36, "история"),
-                GenreDto(18, "драма")),
+                GenreDto(18, "драма")
+            ),
             homepage = "https://www.disneyplus.com/movies/hamilton/3uPmBHWlO6HJ",
             productionCompany = listOf(
                 ProductionCompanyDto(
                     89394,
                     "/m1Hku3PhgdsQiPO8uVe7szyrxAb.png",
                     "RadicalMedia",
-                    "US"),
+                    "US"
+                ),
                 ProductionCompanyDto(
                     122645,
                     null,
                     "Nevis Productions",
-                    "")
+                    ""
+                )
             ),
             productionCountry = listOf(
                 ProductionCountryDto(
@@ -74,16 +79,28 @@ class MapperToDetailsMovieTest {
         detailVo = MapperToDetailsMovie.convertToDetailsMovie(detailDto)
         MatcherAssert.assertThat(detailVo.id, CoreMatchers.`is`(detailDto.id))
         MatcherAssert.assertThat(detailVo.backdropPath, CoreMatchers.`is`(detailDto.backdropPath))
-        MatcherAssert.assertThat(detailVo.originalLanguage, CoreMatchers.`is`(detailDto.originalLanguage))
+        MatcherAssert.assertThat(
+            detailVo.originalLanguage,
+            CoreMatchers.`is`(detailDto.originalLanguage)
+        )
         MatcherAssert.assertThat(detailVo.video, CoreMatchers.`is`(detailDto.video))
         MatcherAssert.assertThat(detailVo.voteCount, CoreMatchers.`is`(detailDto.voteCount))
         MatcherAssert.assertThat(detailVo.genreDtos, CoreMatchers.`is`(detailDto.genres))
         MatcherAssert.assertThat(detailVo.homepage, CoreMatchers.`is`(detailDto.homepage))
-        MatcherAssert.assertThat(detailVo.productionCompanyDtos, CoreMatchers.`is`(detailDto.productionCompany))
-        MatcherAssert.assertThat(detailVo.productionCountryDtos, CoreMatchers.`is`(detailDto.productionCountry))
+        MatcherAssert.assertThat(
+            detailVo.productionCompanyDtos,
+            CoreMatchers.`is`(detailDto.productionCompany)
+        )
+        MatcherAssert.assertThat(
+            detailVo.productionCountryDtos,
+            CoreMatchers.`is`(detailDto.productionCountry)
+        )
         MatcherAssert.assertThat(detailVo.revenue, CoreMatchers.`is`(detailDto.revenue))
         MatcherAssert.assertThat(detailVo.runtime, CoreMatchers.`is`(detailDto.runtime))
-        MatcherAssert.assertThat(detailVo.spokenLanguageDtos, CoreMatchers.`is`(detailDto.spokenLanguage))
+        MatcherAssert.assertThat(
+            detailVo.spokenLanguageDtos,
+            CoreMatchers.`is`(detailDto.spokenLanguage)
+        )
         MatcherAssert.assertThat(detailVo.status, CoreMatchers.`is`(detailDto.status))
         MatcherAssert.assertThat(detailVo.tagline, CoreMatchers.`is`(detailDto.tagline))
         MatcherAssert.assertThat(detailVo.originalTitle, CoreMatchers.`is`(detailDto.originalTitle))
@@ -96,10 +113,10 @@ class MapperToDetailsMovieTest {
         MatcherAssert.assertThat(detailVo.rating, CoreMatchers.`is`(4.2))
     }
 
-//    @Test
-//    fun checkGetRating() {
-//        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
-//    }
+    @Test
+    fun checkGetRating() {
+        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(rating.getRating(detailDto)))
+    }
 
     @After
     fun afterTest() {
@@ -111,12 +128,14 @@ class MapperToDetailsMovieNullTest {
     private lateinit var movieMapper: MapperToDetailsMovie
     private lateinit var detailDto: DetailsMovieDto
     private lateinit var detailVo: DetailsMovie
+    private lateinit var rating: Rating
 
     @Before
     @Throws(Exception::class)
     fun setUp() {
         movieMapper = MapperToDetailsMovie
         detailDto = DetailsMovieDto()
+        rating = Rating()
     }
 
     @Test
@@ -145,11 +164,11 @@ class MapperToDetailsMovieNullTest {
         MatcherAssert.assertThat(0.0, CoreMatchers.`is`(detailVo.voteAverage))
         MatcherAssert.assertThat(0.0, CoreMatchers.`is`(detailVo.rating))
     }
-//
-//    @Test
-//    fun checkGetRating() {
-//        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(MapperToDetailsMovie.getRating(detailDto)))
-//    }
+
+    @Test
+    fun checkGetRating() {
+        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(rating.getRating(detailDto)))
+    }
 
     @After
     fun afterTest() {

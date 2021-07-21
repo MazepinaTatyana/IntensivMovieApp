@@ -27,7 +27,7 @@ object MapperToDetailsMovie {
             tagline = dto.tagline ?: "",
             video = dto.video ?: false,
             voteCount = dto.voteCount ?: 0,
-            rating = getRating(dto)
+            rating = Rating().getRating(dto)
         )
     }
 }

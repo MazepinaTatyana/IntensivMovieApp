@@ -24,9 +24,7 @@ import ru.androidschool.intensiv.data.db.model_db.ResultFeedMovies
 import ru.androidschool.intensiv.data.db.model_db.entities_db.Category
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieAndCategoryCrossRef
 import ru.androidschool.intensiv.data.db.model_db.entities_db.MovieEntity
-import ru.androidschool.intensiv.data.dto.movie_dto.MovieDto
 import ru.androidschool.intensiv.data.mappers.MapperDbToVo
-import ru.androidschool.intensiv.data.mappers.MapperRemoteToVo
 import ru.androidschool.intensiv.data.mappers.MapperToMovieDb
 import ru.androidschool.intensiv.data.repository.db_repository.DBMovieRepository
 import ru.androidschool.intensiv.data.repository.remote_repository.NowPlayingMoviesRemoteRepository

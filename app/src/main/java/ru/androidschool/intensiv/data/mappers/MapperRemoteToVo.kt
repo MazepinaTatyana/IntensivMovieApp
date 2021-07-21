@@ -18,7 +18,7 @@ object MapperRemoteToVo :
             title = dto.title ?: "",
             voteAverage = dto.voteAverage ?: 0.0,
             name = dto.name ?: "",
-            rating = getRating(dto)
+            rating = Rating().getRating(dto)
         )
     }
 
