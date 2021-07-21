@@ -46,6 +46,7 @@ ext {
     junitVersion = '4.13.2'
     espressoVersion = '3.4.0-beta01'
     timberVersion = '4.7.1'
+    mockitoVersion = '1.10.19'
 
     groupieVersion = '2.8.0'
 
@@ -64,4 +65,5 @@ ext {
 
     koin_version = '2.1.5'
     coroutinesVersion = '1.4.1'
+
 }
