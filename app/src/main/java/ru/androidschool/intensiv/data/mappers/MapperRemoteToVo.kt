@@ -10,15 +10,15 @@ object MapperRemoteToVo :
 
     override fun toViewObject(dto: MovieDto): Movie {
         return Movie(
-            id = dto.id?.let { it } ?: 0,
-            originalTitle = dto.originalTitle?.let { it } ?: "",
-            overview = dto.overview?.let { it } ?: "",
-            popularity = dto.popularity?.let { it } ?: 0.0,
-            posterPath = dto.posterPath?.let { it } ?: "",
-            releaseDate = dto.releaseDate?.let { it } ?: "",
-            title = dto.title?.let { it } ?: "",
-            voteAverage = dto.voteAverage?.let { it } ?: 0.0,
-            name = dto.name?.let { it } ?: "",
+            id = dto.id ?: 0,
+            originalTitle = dto.originalTitle ?: "",
+            overview = dto.overview ?: "",
+            popularity = dto.popularity ?: 0.0,
+            posterPath = dto.posterPath ?: "",
+            releaseDate = dto.releaseDate ?: "",
+            title = dto.title ?: "",
+            voteAverage = dto.voteAverage ?: 0.0,
+            name = dto.name ?: "",
             rating = getRating(dto)
         )
     }
@@ -27,7 +27,7 @@ object MapperRemoteToVo :
         return dto.results?.map { toViewObject(it) } ?: listOf()
     }
 
-    override fun getRating(dto: MovieDto): Double {
+    fun getRating(dto: MovieDto): Double {
         return dto.voteAverage?.let { it / RATING } ?: 0.0
     }
 }
