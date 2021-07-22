@@ -10,5 +10,5 @@ data class Movie(
     val title: String,
     val voteAverage: Double,
     val name: String,
-    val rating: Double
+    val calculatedRating: Double
 )

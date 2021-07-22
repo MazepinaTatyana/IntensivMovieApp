@@ -115,7 +115,7 @@ class MapperToDetailsMovieTest {
 
     @Test
     fun checkGetRating() {
-        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(rating.getRating(detailDto)))
+        MatcherAssert.assertThat(4.2, CoreMatchers.`is`(rating.calculateRating(detailDto)))
     }
 
     @After
@@ -167,7 +167,7 @@ class MapperToDetailsMovieNullTest {
 
     @Test
     fun checkGetRating() {
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(rating.getRating(detailDto)))
+        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(rating.calculateRating(detailDto)))
     }
 
     @After

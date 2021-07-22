@@ -58,7 +58,7 @@ class MapperRemoteToVoTest {
         MatcherAssert.assertThat(movieVo.title, CoreMatchers.`is`(movieDto.title))
         MatcherAssert.assertThat(movieVo.voteAverage, CoreMatchers.`is`(movieDto.voteAverage))
         MatcherAssert.assertThat(movieVo.name, CoreMatchers.`is`(movieDto.name))
-        MatcherAssert.assertThat(movieVo.rating, CoreMatchers.`is`(4.35))
+        MatcherAssert.assertThat(movieVo.calculatedRating, CoreMatchers.`is`(4.35))
     }
 
     @Test
@@ -69,7 +69,7 @@ class MapperRemoteToVoTest {
 
     @Test
     fun checkGetRating() {
-        MatcherAssert.assertThat(4.35, CoreMatchers.`is`(rating.getRating(movieDto)))
+        MatcherAssert.assertThat(4.35, CoreMatchers.`is`(rating.calculateRating(movieDto)))
     }
 
     @After
@@ -109,12 +109,12 @@ class MapperRemoteToVoTestNull {
         MatcherAssert.assertThat("", CoreMatchers.`is`(movieVo.title))
         MatcherAssert.assertThat(0.0, CoreMatchers.`is`(movieVo.voteAverage))
         MatcherAssert.assertThat("", CoreMatchers.`is`(movieVo.name))
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(movieVo.rating))
+        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(movieVo.calculatedRating))
     }
 
     @Test
     fun checkNullGetRating() {
-        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(rating.getRating(movieDto)))
+        MatcherAssert.assertThat(0.0, CoreMatchers.`is`(rating.calculateRating(movieDto)))
     }
 
     @Test

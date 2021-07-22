@@ -17,7 +17,7 @@ object MapperDbToVo :
             title = movie.title,
             voteAverage = movie.voteAverage,
             name = movie.name,
-            rating = Rating().getRating(movie)
+            calculatedRating = Rating.calculateRating(movie.voteAverage)
         )
     }
 }
