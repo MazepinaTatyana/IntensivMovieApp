@@ -4,6 +4,6 @@ import ru.androidschool.intensiv.data.constants.RATING
 
 object Rating {
     fun calculateRating(rating: Double?): Double {
-        return rating?.let { it / RATING}  ?: 0.0
+        return rating?.let { it / RATING } ?: 0.0
     }
 }

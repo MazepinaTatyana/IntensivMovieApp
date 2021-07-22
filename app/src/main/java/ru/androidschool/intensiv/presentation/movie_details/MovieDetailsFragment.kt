@@ -71,7 +71,7 @@ class MovieDetailsFragment : Fragment(R.layout.movie_details_fragment), KoinComp
                 movieDetailsFragmentBinding.detailsMovieStudioName.text =
                     productionsCompany.joinToString(", ")
 
-                movieDetailsFragmentBinding.detailsMovieRating.rating = detailsMovie.rating.toFloat()
+                movieDetailsFragmentBinding.detailsMovieRating.rating = detailsMovie.calculatedRating.toFloat()
                 movieDetailsFragmentBinding.detailsMovieTextDescription.text =
                     detailsMovie.overview
 
