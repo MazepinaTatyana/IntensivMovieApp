@@ -9,8 +9,6 @@ data class Movie(
     val releaseDate: String,
     val title: String,
     val voteAverage: Double,
-    val name: String
-) {
-    val rating: Double
-        get() = voteAverage / 2
-}
+    val name: String,
+    val calculatedRating: Double
+)

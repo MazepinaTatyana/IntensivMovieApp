@@ -17,7 +17,7 @@ class TvShowItem(
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.tv_show_title.text = tvShowContent.name
-        viewHolder.tv_show_rating.rating = tvShowContent.rating.toFloat()
+        viewHolder.tv_show_rating.rating = tvShowContent.calculatedRating.toFloat()
         viewHolder.tv_show_content.setOnClickListener {
             onClick.invoke(tvShowContent)
         }
